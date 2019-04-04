@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import './disciplina.dart';
 
 void main() {
   runApp(MaterialApp(
-    title: "Adicionar Disciplina",
+    title: "Organizer",
     home: FormDisciplina(),
   ));
 }
@@ -17,7 +18,8 @@ class FormDisciplina extends StatefulWidget {
 class _FormDisciplina extends State<FormDisciplina> {
   String dropdownDefault = "Período";
   String dropdownDefault2 = "Máx. Faltas";
-  String dropdownDefault3 = "Status";
+  String dropdownDefault3 = "  Status  ";
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +27,22 @@ class _FormDisciplina extends State<FormDisciplina> {
       appBar: AppBar(
         title: Text("Adicionar Disciplina"),
       ),
-      body: Container(
-        child: Column(
+      body: Form(
+        key: _formKey,
+        child: ListView(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(15.0),
               child: Container(
                 margin: EdgeInsets.only(top: 30.0),
                 width: 300.0,
-                child: TextField(
+                child: TextFormField(
+                  
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Campo vazio!';
+                    }
+                  },
                   decoration: InputDecoration(
                       labelText: 'Nome',
                       hintText: 'Ex. Cálculo III',
@@ -43,10 +52,15 @@ class _FormDisciplina extends State<FormDisciplina> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
               child: Container(
                 width: 300.0,
-                child: TextField(
+                child: TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Campo vazio!';
+                    }
+                  },
                   decoration: InputDecoration(
                       labelText: 'Código',
                       hintText: 'Ex. CEA 006',
@@ -56,15 +70,23 @@ class _FormDisciplina extends State<FormDisciplina> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 15.0, right: 15.0),
+              padding: EdgeInsets.only(
+                  top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.all(15.0),
+                      padding:
+                          EdgeInsets.only(top: 5.0, bottom: 5.0, right: 15.0),
                       child: Container(
-                        width: 80.0,
-                        child: TextField(
+                        width: 75.0,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Campo vazio!';
+                            }
+                          },
                           decoration: InputDecoration(
                               labelText: 'Meta',
                               hintText: 'Ex. 60 pts',
@@ -75,7 +97,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
+                    padding: EdgeInsets.only(
+                        top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
                     child: DropdownButton<String>(
                       hint: Text(dropdownDefault,
                           style: TextStyle(
@@ -100,11 +123,13 @@ class _FormDisciplina extends State<FormDisciplina> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 15.0, right: 15.0),
+              padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: Row(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
+                  Container(
+                    width: 150.0,
+                    height: 50.0,
+                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0),
                     child: DropdownButton<String>(
                       hint: Text(dropdownDefault2,
                           style: TextStyle(
@@ -125,8 +150,11 @@ class _FormDisciplina extends State<FormDisciplina> {
                       }).toList(),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 15.0, left: 42.0),
+                  Container(
+                    width: 120.0,
+                    height: 50.0,
+                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                    margin: EdgeInsets.only(right: 10.0, left: 45.0),
                     child: DropdownButton<String>(
                       hint: Text(dropdownDefault3,
                           style: TextStyle(
@@ -150,6 +178,29 @@ class _FormDisciplina extends State<FormDisciplina> {
                 ],
               ),
             ),
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(top: 20.0),
+              child: RaisedButton(
+                padding: EdgeInsets.only(top: 15.0, bottom:15.0, left: 10.0, right:10.0),
+                
+                color: Colors.green[500],
+                child: Text("Salvar",
+                    style: TextStyle(
+                        color: Colors.white,
+                      
+                      fontWeight: FontWeight.bold,
+                    )),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    Disciplina disc = new Disciplina();
+                //    disc.
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text("Disciplina adicionada com sucesso!")));
+                  }
+                },
+              ),
+            )
           ],
         ),
       ),

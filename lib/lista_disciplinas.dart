@@ -10,10 +10,11 @@ class Home extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            runApp(MaterialApp(
-              title: "Adicionar Disciplina",
-              home: FormDisciplina(),
-            ));
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return FormDisciplina();
+            } ));
+     
+          
           },
           child: Icon(Icons.add),
           backgroundColor: Colors.green[400],

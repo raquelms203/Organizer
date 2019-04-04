@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './disciplinas.dart';
+import './lista_disciplinas.dart';
 import './add_disciplina.dart';
 
 void main() {
