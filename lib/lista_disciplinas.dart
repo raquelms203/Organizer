@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import './add_disciplina.dart';
 
 class Home extends StatelessWidget {
+
+ String _disciplina = "";
+ String _cod= "";
+ 
+ ListView lista;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +35,10 @@ class Home extends StatelessWidget {
         )));
   }
 
+  ListView lista (Container)
+
   Widget bannerDisciplinas(String disciplina, String cod, double nota) {
-    return new Container(
+    Container cont = new Container(
         child: new Card(
       child: ListTile(
         leading: Icon(Icons.assignment, size: 40.0),
@@ -42,5 +50,6 @@ class Home extends StatelessWidget {
         onTap: () {},
       ),
     ));
+    lista.add(cont);
   }
 }
