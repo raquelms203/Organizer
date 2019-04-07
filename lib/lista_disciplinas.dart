@@ -1,32 +1,54 @@
 import 'package:flutter/material.dart';
 import './add_disciplina.dart';
-import './disciplina.dart';
 
 class ListaDisciplinas extends StatefulWidget {
-  Container container;
+//   final Container container;
+  final List<Container> lista;
   ListaDisciplinas({
-    this.container
-  });
-  @override
-  State createState() => new _ListaDisciplinas();
+//     this.container,
+   this.lista
+   }); 
+  
+    @override
+    State createState() => new _ListaDisciplinas();
 }
 
 class _ListaDisciplinas extends State<ListaDisciplinas> {
-  String _disciplina = "", _cod = "";
-  double _meta = 0.0;
-  List<Container> lista = []; 
+ 
+  final String _disciplina = "", _cod = "";
+  final double _meta = 0.0;
 
   @override
-  Widget build(BuildContext context) {
-     lista.add(widget.container);
-    return Scaffold(
+  Widget build(BuildContext context) { 
+        if (widget.lista.isEmpty) {
+      return Scaffold(
         appBar: AppBar(
           title: Text("Organizer"),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+          
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return FormDisciplina();
+              return FormDisciplina(lista: widget.lista);
+            }));
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.green[400],
+          tooltip: "Adicionar Disciplina",
+        ),
+        body: new Container()
+      );
+    } else  {
+    return Scaffold(
+        
+        appBar: AppBar(
+          title: Text("Organizer"),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+          
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return FormDisciplina(lista: widget.lista);
             }));
           },
           child: Icon(Icons.add),
@@ -36,17 +58,19 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
         body: new Container(
             child: new Column(
           children: <Widget>[
+            
             new Expanded(
               child: ListView.builder(
-                itemCount: lista.length,
+                itemCount: widget.lista.length,
                 itemBuilder: (BuildContext context, int index) {
-                  
-                  return lista[index] ;
+     
+                  return widget.lista[index];
                 },
               ),
             )
           ],
         )));
+  }
   }
 }
 

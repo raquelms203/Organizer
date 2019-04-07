@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './lista_disciplinas.dart';
+import 'view_disciplina.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -9,10 +9,10 @@ void main() {
 }
 
 class FormDisciplina extends StatefulWidget {
+  final List<Container> lista;
+  FormDisciplina({this.lista});
   @override
-  State<StatefulWidget> createState() {
-    return _FormDisciplina();
-  }
+  State createState() => new _FormDisciplina();
 }
 
 class _FormDisciplina extends State<FormDisciplina> {
@@ -20,8 +20,9 @@ class _FormDisciplina extends State<FormDisciplina> {
   String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "  Status  ";
   String _disciplina = "";
-  String _cod = "";    
+  String _cod = "";
   String _meta = "0.0";
+  List<Container> lista = [];
   int _id;
   int _limFaltas = 0;
   int _faltas = 0;
@@ -194,30 +195,29 @@ class _FormDisciplina extends State<FormDisciplina> {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 20.0),
                 child: RaisedButton(
-                  padding: EdgeInsets.only(
-                      top: 15.0, bottom: 15.0, left: 10.0, right: 10.0),
-                  color: Colors.green[500],
-                  child: Text("Salvar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      String discp = _disciplina;
-                     
-                      print("Disciplina adicionada!");
-                      print("$discp ");
-                      Container cont = cardDisciplina(_disciplina, _cod, _meta);
-                      Navigator.push(context, MaterialPageRoute( 
-                        builder: (context) {
-                          
-                         return ListaDisciplinas(container:cont);
-                        }
-                      ));
-             }
-                  },
-                ),
+                    padding: EdgeInsets.only(
+                        top: 15.0, bottom: 15.0, left: 10.0, right: 10.0),
+                    color: Colors.green[500],
+                    child: Text("Salvar",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        String discp = _disciplina;
+
+                        print("Disciplina adicionada!");
+                        print("$discp ");
+
+                       
+                          Container cont =
+                              cardDisciplina(_disciplina, _cod, _meta);
+                          widget.lista.add(cont);
+                       
+                        Navigator.pop(context);
+                      }
+                    }),
               )
             ],
           ),
@@ -235,22 +235,22 @@ class _FormDisciplina extends State<FormDisciplina> {
     return periodos;
   }
 
-  Container cardDisciplina (String disciplina, String cod, String meta) {
+  Container cardDisciplina(String disciplina, String cod, String meta) {
     return new Container(
         child: new Card(
-      child: ListTile(
-              
-        
-        leading: Icon(Icons.assignment, size: 40.0),
-        title: Text(disciplina),
-        subtitle: Text(cod),
-        trailing: Text("$meta/100",
-            style: new TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.red[400])),
-        onTap: () {},
-        
-      
+          
+            child: ListTile(
+      leading: Icon(Icons.assignment, size: 40.0),
+      title: Text(disciplina),
+      subtitle: Text(cod),
+      trailing: Text("$meta/100",
+          style: new TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.red[400])),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute( builder: (context) {
+            return ViewDisciplina();
+        }));
+      },
     )));
-
   }
 }
