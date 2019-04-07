@@ -6,7 +6,7 @@ void main() {
   runApp(
     MaterialApp(
       title: "Organizer",
-      home: Home(),
+      home: ListaDisciplinas(),
     ),
   );
 }

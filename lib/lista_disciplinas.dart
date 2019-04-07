@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import './add_disciplina.dart';
+import './disciplina.dart';
 
-class Home extends StatelessWidget {
+class ListaDisciplinas extends StatefulWidget {
+  Container container;
+  ListaDisciplinas({
+    this.container
+  });
+  @override
+  State createState() => new _ListaDisciplinas();
+}
 
- String _disciplina = "";
- String _cod= "";
- 
- ListView lista;
+class _ListaDisciplinas extends State<ListaDisciplinas> {
+  String _disciplina = "", _cod = "";
+  double _meta = 0.0;
+  List<Container> lista = []; 
 
   @override
   Widget build(BuildContext context) {
+     lista.add(widget.container);
     return Scaffold(
         appBar: AppBar(
           title: Text("Organizer"),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return FormDisciplina();
-            } ));
-     
-          
+            }));
           },
           child: Icon(Icons.add),
           backgroundColor: Colors.green[400],
@@ -29,27 +36,18 @@ class Home extends StatelessWidget {
         body: new Container(
             child: new Column(
           children: <Widget>[
-            bannerDisciplinas("Prog Movel", "CSI 401", 25.0),
-            bannerDisciplinas("OAC", "CSI 203", 15.0),
+            new Expanded(
+              child: ListView.builder(
+                itemCount: lista.length,
+                itemBuilder: (BuildContext context, int index) {
+                  
+                  return lista[index] ;
+                },
+              ),
+            )
           ],
         )));
   }
-
-  ListView lista (Container)
-
-  Widget bannerDisciplinas(String disciplina, String cod, double nota) {
-    Container cont = new Container(
-        child: new Card(
-      child: ListTile(
-        leading: Icon(Icons.assignment, size: 40.0),
-        title: Text(disciplina),
-        subtitle: Text(cod),
-        trailing: Text("$nota/100",
-            style: new TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.red[400])),
-        onTap: () {},
-      ),
-    ));
-    lista.add(cont);
-  }
 }
+
+ 

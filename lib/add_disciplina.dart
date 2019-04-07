@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './disciplina.dart';
 import './lista_disciplinas.dart';
 
 void main() {
@@ -12,7 +11,6 @@ void main() {
 class FormDisciplina extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    
     return _FormDisciplina();
   }
 }
@@ -22,13 +20,13 @@ class _FormDisciplina extends State<FormDisciplina> {
   String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "  Status  ";
   String _disciplina = "";
-  String _cod = "";
-  double _meta = 0.0;
+  String _cod = "";    
+  String _meta = "0.0";
   int _id;
   int _limFaltas = 0;
   int _faltas = 0;
-  int  _periodo = 0;
-  bool _status = false;  
+  int _periodo = 0;
+  bool _status = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -38,9 +36,8 @@ class _FormDisciplina extends State<FormDisciplina> {
       appBar: AppBar(
         title: Text("Adicionar Disciplina"),
       ),
-      body: Builder(
-        builder: (BuildContext context) {
-              return Form(
+      body: Builder(builder: (BuildContext context) {
+        return Form(
           key: _formKey,
           child: ListView(
             children: <Widget>[
@@ -49,7 +46,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                 child: Container(
                   margin: EdgeInsets.only(top: 30.0),
                   width: 300.0,
-                  child: TextFormField(                  
+                  child: TextFormField(
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Campo vazio!';
@@ -143,7 +140,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                     Container(
                       width: 150.0,
                       height: 50.0,
-                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0),
+                      padding:
+                          EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0),
                       child: DropdownButton<String>(
                         hint: Text(dropdownDefault2,
                             style: TextStyle(
@@ -189,7 +187,6 @@ class _FormDisciplina extends State<FormDisciplina> {
                         }).toList(),
                       ),
                     ),
-                  
                   ],
                 ),
               ),
@@ -197,33 +194,35 @@ class _FormDisciplina extends State<FormDisciplina> {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 20.0),
                 child: RaisedButton(
-                  padding: EdgeInsets.only(top: 15.0, bottom:15.0, left: 10.0, right:10.0),
-                  
+                  padding: EdgeInsets.only(
+                      top: 15.0, bottom: 15.0, left: 10.0, right: 10.0),
                   color: Colors.green[500],
                   child: Text("Salvar",
                       style: TextStyle(
-                          color: Colors.white,
-                        
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       )),
                   onPressed: () {
-                    
                     if (_formKey.currentState.validate()) {
-                 
-                      Home().bannerDisciplinas(_disciplina, _cod, 15.0);
+                      String discp = _disciplina;
+                     
                       print("Disciplina adicionada!");
-                      print("$_disciplina $_cod");
-                      Navigator.pop(context, Home());
-                     
-                     
-                    }
+                      print("$discp ");
+                      Container cont = cardDisciplina(_disciplina, _cod, _meta);
+                      Navigator.push(context, MaterialPageRoute( 
+                        builder: (context) {
+                          
+                         return ListaDisciplinas(container:cont);
+                        }
+                      ));
+             }
                   },
                 ),
               )
             ],
           ),
         );
-        }),
+      }),
     );
   }
 
@@ -234,5 +233,24 @@ class _FormDisciplina extends State<FormDisciplina> {
 
     periodos.add("Eletiva");
     return periodos;
+  }
+
+  Container cardDisciplina (String disciplina, String cod, String meta) {
+    return new Container(
+        child: new Card(
+      child: ListTile(
+              
+        
+        leading: Icon(Icons.assignment, size: 40.0),
+        title: Text(disciplina),
+        subtitle: Text(cod),
+        trailing: Text("$meta/100",
+            style: new TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.red[400])),
+        onTap: () {},
+        
+      
+    )));
+
   }
 }
