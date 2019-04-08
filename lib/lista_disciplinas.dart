@@ -60,6 +60,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
           children: <Widget>[
             
             new Expanded(
+              
               child: ListView.builder(
                 itemCount: widget.lista.length,
                 itemBuilder: (BuildContext context, int index) {

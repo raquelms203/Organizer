@@ -38,21 +38,63 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 ),
               ),
             )),
-            Card(
-              child: Row(
-                children: <Widget>[
-                  Padding(padding: EdgeInsets.only(left: 15.0)),
-                  Text("Faltas"),
-                  Padding(padding: EdgeInsets.only(left: 55.0)),
-                  RaisedButton(
-                    padding: EdgeInsets.only(left: 5.0, top:5.0),
-                    onPressed: () {},
-                  ),
-                  Text(
-                    "10",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
+            Container(
+              height: 80.0,
+              width: 360.0,
+              child: Card(
+                child: Row(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.only(left: 15.0)),
+                    Text(
+                      "Faltas",
+                      style: TextStyle(fontSize: 16.0, 
+                      fontFamily: 'Trojan'
+                   ),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 35.0)),
+                    SizedBox(
+                      width: 65.0,
+                      height: 35.0,
+                      child: FlatButton(
+                        // padding: EdgeInsets.only( bottom: 55.0, top:0.5),
+                        child: Text(
+                          "+",
+                          style: TextStyle(fontSize: 30.0, color: Colors.green),
+                        ),
+                        shape: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green)),
+                        onPressed: () {},
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 15.0)),
+                    Text(
+                      "10",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 15.0)),
+                    // FlatButton(
+                    //   child: Icon(Icons.minimize, color: Colors.red),
+                    //   shape: OutlineInputBorder(
+                    //       borderSide: BorderSide(color: Colors.red)),
+                    //   onPressed: () {},
+                    // ),
+
+                    SizedBox(
+                      width: 65.0,
+                      height: 35.0,
+                      child: FlatButton(
+                        // padding: EdgeInsets.only( bottom: 55.0, top:0.5),
+                        child: Text(
+                          "-",
+                          style: TextStyle(fontSize: 30.0, color: Colors.red),
+                        ),
+                        shape: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

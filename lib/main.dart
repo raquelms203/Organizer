@@ -10,7 +10,7 @@ void main() {
     MaterialApp(
       title: "Organizer",
      // home: ListaDisciplinas(lista: lista),
-     home: ViewDisciplina(),
+     home: ListaDisciplinas(lista: lista),
     ),
   );
 }
