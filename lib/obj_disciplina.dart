@@ -2,15 +2,16 @@
 class Disciplina {
   String _nome = "";
   String _cod = "";
+  String _limFaltas = "";
+  String _faltas = "";
+  String  _periodo = "";
   double _meta = 0.0;
   int _id;
-  int _limFaltas = 0;
-  int _faltas = 0;
-  int  _periodo = 0;
+  
   bool _status = false;  
 
 
-Disciplina (this._nome, this._cod, this._meta, this._id, this._limFaltas, this._faltas,
+Disciplina.nova(this._nome, this._cod, this._meta, this._limFaltas,
 this._periodo, this._status);
 
 

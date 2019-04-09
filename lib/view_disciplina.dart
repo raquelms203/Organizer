@@ -10,6 +10,7 @@ class ViewDisciplina extends StatefulWidget {
 
 class _ViewDisciplina extends State<ViewDisciplina> {
   @override
+  int faltas = 10;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Prog Movel")),
@@ -22,7 +23,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               trailing: Text(
                 "Cursando",
                 style: TextStyle(
-                  color: Colors.green,
+                  color: Colors.orange,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -33,7 +34,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               trailing: Text(
                 "80.0 pts",
                 style: TextStyle(
-                  color: Colors.green,
+                  color: Colors.orange,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -47,12 +48,35 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     Padding(padding: EdgeInsets.only(left: 15.0)),
                     Text(
                       "Faltas",
-                      style: TextStyle(fontSize: 16.0, 
-                      fontFamily: 'Trojan'
-                   ),
+                      style: TextStyle(fontSize: 16.0, fontFamily: 'Trojan'),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 35.0)),
+                    Padding(padding: EdgeInsets.only(right: 100.0)),
                     SizedBox(
+                      width: 65.0,
+                      height: 35.0,
+                      child: FlatButton(
+                        child: Text(
+                          "-",
+                          style: TextStyle(fontSize: 30.0, color: Colors.red),
+                        ),
+                        shape: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red)),
+                        onPressed: () {
+                          setState(() {
+                            faltas = faltas - 1;
+                          });
+                        },
+                      ),
+                    ),
+                   
+                    Padding(padding: EdgeInsets.only(left: 15.0)),
+                    Text(
+                      "$faltas",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 15.0)),
+                     SizedBox(
                       width: 65.0,
                       height: 35.0,
                       child: FlatButton(
@@ -63,36 +87,14 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                         ),
                         shape: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.green)),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            faltas = faltas + 2;
+                          });
+                        },
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 15.0)),
-                    Text(
-                      "10",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                    ),
-                    Padding(padding: EdgeInsets.only(left: 15.0)),
-                    // FlatButton(
-                    //   child: Icon(Icons.minimize, color: Colors.red),
-                    //   shape: OutlineInputBorder(
-                    //       borderSide: BorderSide(color: Colors.red)),
-                    //   onPressed: () {},
-                    // ),
-
-                    SizedBox(
-                      width: 65.0,
-                      height: 35.0,
-                      child: FlatButton(
-                        // padding: EdgeInsets.only( bottom: 55.0, top:0.5),
-                        child: Text(
-                          "-",
-                          style: TextStyle(fontSize: 30.0, color: Colors.red),
-                        ),
-                        shape: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red)),
-                        onPressed: () {},
-                      ),
-                    ),
+                    
                   ],
                 ),
               ),

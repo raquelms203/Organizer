@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'view_disciplina.dart';
+import './lista_disciplinas.dart';
+import 'obj_disciplina.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -21,13 +23,12 @@ class _FormDisciplina extends State<FormDisciplina> {
   String dropdownDefault3 = "  Status  ";
   String _disciplina = "";
   String _cod = "";
-  String _meta = "0.0";
-  List<Container> lista = [];
-  int _id;
-  int _limFaltas = 0;
-  int _faltas = 0;
-  int _periodo = 0;
+  String _limFaltas = "";
+  String _periodo = "";
   bool _status = false;
+  double _meta = 0.0;
+
+  List<Container> lista = [];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -95,9 +96,12 @@ class _FormDisciplina extends State<FormDisciplina> {
                           child: TextFormField(
                             keyboardType: TextInputType.number,
                             validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Campo vazio!';
-                              }
+                              if (value.isEmpty) return 'Campo vazio!';
+
+                              if (double.parse("$value") < 60.0)
+                                return 'Meta menor que 60.0';
+
+                              _meta = double.parse(value);
                             },
                             decoration: InputDecoration(
                                 labelText: 'Meta',
@@ -118,6 +122,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                         onChanged: (String novoValor) {
                           setState(() {
                             dropdownDefault = novoValor;
+                            _periodo = dropdownDefault;
                           });
                         },
                         items: periodos()
@@ -150,6 +155,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                         onChanged: (String novoValor) {
                           setState(() {
                             dropdownDefault2 = novoValor;
+                            _limFaltas = dropdownDefault2;
                           });
                         },
                         items: ['9 Faltas', '18 Faltas']
@@ -175,6 +181,10 @@ class _FormDisciplina extends State<FormDisciplina> {
                         onChanged: (String novoValor) {
                           setState(() {
                             dropdownDefault3 = novoValor;
+                            if (dropdownDefault == "Cursando")
+                              _status = true;
+                            else
+                              _status = false;
                           });
                         },
                         items: ['Cursando', 'Encerrada']
@@ -210,11 +220,13 @@ class _FormDisciplina extends State<FormDisciplina> {
                         print("Disciplina adicionada!");
                         print("$discp ");
 
-                       
-                          Container cont =
-                              cardDisciplina(_disciplina, _cod, _meta);
-                          widget.lista.add(cont);
-                       
+                        Disciplina disciplina = new Disciplina.nova(_disciplina,
+                            _cod, _meta, _limFaltas, _periodo, _status);
+
+                        Container cont =
+                            cardDisciplina(_disciplina, _cod, "$_meta");
+                        widget.lista.add(cont);
+
                         Navigator.pop(context);
                       }
                     }),
@@ -238,7 +250,6 @@ class _FormDisciplina extends State<FormDisciplina> {
   Container cardDisciplina(String disciplina, String cod, String meta) {
     return new Container(
         child: new Card(
-          
             child: ListTile(
       leading: Icon(Icons.assignment, size: 40.0),
       title: Text(disciplina),
@@ -247,9 +258,10 @@ class _FormDisciplina extends State<FormDisciplina> {
           style: new TextStyle(
               fontWeight: FontWeight.bold, color: Colors.red[400])),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute( builder: (context) {
-            return ViewDisciplina();
-        }));
+        print("Fui clicado!");
+        //  Navigator.push(context, MaterialPageRoute( builder: (context) {
+        //   return  ViewDisciplina();
+        // }));
       },
     )));
   }
