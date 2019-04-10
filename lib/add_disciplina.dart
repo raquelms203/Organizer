@@ -37,6 +37,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Adicionar Disciplina"),
+        backgroundColor: Colors.purpleAccent[400],
       ),
       body: Builder(builder: (BuildContext context) {
         return Form(
@@ -99,7 +100,10 @@ class _FormDisciplina extends State<FormDisciplina> {
                               if (value.isEmpty) return 'Campo vazio!';
 
                               if (double.parse("$value") < 60.0)
-                                return 'Meta menor que 60.0';
+                                return 'Meta menor que 60.0!';
+
+                              if (double.parse("$value") > 100.0)
+                                return 'Meta maior que 100.0!';
 
                               _meta = double.parse(value);
                             },
@@ -220,11 +224,18 @@ class _FormDisciplina extends State<FormDisciplina> {
                         print("Disciplina adicionada!");
                         print("$discp ");
 
-                        Disciplina disciplina = new Disciplina.nova(_disciplina,
-                            _cod, _meta, _limFaltas, _periodo, _status);
+                        Disciplina disciplina = new Disciplina();
 
-                        Container cont =
-                            cardDisciplina(_disciplina, _cod, "$_meta");
+                        disciplina.setDisciplina(_disciplina);
+                        disciplina.setCod(_cod);
+                        disciplina.setFaltas(0);
+                        disciplina.setLimFaltas(_limFaltas);
+                        disciplina.setMeta(_meta);
+                        disciplina.setPeriodo(_periodo);
+                        disciplina.setStatus(_status);
+
+                        Container cont = ListaDisciplinas(lista: widget.lista)
+                            .cardDisciplina(disciplina);
                         widget.lista.add(cont);
 
                         Navigator.pop(context);
@@ -245,24 +256,5 @@ class _FormDisciplina extends State<FormDisciplina> {
 
     periodos.add("Eletiva");
     return periodos;
-  }
-
-  Container cardDisciplina(String disciplina, String cod, String meta) {
-    return new Container(
-        child: new Card(
-            child: ListTile(
-      leading: Icon(Icons.assignment, size: 40.0),
-      title: Text(disciplina),
-      subtitle: Text(cod),
-      trailing: Text("$meta/100",
-          style: new TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.red[400])),
-      onTap: () {
-        print("Fui clicado!");
-        //  Navigator.push(context, MaterialPageRoute( builder: (context) {
-        //   return  ViewDisciplina();
-        // }));
-      },
-    )));
   }
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'add_disciplina.dart';
+import './obj_disciplina.dart';
+import './lista_disciplinas.dart';
 
 class ViewDisciplina extends StatefulWidget {
+  Disciplina disciplina;
+  ViewDisciplina({this.disciplina});
+
   @override
   State createState() {
     return _ViewDisciplina();
@@ -10,10 +15,15 @@ class ViewDisciplina extends StatefulWidget {
 
 class _ViewDisciplina extends State<ViewDisciplina> {
   @override
-  int faltas = 10;
+  int faltas = 0;
+
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Prog Movel")),
+      appBar: AppBar(title: Text(widget.disciplina.getDisciplina()), 
+      actions: <Widget>[ 
+       
+      ],
+      backgroundColor: Colors.purpleAccent[400],),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -21,7 +31,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 child: ListTile(
               title: Text("Status"),
               trailing: Text(
-                "Cursando",
+                stringStatus(widget.disciplina.getStatus()),
                 style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
@@ -32,7 +42,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 child: ListTile(
               title: Text("Meta"),
               trailing: Text(
-                "80.0 pts",
+                widget.disciplina.getMeta().toString(),
                 style: TextStyle(
                   color: Colors.orange,
                   fontWeight: FontWeight.bold,
@@ -63,12 +73,13 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                             borderSide: BorderSide(color: Colors.red)),
                         onPressed: () {
                           setState(() {
+                            faltas = widget.disciplina.getFaltas();
                             faltas = faltas - 1;
+                            widget.disciplina.setFaltas(faltas);
                           });
                         },
                       ),
                     ),
-                   
                     Padding(padding: EdgeInsets.only(left: 15.0)),
                     Text(
                       "$faltas",
@@ -76,7 +87,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           fontWeight: FontWeight.bold, fontSize: 20.0),
                     ),
                     Padding(padding: EdgeInsets.only(left: 15.0)),
-                     SizedBox(
+                    SizedBox(
                       width: 65.0,
                       height: 35.0,
                       child: FlatButton(
@@ -89,12 +100,12 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                             borderSide: BorderSide(color: Colors.green)),
                         onPressed: () {
                           setState(() {
-                            faltas = faltas + 2;
+                            faltas = faltas = faltas + 2;
+                            widget.disciplina.setFaltas(faltas);
                           });
                         },
                       ),
                     ),
-                    
                   ],
                 ),
               ),
@@ -103,5 +114,12 @@ class _ViewDisciplina extends State<ViewDisciplina> {
         ),
       ),
     );
+  }
+
+  String stringStatus(bool status) {
+    if (status == true)
+      return "Cursando";
+      else
+         return "Encerrada";
   }
 }

@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
 import './add_disciplina.dart';
 import './view_disciplina.dart';
+import './obj_disciplina.dart';
 
 class ListaDisciplinas extends StatefulWidget {
 //   final Container container;
-  final List<Container> lista;
-  ListaDisciplinas(
-      {
-//     this.container,
-      this.lista});
+  List<Container> lista;
+  ListaDisciplinas({this.lista});
+  ListaDisciplinas.vazia();
 
   @override
   State createState() => new _ListaDisciplinas();
+
+  Container cardDisciplina(Disciplina disciplina) {
+    BuildContext context;
+    return new Container(
+      child: new Card(
+        child: ListTile(
+          leading: Icon(Icons.assignment, size: 40.0),
+          title: Text(disciplina.getDisciplina()),
+          subtitle: Text(disciplina.getCod()),
+          trailing: Text("0.0/100",
+              style: new TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.red[400])),
+          onTap: () {
+            print("Fui clicado!");
+            runApp(MaterialApp(home: ViewDisciplina(disciplina: disciplina)));
+          },
+        ),
+      ),
+    );
+  }
 }
 
 class _ListaDisciplinas extends State<ListaDisciplinas> {
@@ -23,18 +42,20 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Organizer"),
-          
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ViewDisciplina();
-                }));
-              },
-              child: Icon(Icons.remove_red_eye),
-            )
-          ],
-        ),
+                backgroundColor: Colors.purpleAccent[400],),
+
+
+          // actions: <Widget>[
+          //   FlatButton(
+          //     onPressed: () {
+          //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //         return ViewDisciplina();
+          //       }));
+          //     },
+          //     child: Icon(Icons.remove_red_eye),
+          //   )
+          // ],
+        
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             disableTxtVazia(
@@ -63,7 +84,6 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
             Padding(
               padding: EdgeInsets.only(top: 150.0),
             ),
-           
           ],
         )));
   }
