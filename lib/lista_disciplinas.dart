@@ -42,7 +42,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Organizer"),
-                backgroundColor: Colors.purpleAccent[400],),
+                backgroundColor: Colors.purple[300],),
 
 
           // actions: <Widget>[

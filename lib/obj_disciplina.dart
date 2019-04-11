@@ -1,7 +1,7 @@
 class Disciplina {
   String _disciplina = "";
   String _cod = "";
-  String _limFaltas = "";
+  int _limFaltas = 0;
   String _periodo = "";
   double _meta = 0.0;
   int _id;
@@ -17,7 +17,7 @@ class Disciplina {
     return this._cod;
   }
 
-  String getLimFaltas() {
+  int getLimFaltas() {
     return this._limFaltas;
   }
 
@@ -45,7 +45,7 @@ class Disciplina {
     this._cod = cod;
   }
 
-  void setLimFaltas(String limFaltas) {
+  void setLimFaltas(int limFaltas) {
     this._limFaltas = limFaltas;
   }
 

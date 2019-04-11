@@ -23,7 +23,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   String dropdownDefault3 = "  Status  ";
   String _disciplina = "";
   String _cod = "";
-  String _limFaltas = "";
+  int _limFaltas = 0;
   String _periodo = "";
   bool _status = false;
   double _meta = 0.0;
@@ -159,7 +159,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                         onChanged: (String novoValor) {
                           setState(() {
                             dropdownDefault2 = novoValor;
-                            _limFaltas = dropdownDefault2;
+                            _limFaltas = int.parse(dropdownDefault2[0]+dropdownDefault2[1]);
+                            print(_limFaltas);
                           });
                         },
                         items: ['9 Faltas', '18 Faltas']

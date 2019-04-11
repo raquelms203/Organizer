@@ -19,11 +19,25 @@ class _ViewDisciplina extends State<ViewDisciplina> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.disciplina.getDisciplina()), 
-      actions: <Widget>[ 
-       
-      ],
-      backgroundColor: Colors.purpleAccent[400],),
+      appBar: AppBar(
+        title: Text(
+            widget.disciplina.getDisciplina() +
+                "  (" +
+                widget.disciplina.getCod() +
+                ")",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20.0)),
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: 15.0, right: 20.0),
+            child: Text(
+              widget.disciplina.getPeriodo(),
+              style: TextStyle(fontSize: 20.0),
+            ),
+          )
+        ],
+        backgroundColor: Colors.purpleAccent[400],
+      ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -60,7 +74,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                       "Faltas",
                       style: TextStyle(fontSize: 16.0, fontFamily: 'Trojan'),
                     ),
-                    Padding(padding: EdgeInsets.only(right: 100.0)),
+                    Padding(padding: EdgeInsets.only(right: 30.0)),
                     SizedBox(
                       width: 65.0,
                       height: 35.0,
@@ -106,6 +120,13 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                         },
                       ),
                     ),
+                    Text(
+                      "Máx: $widget.disciplina.getLimFaltas()",
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -119,7 +140,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   String stringStatus(bool status) {
     if (status == true)
       return "Cursando";
-      else
-         return "Encerrada";
+    else
+      return "Encerrada";
   }
 }
