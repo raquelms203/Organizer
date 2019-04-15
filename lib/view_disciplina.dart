@@ -29,14 +29,15 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             style: TextStyle(fontSize: 20.0)),
         actions: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 15.0, right: 20.0),
-            child: Text(
-              widget.disciplina.getPeriodo(),
-              style: TextStyle(fontSize: 20.0),
-            ),
+            padding: EdgeInsets.only(top: 25.0, right: 20.0),
+            child:  Text(widget.disciplina.getPeriodo(), 
+            style: TextStyle( 
+              fontSize: 22.0
+            ),)
+
           )
         ],
-        backgroundColor: Colors.purpleAccent[400],
+        backgroundColor: Colors.purple[300],
       ),
       body: Container(
         child: Column(
@@ -120,8 +121,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                         },
                       ),
                     ),
+                    Padding(padding: EdgeInsets.only(left: 25.0)),
                     Text(
-                      "Máx: $widget.disciplina.getLimFaltas()",
+                      "Máx: "+ widget.disciplina.getLimFaltas().toString(),
                       style: TextStyle(
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
@@ -140,7 +142,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   String stringStatus(bool status) {
     if (status == true)
       return "Cursando";
-    else
+   
       return "Encerrada";
   }
 }

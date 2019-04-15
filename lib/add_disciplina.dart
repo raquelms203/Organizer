@@ -37,7 +37,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Adicionar Disciplina"),
-        backgroundColor: Colors.purpleAccent[400],
+        backgroundColor: Colors.purple[300],
       ),
       body: Builder(builder: (BuildContext context) {
         return Form(
@@ -125,8 +125,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                                 fontWeight: FontWeight.bold, fontSize: 20.0)),
                         onChanged: (String novoValor) {
                           setState(() {
-                            dropdownDefault = novoValor;
-                            _periodo = dropdownDefault;
+                            dropdownDefault = novoValor;  
+                            _periodo = novoValor;                                        
                           });
                         },
                         items: periodos()
@@ -186,9 +186,9 @@ class _FormDisciplina extends State<FormDisciplina> {
                         onChanged: (String novoValor) {
                           setState(() {
                             dropdownDefault3 = novoValor;
-                            if (dropdownDefault == "Cursando")
+                            if (novoValor == "Cursando")
                               _status = true;
-                            else
+                            else if (novoValor == "Encerrada")
                               _status = false;
                           });
                         },
