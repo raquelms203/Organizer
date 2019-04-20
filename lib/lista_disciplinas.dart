@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './add_disciplina.dart';
+import './form_disciplina.dart';
 import './view_disciplina.dart';
 import './obj_disciplina.dart';
 
@@ -25,7 +25,7 @@ class ListaDisciplinas extends StatefulWidget {
                   fontWeight: FontWeight.bold, color: Colors.red[400])),
           onTap: () {
             print("Fui clicado!");
-            runApp(MaterialApp(home: ViewDisciplina(disciplina: disciplina)));
+            runApp(MaterialApp(home: ViewDisciplina(disciplina: disciplina, lista: lista)));
           },
         ),
       ),
@@ -62,7 +62,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
               txtListaVazia(widget.lista.length),
             );
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return FormDisciplina(lista: widget.lista);
+              return FormDisciplina.add(widget.lista, "a");
             }));
           },
           child: Icon(Icons.add),

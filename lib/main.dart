@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './lista_disciplinas.dart';
-import './add_disciplina.dart';
+import './form_disciplina.dart';
 import 'view_disciplina.dart';
 
 void main() {

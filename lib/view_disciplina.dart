@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'add_disciplina.dart';
+import 'form_disciplina.dart';
 import './obj_disciplina.dart';
 import './lista_disciplinas.dart';
 
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
-  ViewDisciplina({this.disciplina});
+  List<Container> lista;
+  ViewDisciplina({ 
+    this.disciplina,
+    this.lista 
+    });
 
   @override
   State createState() {
@@ -29,13 +33,27 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             style: TextStyle(fontSize: 20.0)),
         actions: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 25.0, right: 20.0),
-            child:  Text(widget.disciplina.getPeriodo(), 
-            style: TextStyle( 
-              fontSize: 22.0
-            ),)
-
-          )
+              padding: EdgeInsets.only(top: 25.0, right: 20.0),
+              child: Text(
+                widget.disciplina.getPeriodo(),
+                style: TextStyle(fontSize: 22.0),
+              )),
+          Container(
+            child: FlatButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return FormDisciplina.editar(widget.disciplina, "e", widget.lista);
+                  }));
+                },
+                child: Icon(Icons.remove_red_eye)),
+          ),
+          Container(
+            child: FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.assignment_return)),
+          ),
         ],
         backgroundColor: Colors.purple[300],
       ),
@@ -48,7 +66,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               trailing: Text(
                 stringStatus(widget.disciplina.getStatus()),
                 style: TextStyle(
-                  color: Colors.orange,
+                  color: Colors.blueGrey[600],
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -59,7 +77,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               trailing: Text(
                 widget.disciplina.getMeta().toString(),
                 style: TextStyle(
-                  color: Colors.orange,
+                  color: Colors.blueGrey[600],
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -88,9 +106,11 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                             borderSide: BorderSide(color: Colors.red)),
                         onPressed: () {
                           setState(() {
-                            faltas = widget.disciplina.getFaltas();
-                            faltas = faltas - 1;
-                            widget.disciplina.setFaltas(faltas);
+                            if (faltas - 1 >= 0) {
+                              faltas = widget.disciplina.getFaltas();
+                              faltas = faltas - 1;
+                              widget.disciplina.setFaltas(faltas);
+                            }
                           });
                         },
                       ),
@@ -115,17 +135,20 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                             borderSide: BorderSide(color: Colors.green)),
                         onPressed: () {
                           setState(() {
-                            faltas = faltas = faltas + 2;
-                            widget.disciplina.setFaltas(faltas);
+                            if (faltas + 2 <=
+                                widget.disciplina.getLimFaltas()) {
+                              faltas = faltas + 2;
+                              widget.disciplina.setFaltas(faltas);
+                            }
                           });
                         },
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(left: 25.0)),
                     Text(
-                      "Máx: "+ widget.disciplina.getLimFaltas().toString(),
+                      "Máx: " + widget.disciplina.getLimFaltas().toString(),
                       style: TextStyle(
-                        color: Colors.orange,
+                        color: Colors.blueGrey[600],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -140,9 +163,8 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   }
 
   String stringStatus(bool status) {
-    if (status == true)
-      return "Cursando";
-   
-      return "Encerrada";
+    if (status == true) return "Cursando";
+
+    return "Encerrada";
   }
 }
