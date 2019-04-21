@@ -12,6 +12,11 @@ class ListaDisciplinas extends StatefulWidget {
   @override
   State createState() => new _ListaDisciplinas();
 
+  List<Container> getLista () {
+    return this.lista;
+  }
+
+
   Container cardDisciplina(Disciplina disciplina) {
     BuildContext context;
     return new Container(
@@ -25,12 +30,19 @@ class ListaDisciplinas extends StatefulWidget {
                   fontWeight: FontWeight.bold, color: Colors.red[400])),
           onTap: () {
             print("Fui clicado!");
-            runApp(MaterialApp(home: ViewDisciplina(disciplina: disciplina, lista: lista)));
-          },
+            runApp(MaterialApp(home: ViewDisciplina(lista: this.lista, disciplina: disciplina)));
+           },
         ),
       ),
     );
   }
+ 
+  void apagaDisciplina(Disciplina disciplina) {
+    this.lista.remove(disciplina);
+    print(    this.lista.remove(disciplina));
+
+  }
+  
 }
 
 class _ListaDisciplinas extends State<ListaDisciplinas> {
@@ -69,8 +81,8 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
           backgroundColor: Colors.green[400],
           tooltip: "Adicionar Disciplina",
         ),
-        body: new Container(
-            child: new Column(
+        body: Container (
+            child: Column(
           children: <Widget>[
             txtListaVazia(widget.lista.length),
             new Expanded(
@@ -81,11 +93,10 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
                 },
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 150.0),
-            ),
+            // 
           ],
-        )));
+          )),
+        );
   }
 }
 

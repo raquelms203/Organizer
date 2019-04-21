@@ -6,10 +6,7 @@ import './lista_disciplinas.dart';
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
   List<Container> lista;
-  ViewDisciplina({ 
-    this.disciplina,
-    this.lista 
-    });
+  ViewDisciplina({this.lista, this.disciplina});
 
   @override
   State createState() {
@@ -29,30 +26,48 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 "  (" +
                 widget.disciplina.getCod() +
                 ")",
-            textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20.0)),
         actions: <Widget>[
-          Container(
-              padding: EdgeInsets.only(top: 25.0, right: 20.0),
-              child: Text(
-                widget.disciplina.getPeriodo(),
-                style: TextStyle(fontSize: 22.0),
-              )),
-          Container(
+          SizedBox(
+            height: 20.0,
+            width: 60.0,
             child: FlatButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return FormDisciplina.editar(widget.disciplina, "e", widget.lista);
+                    return FormDisciplina.editar(
+                        widget.disciplina, "e", widget.lista);
                   }));
                 },
-                child: Icon(Icons.remove_red_eye)),
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.blue[300],
+                  size: 30.0,
+                )),
           ),
-          Container(
+          SizedBox(
+            height: 0.0,
+            width: 50.0,
+            child: FlatButton(
+                onPressed: () { 
+                  ListaDisciplinas(lista: widget.lista).apagaDisciplina(widget.disciplina);
+
+                },
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.red[300],
+                  size: 30.0,
+                )),
+          ),
+          SizedBox(
+            height: 20.0,
+            width: 60.0,
             child: FlatButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  ListaDisciplinas.vazia().cardDisciplina(widget.disciplina);
+                  runApp(
+                      MaterialApp(home: ListaDisciplinas(lista: widget.lista)));
                 },
-                child: Icon(Icons.assignment_return)),
+                child: Icon(Icons.arrow_back, color: Colors.black, size: 30.0)),
           ),
         ],
         backgroundColor: Colors.purple[300],
@@ -60,6 +75,16 @@ class _ViewDisciplina extends State<ViewDisciplina> {
       body: Container(
         child: Column(
           children: <Widget>[
+            Card(
+                child: ListTile(
+                    title: Text("Período"),
+                    trailing: Text(
+                      widget.disciplina.getPeriodo(),
+                      style: TextStyle(
+                        color: Colors.blueGrey[600],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ))),
             Card(
                 child: ListTile(
               title: Text("Status"),
