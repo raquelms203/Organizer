@@ -13,7 +13,8 @@ class FormDisciplina extends StatefulWidget {
     this.acao = acao;
   }
 
-  FormDisciplina.editar(Disciplina disciplina, String acao, List<Container> lista ) {
+  FormDisciplina.editar(
+      Disciplina disciplina, String acao, List<Container> lista) {
     this.lista = lista;
     this.disciplina = disciplina;
     this.acao = acao;
@@ -32,7 +33,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   String _cod = "";
   int _limFaltas = 0;
   String _periodo = "";
-  bool _status = false;
+  bool _status;
   double _meta = 0.0;
 
   List<Container> lista = [];
@@ -57,7 +58,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                   margin: EdgeInsets.only(top: 30.0),
                   width: 300.0,
                   child: TextFormField(
-                    initialValue:valorInicialDisciplina(),
+                    initialValue: valorInicialDisciplina(),
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Campo vazio!';
@@ -77,8 +78,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                 child: Container(
                   width: 300.0,
                   child: TextFormField(
-                    initialValue:valorInicialCod(),
-
+                    initialValue: valorInicialCod(),
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Campo vazio!';
@@ -123,38 +123,32 @@ class _FormDisciplina extends State<FormDisciplina> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 30.0, right: 35.0 )
-                          ),
-                
-                       Container(
-                         padding: EdgeInsets.only(right: 20.0),
-                         child: DropdownButtonHideUnderline(
-                           
-                          child: DropdownButton<String>(
-                            hint: Text(dropdownDefault,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20.0)),
-                            onChanged: (String novoValor) {
-                              setState(() {
-                                dropdownDefault = novoValor;
-                                _periodo = novoValor;
-                              });
-                            },
-                            items: periodos()
-                                .map<DropdownMenuItem<String>>((String valor) {
-                              return DropdownMenuItem<String>(
-                                  value: valor,
-                                  child: Text(
-                                    valor,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ));
-                            }).toList(),
-                          ),
+                    Padding(padding: EdgeInsets.only(left: 30.0, right: 35.0)),
+                    Container(
+                      padding: EdgeInsets.only(right: 20.0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          hint: Text(dropdownDefault,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                          onChanged: (String novoValor) {
+                            setState(() {
+                              dropdownDefault = novoValor;
+                              _periodo = novoValor;
+                            });
+                          },
+                          items: periodos()
+                              .map<DropdownMenuItem<String>>((String valor) {
+                            return DropdownMenuItem<String>(
+                                value: valor,
+                                child: Text(
+                                  valor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ));
+                          }).toList(),
+                        ),
                       ),
-                       ),
-                    
+                    ),
                   ],
                 ),
               ),
@@ -166,8 +160,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                     Container(
                       width: 128.0,
                       height: 50.0,
-                      padding:
-                          EdgeInsets.only(top: 5.0, bottom: 5.0),
+                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           hint: Text(dropdownDefault2,
@@ -252,9 +245,6 @@ class _FormDisciplina extends State<FormDisciplina> {
       }),
     );
   }
-  
-  
-  
 
   List<String> periodos() {
     List<String> periodos = [""];
@@ -265,73 +255,75 @@ class _FormDisciplina extends State<FormDisciplina> {
     return periodos;
   }
 
-  String appbarTitulo () {
-    if (widget.acao == "e")
-      return "Editar Disciplina";
+  String appbarTitulo() {
+    if (widget.acao == "e") return "Editar Disciplina";
 
-        return "Adicionar Disciplina";
+    return "Adicionar Disciplina";
   }
 
   String valorInicialDisciplina() {
     if (widget.acao == "a")
       return "";
-      else if (widget.acao == "e")
-        return  widget.disciplina.getDisciplina(); 
-    
-     return  ""; 
+    else if (widget.acao == "e") return widget.disciplina.getDisciplina();
+
+    return "";
   }
 
   String valorInicialCod() {
     if (widget.acao == "a")
       return "";
-      else if (widget.acao == "e")
-        return widget.disciplina.getCod();
+    else if (widget.acao == "e") return widget.disciplina.getCod();
 
-    return "";            
+    return "";
   }
 
   String valorInicialMeta() {
     if (widget.acao == "a")
       return "";
-      else if (widget.acao == "e")
-        return widget.disciplina.getMeta().toString();    
+    else if (widget.acao == "e") return widget.disciplina.getMeta().toString();
 
-    return "";        
+    return "";
   }
 
-  // String valorInicialPeriodo() {
-  //   if (widget.acao == "a")
-  //     return dropdownDefault;
-  //     else if (widget.acao == "e")
-  //       return widget.disciplina.getPeriodo();     
-
-  //   return "";       
-  // }
-
-  // String valorInicialLimFaltas() {
-  //   if (widget.acao == "a")
-  //     return dropdownDefault2;
-  //     else if (widget.acao == "e")
-  //       return (widget.disciplina.getLimFaltas().toString()+ " Faltas");       
-
-  //   return "";     
-  // }
-
-  // String valorInicialStatus() {
-  //   if (widget.acao == "a")
-  //     return dropdownDefault3;
-  //     else if (widget.acao == "e") {
-  //       if (widget.disciplina.getStatus() == false)
-  //         return "Encerrada";
-  //           else 
-  //             return "Cursando";    
-  //     }   
-
-  // return "";
-
-  // }
+  bool errorMsg(String campo) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(
+            "Selecione o " + campo + "!",
+            style: TextStyle(color: Colors.red),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return true;
+  }
 
   void salvarDisciplina() {
+    if (_periodo == "") {
+      errorMsg("Período");
+      return;
+    }
+
+    if (_limFaltas == 0) {
+      errorMsg("Máx de Faltas");
+      return;
+    }
+
+    if (_status.toString() != "true" && _status.toString() != "false") {
+      errorMsg("Status");
+      return;
+    }
+
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
       widget.disciplina.setCod(_cod);

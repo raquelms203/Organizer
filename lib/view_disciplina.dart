@@ -21,6 +21,16 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading:  SizedBox(
+            height: 20.0,
+            width: 60.0,
+            child: FlatButton(
+                onPressed: () {
+                  runApp(
+                      MaterialApp(home: ListaDisciplinas(lista: widget.lista)));
+                },
+                child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
+          ),
         title: Text(
             widget.disciplina.getDisciplina() +
                 "  (" +
@@ -49,10 +59,12 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             width: 50.0,
             child: FlatButton(
                 onPressed: () {
-                  // print(widget.lista);
-                  // ListaDisciplinas(lista: widget.lista)
-                  //     .apagaDisciplina(widget.disciplina);
-                  // print(widget.lista);
+                  print(widget.lista);
+                  // setState(() {
+                  //   Container cont = ListaDisciplinas(lista: widget.lista).cardDisciplina(widget.disciplina);
+                  // ListaDisciplinas(lista: widget.lista).getLista(). 
+                  // });                      
+                  print(widget.lista);
                 },
                 child: Icon(
                   Icons.delete,
@@ -60,16 +72,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   size: 30.0,
                 )),
           ),
-          SizedBox(
-            height: 20.0,
-            width: 60.0,
-            child: FlatButton(
-                onPressed: () {
-                  runApp(
-                      MaterialApp(home: ListaDisciplinas(lista: widget.lista)));
-                },
-                child: Icon(Icons.arrow_back, color: Colors.black, size: 30.0)),
-          ),
+         
         ],
         backgroundColor: Colors.purple[300],
       ),
@@ -132,8 +135,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                             borderSide: BorderSide(color: Colors.red)),
                         onPressed: () {
                           setState(() {
+                            faltas = widget.disciplina.getFaltas();
+
                             if (faltas - 1 >= 0) {
-                              faltas = widget.disciplina.getFaltas();
                               faltas = faltas - 1;
                               widget.disciplina.setFaltas(faltas);
                             }
@@ -143,7 +147,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     ),
                     Padding(padding: EdgeInsets.only(left: 15.0)),
                     Text(
-                      "$faltas",
+                      widget.disciplina.getFaltas().toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20.0),
                     ),
@@ -152,7 +156,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                       width: 65.0,
                       height: 35.0,
                       child: FlatButton(
-                        // padding: EdgeInsets.only( bottom: 55.0, top:0.5),
                         child: Text(
                           "+",
                           style: TextStyle(fontSize: 30.0, color: Colors.green),
@@ -161,6 +164,8 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                             borderSide: BorderSide(color: Colors.green)),
                         onPressed: () {
                           setState(() {
+                            faltas = widget.disciplina.getFaltas();
+
                             if (faltas + 2 <=
                                 widget.disciplina.getLimFaltas()) {
                               faltas = faltas + 2;
