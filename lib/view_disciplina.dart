@@ -45,16 +45,18 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 )),
           ),
           SizedBox(
-            height: 0.0,
+            height: 20.0,
             width: 50.0,
             child: FlatButton(
-                onPressed: () { 
-                  ListaDisciplinas(lista: widget.lista).apagaDisciplina(widget.disciplina);
-
+                onPressed: () {
+                  // print(widget.lista);
+                  // ListaDisciplinas(lista: widget.lista)
+                  //     .apagaDisciplina(widget.disciplina);
+                  // print(widget.lista);
                 },
                 child: Icon(
                   Icons.delete,
-                  color: Colors.red[300],
+                  color: Colors.white70,
                   size: 30.0,
                 )),
           ),
@@ -63,7 +65,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             width: 60.0,
             child: FlatButton(
                 onPressed: () {
-                  ListaDisciplinas.vazia().cardDisciplina(widget.disciplina);
                   runApp(
                       MaterialApp(home: ListaDisciplinas(lista: widget.lista)));
                 },

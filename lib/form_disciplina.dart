@@ -43,7 +43,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Adicionar Disciplina"),
+        title: Text(appbarTitulo()),
         backgroundColor: Colors.purple[300],
       ),
       body: Builder(builder: (BuildContext context) {
@@ -57,6 +57,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                   margin: EdgeInsets.only(top: 30.0),
                   width: 300.0,
                   child: TextFormField(
+                    initialValue:valorInicialDisciplina(),
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Campo vazio!';
@@ -76,6 +77,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                 child: Container(
                   width: 300.0,
                   child: TextFormField(
+                    initialValue:valorInicialCod(),
+
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Campo vazio!';
@@ -99,6 +102,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                         padding: EdgeInsets.only(
                             top: 10.0, bottom: 10.0, right: 2.0),
                         child: TextFormField(
+                          initialValue: valorInicialMeta(),
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value.isEmpty) return 'Campo vazio!';
@@ -127,6 +131,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                        Container(
                          padding: EdgeInsets.only(right: 20.0),
                          child: DropdownButtonHideUnderline(
+                           
                           child: DropdownButton<String>(
                             hint: Text(dropdownDefault,
                                 style: TextStyle(
@@ -247,6 +252,9 @@ class _FormDisciplina extends State<FormDisciplina> {
       }),
     );
   }
+  
+  
+  
 
   List<String> periodos() {
     List<String> periodos = [""];
@@ -257,11 +265,77 @@ class _FormDisciplina extends State<FormDisciplina> {
     return periodos;
   }
 
+  String appbarTitulo () {
+    if (widget.acao == "e")
+      return "Editar Disciplina";
+
+        return "Adicionar Disciplina";
+  }
+
+  String valorInicialDisciplina() {
+    if (widget.acao == "a")
+      return "";
+      else if (widget.acao == "e")
+        return  widget.disciplina.getDisciplina(); 
+    
+     return  ""; 
+  }
+
+  String valorInicialCod() {
+    if (widget.acao == "a")
+      return "";
+      else if (widget.acao == "e")
+        return widget.disciplina.getCod();
+
+    return "";            
+  }
+
+  String valorInicialMeta() {
+    if (widget.acao == "a")
+      return "";
+      else if (widget.acao == "e")
+        return widget.disciplina.getMeta().toString();    
+
+    return "";        
+  }
+
+  // String valorInicialPeriodo() {
+  //   if (widget.acao == "a")
+  //     return dropdownDefault;
+  //     else if (widget.acao == "e")
+  //       return widget.disciplina.getPeriodo();     
+
+  //   return "";       
+  // }
+
+  // String valorInicialLimFaltas() {
+  //   if (widget.acao == "a")
+  //     return dropdownDefault2;
+  //     else if (widget.acao == "e")
+  //       return (widget.disciplina.getLimFaltas().toString()+ " Faltas");       
+
+  //   return "";     
+  // }
+
+  // String valorInicialStatus() {
+  //   if (widget.acao == "a")
+  //     return dropdownDefault3;
+  //     else if (widget.acao == "e") {
+  //       if (widget.disciplina.getStatus() == false)
+  //         return "Encerrada";
+  //           else 
+  //             return "Cursando";    
+  //     }   
+
+  // return "";
+
+  // }
+
   void salvarDisciplina() {
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
       widget.disciplina.setCod(_cod);
-      widget.disciplina.setFaltas(0);
+      widget.disciplina.setFaltas(_limFaltas);
       widget.disciplina.setLimFaltas(_limFaltas);
       widget.disciplina.setMeta(_meta);
       widget.disciplina.setPeriodo(_periodo);

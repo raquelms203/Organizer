@@ -29,8 +29,12 @@ class ListaDisciplinas extends StatefulWidget {
               style: new TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.red[400])),
           onTap: () {
-            print("Fui clicado!");
-            runApp(MaterialApp(home: ViewDisciplina(lista: this.lista, disciplina: disciplina)));
+            print(lista);
+            runApp(MaterialApp(home: ViewDisciplina(lista: lista, disciplina: disciplina))); 
+           
+          // lista.remove(disciplina);   
+           print(lista);
+       
            },
         ),
       ),
@@ -42,12 +46,15 @@ class ListaDisciplinas extends StatefulWidget {
     print(    this.lista.remove(disciplina));
 
   }
+
   
 }
 
 class _ListaDisciplinas extends State<ListaDisciplinas> {
   final String _disciplina = "", _cod = "";
   final double _meta = 0.0;
+
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -85,20 +92,21 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
             child: Column(
           children: <Widget>[
             txtListaVazia(widget.lista.length),
-            new Expanded(
-              child: ListView.builder(
-                itemCount: widget.lista.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return widget.lista[index];
-                },
-              ),
-            ),
+            carregarLista()
+            // new Expanded(
+            //   child: ListView.builder(
+            //     itemCount: widget.lista.length,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       return widget.lista[index];
+            //     },
+            //   ),
+            // ),
             // 
           ],
           )),
         );
   }
-}
+
 
 Container txtListaVazia(int tam) {
   if (tam == 1) {
@@ -115,6 +123,23 @@ Container txtListaVazia(int tam) {
   }
 }
 
+Expanded carregarLista() {
+  Expanded ex;
+  setState(() {
+     ex =  Expanded(
+              child: ListView.builder(
+                itemCount: widget.lista.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return widget.lista[index];
+                },
+              ),
+            );
+  });
+  return ex;
+}
+
 Visibility disableTxtVazia(Container cont) {
   return Visibility(child: cont, visible: false);
+}
+
 }
