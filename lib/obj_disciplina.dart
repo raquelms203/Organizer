@@ -4,7 +4,6 @@ class Disciplina {
   int _limFaltas = 0;
   String _periodo = "";
   double _meta = 0.0;
-  int _id;
   int _faltas = 0;
 
   bool _status = false;

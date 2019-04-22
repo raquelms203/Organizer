@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'view_disciplina.dart';
 import './lista_disciplinas.dart';
 import 'obj_disciplina.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Container> lista;
+  List<Disciplina> listaDisciplina;
   Disciplina disciplina;
   String acao;
 
-  FormDisciplina.add(List<Container> lista, String acao) {
+  FormDisciplina.add(
+      List<Container> lista, String acao, List<Disciplina> listaDisciplina) {
     this.lista = lista;
     this.acao = acao;
+    this.listaDisciplina = listaDisciplina;
   }
 
   FormDisciplina.editar(
@@ -39,7 +41,6 @@ class _FormDisciplina extends State<FormDisciplina> {
   List<Container> lista = [];
 
   final _formKey = GlobalKey<FormState>();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +174,6 @@ class _FormDisciplina extends State<FormDisciplina> {
                               dropdownDefault2 = novoValor;
                               _limFaltas = int.parse(
                                   dropdownDefault2[0] + dropdownDefault2[1]);
-                              print(_limFaltas);
                             });
                           },
                           items: ['9 Faltas', '18 Faltas']
@@ -288,16 +288,15 @@ class _FormDisciplina extends State<FormDisciplina> {
   }
 
   void valorInicialDropdown() {
-    if (widget.acao == "a")
-     return;
-      dropdownDefault = widget.disciplina.getPeriodo();
-      dropdownDefault2 = (widget.disciplina.getLimFaltas().toString() + " Faltas");
+    if (widget.acao == "a") return;
+    dropdownDefault = widget.disciplina.getPeriodo();
+    dropdownDefault2 =
+        (widget.disciplina.getLimFaltas().toString() + " Faltas");
 
-      if (widget.disciplina.getStatus() == false)
-        dropdownDefault3 = "Encerrada";
-        else if (widget.disciplina.getStatus() == true)
-        dropdownDefault3 = "Cursando";
-
+    if (widget.disciplina.getStatus() == false)
+      dropdownDefault3 = "Encerrada";
+    else if (widget.disciplina.getStatus() == true)
+      dropdownDefault3 = "Cursando";
   }
 
   bool errorMsg(String campo) {
@@ -359,9 +358,8 @@ class _FormDisciplina extends State<FormDisciplina> {
       Container cont =
           ListaDisciplinas(lista: widget.lista).cardDisciplina(disciplina);
       widget.lista.add(cont);
-      ViewDisciplina(lista: widget.lista, disciplina: widget.disciplina).setCont(cont);
+      widget.listaDisciplina.add(disciplina);
     }
-
     Navigator.pop(context);
   }
 }

@@ -4,11 +4,18 @@ import './view_disciplina.dart';
 import './obj_disciplina.dart';
 
 class ListaDisciplinas extends StatefulWidget {
-//   final Container container;
   List<Container> lista;
-  List<Disciplina> listaDisciplina;
+  List<Disciplina> listaDisciplina = [new Disciplina()];
   ListaDisciplinas({this.lista});
   ListaDisciplinas.vazia();
+
+  List<Disciplina> getListaD() {
+    return this.listaDisciplina;
+  }
+
+  void addLista (Disciplina disciplina) {
+    listaDisciplina.add(disciplina);
+  }
 
   @override
   State createState() => new _ListaDisciplinas();
@@ -27,8 +34,7 @@ class ListaDisciplinas extends StatefulWidget {
               style: new TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.red[400])),
           onTap: () {
-            runApp(MaterialApp(home: ViewDisciplina(lista: lista, disciplina: disciplina))); 
-       
+            runApp(MaterialApp(home: ViewDisciplina(lista: lista, disciplina: disciplina, listaDisciplina: listaDisciplina,)));
            },
         ),
       ),
@@ -36,22 +42,8 @@ class ListaDisciplinas extends StatefulWidget {
     ViewDisciplina.vazia().setCont(cont);
     return cont;
   }
-
- 
-  void apagaDisciplina(Disciplina disciplina) {
-    this.lista.remove(disciplina);
-    print(    this.lista.remove(disciplina));
-
-  }
-
-  
 }
-
 class _ListaDisciplinas extends State<ListaDisciplinas> {
-  final String _disciplina = "", _cod = "";
-  final double _meta = 0.0;
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -60,25 +52,13 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
           title: Text("Organizer"),
                 backgroundColor: Colors.purple[300],),
 
-
-          // actions: <Widget>[
-          //   FlatButton(
-          //     onPressed: () {
-          //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //         return ViewDisciplina();
-          //       }));
-          //     },
-          //     child: Icon(Icons.remove_red_eye),
-          //   )
-          // ],
-        
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             disableTxtVazia(
               txtListaVazia(widget.lista.length),
             );
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return FormDisciplina.add(widget.lista, "a");
+              return FormDisciplina.add(widget.lista, "a", widget.listaDisciplina);
             }));
           },
           child: Icon(Icons.add),
@@ -90,15 +70,6 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
           children: <Widget>[
             txtListaVazia(widget.lista.length),
             carregarLista()
-            // new Expanded(
-            //   child: ListView.builder(
-            //     itemCount: widget.lista.length,
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return widget.lista[index];
-            //     },
-            //   ),
-            // ),
-            // 
           ],
           )),
         );

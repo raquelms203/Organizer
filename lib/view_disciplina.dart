@@ -6,8 +6,11 @@ import './lista_disciplinas.dart';
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
   List<Container> lista;
+  List<Disciplina> listaDisciplina;
+
   Container cont;
-  ViewDisciplina({this.lista, this.disciplina});
+  ViewDisciplina(
+      {this.lista, this.disciplina, List<Disciplina> listaDisciplina});
   ViewDisciplina.vazia();
 
   void setCont(Container cont) {
@@ -74,11 +77,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               width: 50.0,
               child: FlatButton(
                   onPressed: () {
-                    print(widget.lista);
                     setState(() {
-                      widget.lista.remove(widget.getCont());
+                      alertApagar();
                     });
-                    print(widget.lista);
                   },
                   child: Icon(
                     Icons.delete,
@@ -212,5 +213,39 @@ class _ViewDisciplina extends State<ViewDisciplina> {
     if (status == true) return "Cursando";
 
     return "Encerrada";
+  }
+
+  void alertApagar() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(
+            "Deseja apagar a última disciplina cadastrada?",
+            style: TextStyle(color: Colors.blue[600]),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: new Text(
+                  "Sim",
+                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+                onPressed: () {
+                  widget.lista.removeLast();
+                  Navigator.pop(context);
+                }),
+            FlatButton(
+              child: new Text(
+                "Não",
+                style: TextStyle(color: Colors.black, fontSize: 15.0),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
