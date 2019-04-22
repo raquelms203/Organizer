@@ -359,7 +359,6 @@ class _FormDisciplina extends State<FormDisciplina> {
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
       widget.disciplina.setCod(_cod);
-      widget.disciplina.setFaltas(_limFaltas);
       widget.disciplina.setLimFaltas(_limFaltas);
       widget.disciplina.setMeta(_meta);
       widget.disciplina.setPeriodo(_periodo);
