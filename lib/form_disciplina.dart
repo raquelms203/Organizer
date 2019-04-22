@@ -93,7 +93,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Código',
-                        hintText: 'Ex. CSI 451',
+                        hintText: 'Ex. CSI 401',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
