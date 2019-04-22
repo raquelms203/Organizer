@@ -6,8 +6,17 @@ import './lista_disciplinas.dart';
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
   List<Container> lista;
+  Container cont;
   ViewDisciplina({this.lista, this.disciplina});
+  ViewDisciplina.vazia();
 
+  void setCont(Container cont) {
+    this.cont = cont;
+  }
+
+  Container getCont () {
+    return cont;
+  }
   @override
   State createState() {
     return _ViewDisciplina();
@@ -21,16 +30,16 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading:  SizedBox(
-            height: 20.0,
-            width: 60.0,
-            child: FlatButton(
-                onPressed: () {
-                  runApp(
-                      MaterialApp(home: ListaDisciplinas(lista: widget.lista)));
-                },
-                child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
-          ),
+        leading: SizedBox(
+          height: 20.0,
+          width: 60.0,
+          child: FlatButton(
+              onPressed: () {
+                runApp(
+                    MaterialApp(home: ListaDisciplinas(lista: widget.lista)));
+              },
+              child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
+        ),
         title: Text(
             widget.disciplina.getDisciplina() +
                 "  (" +
@@ -60,12 +69,10 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             child: FlatButton(
                 onPressed: () {
                   print(widget.lista);
-                 setState(() {
-                  Container cont = FormDisciplina.vazia().getCont();
-                  widget.lista.remove(cont);                   
+                  setState(() {
+                  widget.lista.remove(widget.getCont());
+                  });
                   print(widget.lista);
-                   });   
-                   
                 },
                 child: Icon(
                   Icons.delete,
@@ -73,7 +80,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   size: 30.0,
                 )),
           ),
-         
         ],
         backgroundColor: Colors.purple[300],
       ),

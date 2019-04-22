@@ -7,7 +7,6 @@ class FormDisciplina extends StatefulWidget {
   List<Container> lista;
   Disciplina disciplina;
   String acao;
-  Container cont;
 
   FormDisciplina.add(List<Container> lista, String acao) {
     this.lista = lista;
@@ -19,16 +18,6 @@ class FormDisciplina extends StatefulWidget {
     this.lista = lista;
     this.disciplina = disciplina;
     this.acao = acao;
-  }
-
-  FormDisciplina.vazia();
-  
-  Container getCont () {    
-    return cont;
-  }
-
-  void setCont (Container cont) {
-    this.cont = cont;
   }
 
   @override
@@ -50,9 +39,11 @@ class _FormDisciplina extends State<FormDisciplina> {
   List<Container> lista = [];
 
   final _formKey = GlobalKey<FormState>();
+  
 
   @override
   Widget build(BuildContext context) {
+    valorInicialDropdown();
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
@@ -164,7 +155,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(left: 17.0, right: 15.0),
                 child: Row(
                   children: <Widget>[
                     Padding(padding: EdgeInsets.only(left: 1.0)),
@@ -197,7 +188,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                         ),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 75.0)),
+                    Padding(padding: EdgeInsets.only(left: 73.0)),
                     Container(
                       width: 125.0,
                       height: 50.0,
@@ -296,6 +287,19 @@ class _FormDisciplina extends State<FormDisciplina> {
     return "";
   }
 
+  void valorInicialDropdown() {
+    if (widget.acao == "a")
+     return;
+      dropdownDefault = widget.disciplina.getPeriodo();
+      dropdownDefault2 = (widget.disciplina.getLimFaltas().toString() + " Faltas");
+
+      if (widget.disciplina.getStatus() == false)
+        dropdownDefault3 = "Encerrada";
+        else if (widget.disciplina.getStatus() == true)
+        dropdownDefault3 = "Cursando";
+
+  }
+
   bool errorMsg(String campo) {
     showDialog(
       context: context,
@@ -319,7 +323,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     return true;
   }
 
-  salvarDisciplina() {
+  void salvarDisciplina() {
     if (_periodo == "") {
       errorMsg("Período");
       return;
@@ -353,12 +357,9 @@ class _FormDisciplina extends State<FormDisciplina> {
       disciplina.setPeriodo(_periodo);
       disciplina.setStatus(_status);
       Container cont =
-          ListaDisciplinas(lista: lista).cardDisciplina(disciplina);
+          ListaDisciplinas(lista: widget.lista).cardDisciplina(disciplina);
       widget.lista.add(cont);
-      ListaDisciplinas(lista: lista).getLista().add(disciplina);
-      List<Disciplina> disp = ListaDisciplinas(lista: lista).getLista();
-      print(disp);
-      FormDisciplina.vazia().setCont(cont);
+      ViewDisciplina(lista: widget.lista, disciplina: widget.disciplina).setCont(cont);
     }
 
     Navigator.pop(context);
