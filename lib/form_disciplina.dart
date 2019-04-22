@@ -44,7 +44,6 @@ class _FormDisciplina extends State<FormDisciplina> {
 
   @override
   Widget build(BuildContext context) {
-    valorInicialDropdown();
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
@@ -52,6 +51,9 @@ class _FormDisciplina extends State<FormDisciplina> {
       ),
       body: Builder(builder: (BuildContext context) {
         return Form(
+          onChanged: () {
+            valorInicialDropdown();
+          },
           key: _formKey,
           child: ListView(
             children: <Widget>[
@@ -66,11 +68,12 @@ class _FormDisciplina extends State<FormDisciplina> {
                       if (value.isEmpty) {
                         return 'Campo vazio!';
                       }
+                    
                       _disciplina = value;
                     },
                     decoration: InputDecoration(
                         labelText: 'Nome',
-                        hintText: 'Ex. Cálculo III',
+                        hintText: 'Ex. Prog Móvel',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -90,7 +93,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                     },
                     decoration: InputDecoration(
                         labelText: 'Código',
-                        hintText: 'Ex. CEA 006',
+                        hintText: 'Ex. CSI 451',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0))),
                   ),
@@ -136,6 +139,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   fontWeight: FontWeight.bold, fontSize: 20.0)),
                           onChanged: (String novoValor) {
                             setState(() {
+                                    valorInicialDropdown();
                               dropdownDefault = novoValor;
                               _periodo = novoValor;
                             });
@@ -171,6 +175,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   fontWeight: FontWeight.bold, fontSize: 20.0)),
                           onChanged: (String novoValor) {
                             setState(() {
+                                     valorInicialDropdown();
                               dropdownDefault2 = novoValor;
                               _limFaltas = int.parse(
                                   dropdownDefault2[0] + dropdownDefault2[1]);
@@ -201,6 +206,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   fontWeight: FontWeight.bold, fontSize: 20.0)),
                           onChanged: (String novoValor) {
                             setState(() {
+                                  valorInicialDropdown();
                               dropdownDefault3 = novoValor;
                               if (novoValor == "Cursando")
                                 _status = true;
@@ -288,15 +294,25 @@ class _FormDisciplina extends State<FormDisciplina> {
   }
 
   void valorInicialDropdown() {
-    if (widget.acao == "a") return;
-    dropdownDefault = widget.disciplina.getPeriodo();
-    dropdownDefault2 =
-        (widget.disciplina.getLimFaltas().toString() + " Faltas");
+    if (widget.acao == "a")
+      return;
+    else if (widget.acao == "e") {
+      setState(() {
+        dropdownDefault = widget.disciplina.getPeriodo();
+        _periodo = widget.disciplina.getPeriodo();
+        dropdownDefault2 =
+            (widget.disciplina.getLimFaltas().toString() + " Faltas");
+        _limFaltas = widget.disciplina.getLimFaltas();
 
-    if (widget.disciplina.getStatus() == false)
-      dropdownDefault3 = "Encerrada";
-    else if (widget.disciplina.getStatus() == true)
-      dropdownDefault3 = "Cursando";
+        if (widget.disciplina.getStatus() == false) {
+          dropdownDefault3 = "Encerrada";
+          _status = false;
+        } else if (widget.disciplina.getStatus() == true) {
+          dropdownDefault3 = "Cursando";
+          _status = true;
+        }
+      });
+    }
   }
 
   bool errorMsg(String campo) {
@@ -336,7 +352,9 @@ class _FormDisciplina extends State<FormDisciplina> {
     if (_status.toString() != "true" && _status.toString() != "false") {
       errorMsg("Status");
       return;
-    }
+    }    
+    _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
+    _cod = _cod.toUpperCase();
 
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
@@ -346,6 +364,8 @@ class _FormDisciplina extends State<FormDisciplina> {
       widget.disciplina.setMeta(_meta);
       widget.disciplina.setPeriodo(_periodo);
       widget.disciplina.setStatus(_status);
+
+      
     } else if (widget.acao == "a") {
       Disciplina disciplina = new Disciplina();
       disciplina.setDisciplina(_disciplina);
@@ -355,9 +375,11 @@ class _FormDisciplina extends State<FormDisciplina> {
       disciplina.setMeta(_meta);
       disciplina.setPeriodo(_periodo);
       disciplina.setStatus(_status);
+
       Container cont =
           ListaDisciplinas(lista: widget.lista).cardDisciplina(disciplina);
       widget.lista.add(cont);
+
       widget.listaDisciplina.add(disciplina);
     }
     Navigator.pop(context);

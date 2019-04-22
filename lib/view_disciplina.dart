@@ -10,7 +10,7 @@ class ViewDisciplina extends StatefulWidget {
 
   Container cont;
   ViewDisciplina(
-      {this.lista, this.disciplina, List<Disciplina> listaDisciplina});
+      {this.lista, this.disciplina, this.listaDisciplina });
   ViewDisciplina.vazia();
 
   void setCont(Container cont) {
@@ -38,9 +38,15 @@ class _ViewDisciplina extends State<ViewDisciplina> {
       },
       child: Scaffold(
         appBar: AppBar(
+          bottom: PreferredSize(
+            child: Container(
+              height: 5.0,
+            ),
+            preferredSize: Size(100.0, 15.0),
+          ),
           leading: SizedBox(
             height: 20.0,
-            width: 60.0,
+            width: 20.0,
             child: FlatButton(
                 onPressed: () {
                   runApp(
@@ -48,16 +54,23 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 },
                 child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
           ),
-          title: Text(
-              widget.disciplina.getDisciplina() +
-                  "  (" +
-                  widget.disciplina.getCod() +
-                  ")",
-              style: TextStyle(fontSize: 20.0)),
+          title: Container(
+            height: 50.0,
+            padding: EdgeInsets.only(top: 5.0),
+          //  alignment: Alignment.centerLeft,
+              child: Text(
+                  widget.disciplina.getDisciplina()+
+                      "\n(" +
+                      widget.disciplina.getCod() +
+                      ")",
+                  style:
+                      TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            ),
           actions: <Widget>[
+            
             SizedBox(
-              height: 20.0,
-              width: 60.0,
+              height: 30.0,
+              width: 50.0,
               child: FlatButton(
                   onPressed: () {
                     Navigator.push(context,
@@ -73,7 +86,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   )),
             ),
             SizedBox(
-              height: 20.0,
+              height: 30.0,
               width: 50.0,
               child: FlatButton(
                   onPressed: () {
