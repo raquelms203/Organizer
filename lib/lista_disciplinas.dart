@@ -6,14 +6,15 @@ import './obj_disciplina.dart';
 class ListaDisciplinas extends StatefulWidget {
 //   final Container container;
   List<Container> lista;
+  List<Disciplina> listaDisciplina;
   ListaDisciplinas({this.lista});
   ListaDisciplinas.vazia();
 
   @override
   State createState() => new _ListaDisciplinas();
 
-  List<Container> getLista() {
-    return this.lista;
+  List<Disciplina> getLista() {
+    return this.listaDisciplina;
   }
 
   Container cardDisciplina(Disciplina disciplina) {

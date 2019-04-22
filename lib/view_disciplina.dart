@@ -60,11 +60,12 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             child: FlatButton(
                 onPressed: () {
                   print(widget.lista);
-                  // setState(() {
-                  //   Container cont = ListaDisciplinas(lista: widget.lista).cardDisciplina(widget.disciplina);
-                  // ListaDisciplinas(lista: widget.lista).getLista(). 
-                  // });                      
+                 setState(() {
+                  Container cont = FormDisciplina.vazia().getCont();
+                  widget.lista.remove(cont);                   
                   print(widget.lista);
+                   });   
+                   
                 },
                 child: Icon(
                   Icons.delete,

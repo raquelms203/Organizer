@@ -7,6 +7,7 @@ class FormDisciplina extends StatefulWidget {
   List<Container> lista;
   Disciplina disciplina;
   String acao;
+  Container cont;
 
   FormDisciplina.add(List<Container> lista, String acao) {
     this.lista = lista;
@@ -18,6 +19,16 @@ class FormDisciplina extends StatefulWidget {
     this.lista = lista;
     this.disciplina = disciplina;
     this.acao = acao;
+  }
+
+  FormDisciplina.vazia();
+  
+  Container getCont () {    
+    return cont;
+  }
+
+  void setCont (Container cont) {
+    this.cont = cont;
   }
 
   @override
@@ -308,7 +319,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     return true;
   }
 
-  void salvarDisciplina() {
+  salvarDisciplina() {
     if (_periodo == "") {
       errorMsg("Período");
       return;
@@ -342,8 +353,12 @@ class _FormDisciplina extends State<FormDisciplina> {
       disciplina.setPeriodo(_periodo);
       disciplina.setStatus(_status);
       Container cont =
-          ListaDisciplinas(lista: widget.lista).cardDisciplina(disciplina);
+          ListaDisciplinas(lista: lista).cardDisciplina(disciplina);
       widget.lista.add(cont);
+      ListaDisciplinas(lista: lista).getLista().add(disciplina);
+      List<Disciplina> disp = ListaDisciplinas(lista: lista).getLista();
+      print(disp);
+      FormDisciplina.vazia().setCont(cont);
     }
 
     Navigator.pop(context);
