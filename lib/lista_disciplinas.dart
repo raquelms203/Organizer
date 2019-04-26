@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import './form_disciplina.dart';
 import './view_disciplina.dart';
 import './obj_disciplina.dart';
-import './sqflite_connection.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
 class ListaDisciplinas extends StatefulWidget {
   List<Container> lista;
@@ -19,8 +16,6 @@ class ListaDisciplinas extends StatefulWidget {
   void addLista (Disciplina disciplina) {
     listaDisciplina.add(disciplina);
   }
-
-  
 
   @override
   State createState() => new _ListaDisciplinas();
@@ -71,10 +66,9 @@ class ListaDisciplinas extends StatefulWidget {
   // }
 }
 class _ListaDisciplinas extends State<ListaDisciplinas> {
-  String _lista="";
+
   @override
   Widget build(BuildContext context) {
-    print (" [ ( ");
     return Scaffold(
         appBar: AppBar(
           title: Text("Organizer"),
@@ -97,7 +91,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
             child: Column(
           children: <Widget>[
             txtListaVazia(widget.lista.length),
-            carregarLista();
+            carregarLista()
           ],
           )),
         );
@@ -119,39 +113,23 @@ Container txtListaVazia(int tam) {
   }
 }
 
-  Future<List<Map<String, dynamic>>> carregarLista() async {
-
-  Database db = SqfliteConnection().connec();
-
-  var lista =  await db.query("disciplinas", 
-    columns: ["id", "disciplina"],
-    where: "id>?",
-    whereArgs: ["0"]);  
-
-    for (var item in lista) {
-      setState(() {
-       _lista += item['disciplina']+"\n"; 
-      });
-    }
-
-    await db.close();
-      return lista;
-    }
-  // Expanded ex;
-  // setState(() {
-  //    ex =  Expanded(
-  //             child: ListView.builder(
-  //               itemCount: widget.lista.length,
-  //               itemBuilder: (BuildContext context, int index) {
-  //                 return widget.lista[index];
-  //               },
-  //             ),
-  //           );
-  // });
-  // return ex;
+Expanded carregarLista() {
+  Expanded ex;
+  setState(() {
+     ex =  Expanded(
+              child: ListView.builder(
+                itemCount: widget.lista.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return widget.lista[index];
+                },
+              ),
+            );
+  });
+  return ex;
 }
 
 Visibility disableTxtVazia(Container cont) {
   return Visibility(child: cont, visible: false);
 }
 
+}

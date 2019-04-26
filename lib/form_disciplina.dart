@@ -341,7 +341,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     return true;
   }
 
-  void salvarDisciplina() async  {
+  void salvarDisciplina() {
     if (_periodo == "") {
       errorMsg("Período");
       return;
@@ -359,7 +359,6 @@ class _FormDisciplina extends State<FormDisciplina> {
     _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
     _cod = _cod.toUpperCase();
 
-    SqfliteConnection().connec();
 
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
@@ -383,12 +382,10 @@ class _FormDisciplina extends State<FormDisciplina> {
           ListaDisciplinas(lista: widget.lista).cardDisciplina(disciplina);
       widget.lista.add(cont);
 
-      // widget.listaDisciplina.add(disciplina);
+       widget.listaDisciplina.add(disciplina);
 
-      Database db = new SqfliteConnection().connec();
-      await db.rawInsert("INSERT INTO (disciplina, cod, faltas, lim_faltas, meta, status)"+
-                   " value ('Prog Movel', 'CEA 401', '0', '18', '80.0', '1'");
-      await db.close();
+     
+      
       
     }
     Navigator.pop(context);
