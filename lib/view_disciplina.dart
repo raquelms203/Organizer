@@ -57,7 +57,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
           title: Container(
             height: 50.0,
             padding: EdgeInsets.only(top: 5.0),
-          //  alignment: Alignment.centerLeft,
               child: Text(
                   widget.disciplina.getDisciplina()+
                       "\n(" +

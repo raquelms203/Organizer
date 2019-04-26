@@ -19,9 +19,8 @@ class ListaDisciplinas extends StatefulWidget {
 
   @override
   State createState() => new _ListaDisciplinas();
-  
-  
-  Container cardDisciplina(Disciplina disciplina) {
+
+   Container cardDisciplina(Disciplina disciplina) {
     
     Container cont = new Container( 
    
@@ -42,11 +41,35 @@ class ListaDisciplinas extends StatefulWidget {
     ViewDisciplina.vazia().setCont(cont);
     return cont;
   }
+  
+  
+  // Container cardDisciplina(Disciplina disciplina) {
+    
+  //   Container cont = new Container( 
+   
+  //     child: new Card(
+  //       child: ListTile(
+  //         leading: Icon(Icons.assignment, size: 40.0),
+  //         title: Text(disciplina.getDisciplina()),
+  //         subtitle: Text(disciplina.getCod()),
+  //         trailing: Text("0.0/100",
+  //             style: new TextStyle(
+  //                 fontWeight: FontWeight.bold, color: Colors.red[400])),
+  //         onTap: () {
+  //           runApp(MaterialApp(home: ViewDisciplina(lista: lista, disciplina: disciplina, listaDisciplina: listaDisciplina,)));
+  //          },
+  //       ),
+  //     ),
+  //   );
+  //   ViewDisciplina.vazia().setCont(cont);
+  //   return cont;
+  // }
 }
 class _ListaDisciplinas extends State<ListaDisciplinas> {
 
   @override
   Widget build(BuildContext context) {
+    print (" [ ( ");
     return Scaffold(
         appBar: AppBar(
           title: Text("Organizer"),

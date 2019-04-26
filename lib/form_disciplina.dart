@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import './lista_disciplinas.dart';
 import 'obj_disciplina.dart';
+import './sqflite_connection.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Container> lista;
@@ -356,6 +359,8 @@ class _FormDisciplina extends State<FormDisciplina> {
     _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
     _cod = _cod.toUpperCase();
 
+    SqfliteConnection().executar();
+
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
       widget.disciplina.setCod(_cod);
@@ -364,7 +369,6 @@ class _FormDisciplina extends State<FormDisciplina> {
       widget.disciplina.setPeriodo(_periodo);
       widget.disciplina.setStatus(_status);
 
-      
     } else if (widget.acao == "a") {
       Disciplina disciplina = new Disciplina();
       disciplina.setDisciplina(_disciplina);
@@ -379,7 +383,13 @@ class _FormDisciplina extends State<FormDisciplina> {
           ListaDisciplinas(lista: widget.lista).cardDisciplina(disciplina);
       widget.lista.add(cont);
 
-      widget.listaDisciplina.add(disciplina);
+      // widget.listaDisciplina.add(disciplina);
+
+      Database db = new SqfliteConnection().connec();
+      db.rawInsert("INSERT INTO (disciplina, cod, faltas, lim_faltas, meta, status)"+
+                   " value ('Prog Movel', 'CEA 401', '0', '18', '80.0', '1'");
+      
+      
     }
     Navigator.pop(context);
   }
