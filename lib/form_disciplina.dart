@@ -47,6 +47,9 @@ class _FormDisciplina extends State<FormDisciplina> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+     valorInicialDropdown(); 
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
@@ -54,9 +57,6 @@ class _FormDisciplina extends State<FormDisciplina> {
       ),
       body: Builder(builder: (BuildContext context) {
         return Form(
-          onChanged: () {
-            valorInicialDropdown();
-          },
           key: _formKey,
           child: ListView(
             children: <Widget>[
@@ -142,7 +142,6 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   fontWeight: FontWeight.bold, fontSize: 20.0)),
                           onChanged: (String novoValor) {
                             setState(() {
-                                    valorInicialDropdown();
                               dropdownDefault = novoValor;
                               _periodo = novoValor;
                             });
@@ -178,7 +177,6 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   fontWeight: FontWeight.bold, fontSize: 20.0)),
                           onChanged: (String novoValor) {
                             setState(() {
-                                     valorInicialDropdown();
                               dropdownDefault2 = novoValor;
                               _limFaltas = int.parse(
                                   dropdownDefault2[0] + dropdownDefault2[1]);
@@ -209,7 +207,6 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   fontWeight: FontWeight.bold, fontSize: 20.0)),
                           onChanged: (String novoValor) {
                             setState(() {
-                                  valorInicialDropdown();
                               dropdownDefault3 = novoValor;
                               if (novoValor == "Cursando")
                                 _status = true;
