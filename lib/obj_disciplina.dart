@@ -1,12 +1,19 @@
 class Disciplina {
-  String _disciplina = "";
-  String _cod = "";
-  int _limFaltas = 0;
-  String _periodo = "";
-  double _meta = 0.0;
-  int _faltas = 0;
+  String _disciplina;
+  String _cod;
+  String _periodo;
 
-  bool _status = false;
+  int _status;
+  int _id;
+  int _limFaltas;
+  int _faltas;
+  double _meta;
+
+  Disciplina(this._disciplina, this._cod, this._faltas, this._limFaltas,
+      this._meta, this._periodo, this._status);
+
+  Disciplina.comId(this._disciplina, this._cod, this._faltas, this._limFaltas,
+      this._meta, this._periodo, this._status, this._id);
 
   String getDisciplina() {
     return this._disciplina;
@@ -20,7 +27,7 @@ class Disciplina {
     return this._limFaltas;
   }
 
-  bool getStatus() {
+  int getStatus() {
     return this._status;
   }
 
@@ -36,6 +43,10 @@ class Disciplina {
     return this._meta;
   }
 
+  int getId() {
+    return this._id;
+  }
+
   void setDisciplina(String disciplina) {
     this._disciplina = disciplina;
   }
@@ -48,7 +59,7 @@ class Disciplina {
     this._limFaltas = limFaltas;
   }
 
-  void setStatus(bool status) {
+  void setStatus(int status) {
     this._status = status;
   }
 
@@ -62,5 +73,38 @@ class Disciplina {
 
   void setMeta(double meta) {
     this._meta = meta;
+  }
+
+  void setId(int id) {
+    this._id = id;
+  }
+
+  //converte Disciplina em Map
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+
+    if (getId() != null) map['id'] = _id;
+
+    map['disciplina'] = _disciplina;
+    map['cod'] = _cod;
+    map['meta'] = _meta;
+    map['periodo'] = _periodo;
+    map['lim_faltas'] = _limFaltas;
+    map['status'] = _status;
+    map['faltas'] = 0;
+
+    return map;
+  }
+
+  //converte Map em Disciplina
+  Disciplina.fromMapObject(Map<String, dynamic> map) {
+    this._id = map['id'];
+    this._disciplina = map['disciplina'];
+    this._cod = map['cod'];
+    this._meta = map['meta'];
+    this._periodo = map['periodo'];
+    this._limFaltas = map['lim_faltas'];
+    this._status = map['status'];
+    this._faltas = map['faltas'];
   }
 }
