@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'obj_disciplina.dart';
-import './database_helper.dart';
+import 'package:organizer/model/obj_disciplina.dart';
+import 'package:organizer/model/database_helper.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Disciplina> listaDisciplina;
@@ -20,7 +20,7 @@ class FormDisciplina extends StatefulWidget {
 }
 
 class _FormDisciplina extends State<FormDisciplina> {
-  String dropdownDefault = "Período";
+ String dropdownDefault = "Período";
   String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "Status";
   String _disciplina = "";
@@ -30,22 +30,24 @@ class _FormDisciplina extends State<FormDisciplina> {
   String _periodo = "";
   int _status = 0;
   double _meta = 0.0;
-
+  
   DatabaseHelper databaseHelper = DatabaseHelper();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appbarTitulo()),
-        backgroundColor: Colors.purple[300],
-      ),
-      body: GestureDetector(
-        onTap: () => valorInicialDropdown(),
-              child: Builder(builder: (BuildContext context) {
+
+    return GestureDetector(
+      onDoubleTap: ()=>valorInicialDropdown(),
+          child: Scaffold(
+        appBar: AppBar(
+          title: Text(appbarTitulo()),
+          backgroundColor: Colors.purple[300],
+        ),
+        body: Builder(builder: (BuildContext context) {
           return Form(
+            
             key: _formKey,
             child: ListView(
               children: <Widget>[
@@ -57,7 +59,6 @@ class _FormDisciplina extends State<FormDisciplina> {
                     child: TextFormField(
                       initialValue: valorInicialDisciplina(),
                       validator: (value) {
-                       
                         if (value.isEmpty) {
                           return 'Campo vazio!';
                         }
@@ -259,10 +260,17 @@ class _FormDisciplina extends State<FormDisciplina> {
     return "Adicionar Disciplina";
   }
 
+  String valorInicialPeriodo() {
+    if (widget.acao == "e")
+      return widget.disciplina.getPeriodo();
+      else 
+      return "Período";
+    }
+  
   Container valorInicialDropdown() {
-    if (widget.acao == "e") {
+       if (widget.acao == "e") {
       dropdownDefault = widget.disciplina.getPeriodo();
-      _periodo = dropdownDefault;
+      _periodo = widget.disciplina.getPeriodo();
 
       dropdownDefault2 =
           (widget.disciplina.getLimFaltas().toString() + " Faltas");
@@ -275,6 +283,7 @@ class _FormDisciplina extends State<FormDisciplina> {
         dropdownDefault3 = "Cursando";
         _status = 1;
       }
+   
     }
     return Container();
   }
@@ -294,7 +303,9 @@ class _FormDisciplina extends State<FormDisciplina> {
   String valorInicialDisciplina() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") return widget.disciplina.getDisciplina();
+    else if (widget.acao == "e") 
+      return widget.disciplina.getDisciplina();
+    
 
     return "";
   }
@@ -380,13 +391,11 @@ class _FormDisciplina extends State<FormDisciplina> {
     _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
     _cod = _cod.toUpperCase();
 
-    if (widget.acao == "e") {
-      widget.disciplina.setDisciplina(_disciplina);
-      widget.disciplina.setCod(_cod);
-      widget.disciplina.setLimFaltas(_limFaltas);
+    if (widget.acao == "e") { widget.disciplina.setDisciplina(_disciplina); widget.disciplina.setCod(_cod); widget.disciplina.setLimFaltas(_limFaltas);
       widget.disciplina.setMeta(_meta);
       widget.disciplina.setPeriodo(_periodo);
       widget.disciplina.setStatus(_status);
+      print("faltas: ${widget.disciplina.getFaltas()}");
 
       result = await databaseHelper.atualizar(widget.disciplina);
     } else if (widget.acao == "a") {

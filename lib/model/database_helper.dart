@@ -14,8 +14,9 @@ class DatabaseHelper {
   //singleton database
   static Database _database;
 
+  //tabela disciplinas
   String tableDisciplinas = 'disciplinas';
-  String colId = 'id';
+  String colIdDisciplinas = 'id';
   String colDisciplina = 'disciplina';
   String colCod = 'cod';
   String colLimFaltas = 'lim_faltas';
@@ -23,6 +24,18 @@ class DatabaseHelper {
   String colFaltas = 'faltas';
   String colMeta = 'meta';
   String colStatus = 'status';
+
+  //tabela tarefas
+
+  String tableTarefas = 'tarefas';
+  String colIdTarefas = 'id';
+  String colTarefa = 'tarefa';
+  String colValor = 'valor';
+  String colNota = 'nota';
+  String colEntrega = 'entrega';
+  String colTipo = 'tipo';
+  String colPrioridade = 'prioridade';
+
 
   DatabaseHelper._createInstance();
 
@@ -54,7 +67,7 @@ class DatabaseHelper {
   void _criarDb(Database db, int newVersion) async {
     await db.execute('''
           CREATE TABLE $tableDisciplinas (
-            $colId INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+            $colIdDisciplinas INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             $colDisciplina TEXT NOT NULL,
             $colCod TEXT NOT NULL,
             $colFaltas INTEGER (2) NOT NULL,
@@ -62,7 +75,6 @@ class DatabaseHelper {
             $colMeta DOUBLE NOT NULL,
             $colStatus INTEGER (1) NOT NULL,
             $colPeriodo TEXT NOT NULL
-
           )''');
   }
 
@@ -81,13 +93,19 @@ class DatabaseHelper {
 
   Future<int> atualizar(Disciplina disciplina) async {
     var db = await this.getDatabase();
-    var result = await db.update(tableDisciplinas, disciplina.toMap(), where: '$colId = ?', whereArgs: [disciplina.getId()]);
+    var result = await db.update(tableDisciplinas, disciplina.toMap(), where: '$colIdDisciplinas = ?', whereArgs: [disciplina.getId()]);
     return result;
   }
 
   Future<int> apagar(int id) async {
     var db = await this.getDatabase();
-    int result = await db.rawDelete('DELETE FROM $tableDisciplinas WHERE $colId = $id');
+    int result = await db.rawDelete('DELETE FROM $tableDisciplinas WHERE $colIdDisciplinas = $id');
+    return result;
+  }
+
+  Future<int> atualizarFaltas(int faltas, int id) async {
+    var db = await this.getDatabase();
+    int result = await db.rawUpdate('UPDATE $tableDisciplinas SET faltas = $faltas WHERE id = $id');
     return result;
   }
 

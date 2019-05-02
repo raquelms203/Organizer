@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import './form_disciplina.dart';
+import 'package:organizer/controller/form_disciplina.dart';
 import './view_disciplina.dart';
-import './obj_disciplina.dart';
-import './database_helper.dart';
+import 'package:organizer/model/obj_disciplina.dart';
+import 'package:organizer/model/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -25,7 +25,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
 
   @override
   Widget build(BuildContext context) {
-
+    
     if (listaDisciplina == null) 
       listaDisciplina = List<Disciplina>();    
        else 
@@ -39,9 +39,8 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
           FlatButton(
               child: Icon(Icons.remove_red_eye),
               onPressed: () {
-                setState(() {
-                  print(listaDisciplina[1].getDisciplina());
-                });
+              
+                  print(listaDisciplina[3].getFaltas());
               })
         ],
       ),

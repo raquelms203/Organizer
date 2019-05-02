@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'form_disciplina.dart';
-import './obj_disciplina.dart';
-import './lista_disciplinas.dart';
-import './database_helper.dart';
+import 'package:organizer/controller/form_disciplina.dart';
+import 'package:organizer/model/obj_disciplina.dart';
+import 'package:organizer/view/lista_disciplinas.dart';
+import 'package:organizer/model/database_helper.dart';
 import 'dart:async';
 
 class ViewDisciplina extends StatefulWidget {
@@ -12,28 +12,24 @@ class ViewDisciplina extends StatefulWidget {
   int id;
 
   Container cont;
-  ViewDisciplina(
-      {this.disciplina});
+  ViewDisciplina({this.disciplina});
   ViewDisciplina.vazia();
 
   @override
   State createState() {
-    return _ViewDisciplina(this.disciplina);
+    return _ViewDisciplina();
   }
 }
 
 class _ViewDisciplina extends State<ViewDisciplina> {
   int faltas = 0;
-  Disciplina disciplina;
   DatabaseHelper databaseHelper = DatabaseHelper();
-
-  _ViewDisciplina(this.disciplina);
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: ()  {
+        print(widget.disciplina.getFaltas());
         Navigator.pop(context, true);
       },
       child: Scaffold(
@@ -51,30 +47,30 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-
                 child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
           ),
           title: Container(
             height: 50.0,
             padding: EdgeInsets.only(top: 5.0),
-              child: Text(
-                  widget.disciplina.getDisciplina()+
-                      "\n(" +
-                      widget.disciplina.getCod() +
-                      ")",
-                  style:
-                      TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-            ),
+            child: Text(
+                widget.disciplina.getDisciplina() +
+                    "\n(" +
+                    widget.disciplina.getCod() +
+                    ")",
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+          ),
           actions: <Widget>[
-            
             SizedBox(
               height: 30.0,
               width: 50.0,
               child: FlatButton(
-                  onPressed: () async {
-                    await Navigator.push(context,
+                  onPressed: ()  {
+                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return FormDisciplina.editar(disciplina: disciplina, id: disciplina.getId(), acao: "e");
+                      return FormDisciplina.editar(
+                          disciplina: widget.disciplina,
+                          id: widget.disciplina.getId(),
+                          acao: "e");
                     }));
                   },
                   child: Icon(
@@ -82,6 +78,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     color: Colors.blue[300],
                     size: 30.0,
                   )),
+                  
             ),
             SizedBox(
               height: 30.0,
@@ -98,6 +95,14 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     size: 30.0,
                   )),
             ),
+            // FlatButton( 
+            //   child: Icon(Icons.remove_red_eye),
+            //   onPressed: () async {
+            //      int result = await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
+            //      print(widget.disciplina.getFaltas());
+                
+            //   }
+            // )
           ],
           backgroundColor: Colors.purple[300],
         ),
@@ -158,21 +163,23 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           ),
                           shape: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red)),
-                          onPressed: () {
+                          onPressed: ()  async {
+                            faltas = widget.disciplina.getFaltas();
                             setState(() {
-                              faltas = widget.disciplina.getFaltas();
-
                               if (faltas - 1 >= 0) {
                                 faltas = faltas - 1;
-                                widget.disciplina.setFaltas(faltas);
                               }
                             });
+                            widget.disciplina.setFaltas(faltas);
+                                                        await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
+
+                     //       salvar();
                           },
                         ),
                       ),
                       Padding(padding: EdgeInsets.only(left: 15.0)),
                       Text(
-                        widget.disciplina.getFaltas().toString(),
+                        "${widget.disciplina.getFaltas()}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.0),
                       ),
@@ -188,16 +195,19 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           ),
                           shape: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.green)),
-                          onPressed: () {
+                          onPressed: () async {
+                            faltas = widget.disciplina.getFaltas();
                             setState(() {
-                              faltas = widget.disciplina.getFaltas();
 
                               if (faltas + 2 <=
                                   widget.disciplina.getLimFaltas()) {
                                 faltas = faltas + 2;
-                                widget.disciplina.setFaltas(faltas);
                               }
+
                             });
+                            widget.disciplina.setFaltas(faltas);
+                            await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
+
                           },
                         ),
                       ),
@@ -220,11 +230,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
     );
   }
 
-  BuildContext getContext () {
+  BuildContext getContext() {
     return this.context;
   }
-
-  
 
   String stringStatus(int status) {
     if (status == 1) return "Cursando";
@@ -233,9 +241,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   }
 
   void alertApagar(BuildContext context, Disciplina disciplina) async {
-   
-
-    showDialog  (
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -251,10 +257,10 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 ),
                 onPressed: () async {
                   int result = await databaseHelper.apagar(disciplina.getId());
-                if (result != 0) {
-               //   _showSnackBar(getContext(), 'Disciplina apagada com sucesso!');
-                }
-                //  widget.lista.removeLast();
+                  if (result != 0) {
+                    //   _showSnackBar(getContext(), 'Disciplina apagada com sucesso!');
+                  }
+                  //  widget.lista.removeLast();
                   Navigator.pop(context);
                 }),
             FlatButton(
@@ -277,8 +283,13 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   //   Scaffold.of(context).showSnackBar(snackBar);
   //}
 
-  void apagar() async {
-     await databaseHelper.apagar(widget.id);
-     Navigator.pop(context, true);
+  
+
+  void salvar() async  {
+    widget.disciplina.setFaltas(faltas);    
+    var result = await databaseHelper.atualizar(widget.disciplina);
+
+    if (result != 0)
+    print("Erro ao salvar!");
   }
 }
