@@ -4,11 +4,14 @@ import './view_disciplina.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:organizer/controller/form_tarefa.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:organizer/model/obj_tarefa.dart';
 
 class ListaDisciplinas extends StatefulWidget {
   List<Disciplina> listaDisciplina;
+  List<Tarefa> listaTarefa;
 
   ListaDisciplinas({this.listaDisciplina});
 
@@ -25,11 +28,10 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
 
   @override
   Widget build(BuildContext context) {
-    
-    if (listaDisciplina == null) 
-      listaDisciplina = List<Disciplina>();    
-       else 
-         atualizarListView();
+    if (listaDisciplina == null)
+      listaDisciplina = List<Disciplina>();
+    else
+      atualizarListView();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,8 +41,9 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
           FlatButton(
               child: Icon(Icons.remove_red_eye),
               onPressed: () {
-              
-                  print(listaDisciplina[3].getFaltas());
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return FormTarefa.add(listaTarefa: widget.listaTarefa, acao: "a");
+                }));
               })
         ],
       ),
@@ -131,6 +134,4 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
       });
     });
   }
-
-  
 }

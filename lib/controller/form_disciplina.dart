@@ -20,7 +20,7 @@ class FormDisciplina extends StatefulWidget {
 }
 
 class _FormDisciplina extends State<FormDisciplina> {
- String dropdownDefault = "Período";
+  String dropdownDefault = "Período";
   String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "Status";
   String _disciplina = "";
@@ -30,24 +30,37 @@ class _FormDisciplina extends State<FormDisciplina> {
   String _periodo = "";
   int _status = 0;
   double _meta = 0.0;
-  
+
   DatabaseHelper databaseHelper = DatabaseHelper();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
-      onDoubleTap: ()=>valorInicialDropdown(),
-          child: Scaffold(
+      onTap: () => valorInicialDropdown(),
+      child: Scaffold(
         appBar: AppBar(
           title: Text(appbarTitulo()),
           backgroundColor: Colors.purple[300],
+          actions: <Widget>[
+            MaterialButton(
+                child: Text(
+                  "Salvar",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.white,
+                      fontSize: 18.0),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    salvarDisciplina();
+                  }
+                })
+          ],
         ),
         body: Builder(builder: (BuildContext context) {
           return Form(
-            
             key: _formKey,
             child: ListView(
               children: <Widget>[
@@ -74,7 +87,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
+                  padding:
+                      EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
                   child: Container(
                     width: 300.0,
                     child: TextFormField(
@@ -123,14 +137,16 @@ class _FormDisciplina extends State<FormDisciplina> {
                           ),
                         ),
                       ),
-                      Padding(padding: EdgeInsets.only(left: 30.0, right: 35.0)),
+                      Padding(
+                          padding: EdgeInsets.only(left: 30.0, right: 35.0)),
                       Container(
                         padding: EdgeInsets.only(right: 20.0),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             hint: Text(dropdownDefault,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20.0)),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
                             onChanged: (String novoValor) {
                               setState(() {
                                 dropdownDefault = novoValor;
@@ -143,7 +159,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   value: valor,
                                   child: Text(
                                     valor,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ));
                             }).toList(),
                           ),
@@ -165,7 +182,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                           child: DropdownButton<String>(
                             hint: Text(dropdownDefault2,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20.0)),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
                             onChanged: (String novoValor) {
                               setState(() {
                                 dropdownDefault2 = novoValor;
@@ -179,7 +197,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   value: valor,
                                   child: Text(
                                     valor,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ));
                             }).toList(),
                           ),
@@ -195,7 +214,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                           child: DropdownButton<String>(
                             hint: Text(dropdownDefault3,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20.0)),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
                             onChanged: (String novoValor) {
                               setState(() {
                                 dropdownDefault3 = novoValor;
@@ -210,7 +230,8 @@ class _FormDisciplina extends State<FormDisciplina> {
                                   value: valor,
                                   child: Text(
                                     valor,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ));
                             }).toList(),
                           ),
@@ -219,24 +240,24 @@ class _FormDisciplina extends State<FormDisciplina> {
                     ],
                   ),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: RaisedButton(
-                      padding: EdgeInsets.only(
-                          top: 15.0, bottom: 15.0, left: 10.0, right: 10.0),
-                      color: Colors.green[500],
-                      child: Text("Salvar",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          salvarDisciplina();
-                        }
-                      }),
-                )
+                // Container(
+                //   alignment: Alignment.center,
+                //   padding: EdgeInsets.only(top: 20.0),
+                //   child: RaisedButton(
+                //       padding: EdgeInsets.only(
+                //           top: 15.0, bottom: 15.0, left: 10.0, right: 10.0),
+                //       color: Colors.green[500],
+                //       child: Text("Salvar",
+                //           style: TextStyle(
+                //             color: Colors.white,
+                //             fontWeight: FontWeight.bold,
+                //           )),
+                //       onPressed: () {
+                //         if (_formKey.currentState.validate()) {
+                //           salvarDisciplina();
+                //         }
+                //       }),
+                // )
               ],
             ),
           );
@@ -263,12 +284,12 @@ class _FormDisciplina extends State<FormDisciplina> {
   String valorInicialPeriodo() {
     if (widget.acao == "e")
       return widget.disciplina.getPeriodo();
-      else 
+    else
       return "Período";
-    }
-  
+  }
+
   Container valorInicialDropdown() {
-       if (widget.acao == "e") {
+    if (widget.acao == "e") {
       dropdownDefault = widget.disciplina.getPeriodo();
       _periodo = widget.disciplina.getPeriodo();
 
@@ -283,7 +304,6 @@ class _FormDisciplina extends State<FormDisciplina> {
         dropdownDefault3 = "Cursando";
         _status = 1;
       }
-   
     }
     return Container();
   }
@@ -303,9 +323,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   String valorInicialDisciplina() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") 
-      return widget.disciplina.getDisciplina();
-    
+    else if (widget.acao == "e") return widget.disciplina.getDisciplina();
 
     return "";
   }
@@ -391,21 +409,21 @@ class _FormDisciplina extends State<FormDisciplina> {
     _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
     _cod = _cod.toUpperCase();
 
-    if (widget.acao == "e") { widget.disciplina.setDisciplina(_disciplina); widget.disciplina.setCod(_cod); widget.disciplina.setLimFaltas(_limFaltas);
+    if (widget.acao == "e") {
+      widget.disciplina.setDisciplina(_disciplina);
+      widget.disciplina.setCod(_cod);
+      widget.disciplina.setLimFaltas(_limFaltas);
       widget.disciplina.setMeta(_meta);
       widget.disciplina.setPeriodo(_periodo);
       widget.disciplina.setStatus(_status);
-      print("faltas: ${widget.disciplina.getFaltas()}");
 
-      result = await databaseHelper.atualizar(widget.disciplina);
+      result = await databaseHelper.atualizarDisciplina(widget.disciplina);
     } else if (widget.acao == "a") {
       Disciplina disciplina = new Disciplina(
           _disciplina, _cod, 0, _limFaltas, _meta, _periodo, _status);
 
-      print("_disciplina:$_disciplina");
-      print("Disciplina.getDisciplina(): ${disciplina.getDisciplina()}");
 
-      result = await databaseHelper.inserir(disciplina);
+      result = await databaseHelper.inserirDisciplina(disciplina);
     }
 
     if (result == 0) errorMsgSalvar();

@@ -80,7 +80,7 @@ class Disciplina {
   }
 
   //converte Disciplina em Map
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> disciplinaToMap() {
     var map = Map<String, dynamic>();
 
     if (getId() != null) map['id'] = _id;

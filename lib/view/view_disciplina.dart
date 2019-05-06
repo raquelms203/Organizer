@@ -28,7 +28,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()  {
+      onWillPop: () {
         print(widget.disciplina.getFaltas());
         Navigator.pop(context, true);
       },
@@ -64,8 +64,8 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               height: 30.0,
               width: 50.0,
               child: FlatButton(
-                  onPressed: ()  {
-                     Navigator.push(context,
+                  onPressed: () {
+                    Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return FormDisciplina.editar(
                           disciplina: widget.disciplina,
@@ -78,7 +78,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     color: Colors.blue[300],
                     size: 30.0,
                   )),
-                  
             ),
             SizedBox(
               height: 30.0,
@@ -95,12 +94,12 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     size: 30.0,
                   )),
             ),
-            // FlatButton( 
+            // FlatButton(
             //   child: Icon(Icons.remove_red_eye),
             //   onPressed: () async {
             //      int result = await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
             //      print(widget.disciplina.getFaltas());
-                
+
             //   }
             // )
           ],
@@ -122,13 +121,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
               Card(
                   child: ListTile(
                 title: Text("Status"),
-                trailing: Text(
-                  stringStatus(widget.disciplina.getStatus()),
-                  style: TextStyle(
-                    color: Colors.blueGrey[600],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                trailing: textStatus(widget.disciplina.getStatus())
               )),
               Card(
                   child: ListTile(
@@ -163,7 +156,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           ),
                           shape: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red)),
-                          onPressed: ()  async {
+                          onPressed: () async {
                             faltas = widget.disciplina.getFaltas();
                             setState(() {
                               if (faltas - 1 >= 0) {
@@ -171,9 +164,11 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                               }
                             });
                             widget.disciplina.setFaltas(faltas);
-                                                        await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
+                            await databaseHelper.atualizarFaltas(
+                                widget.disciplina.getFaltas(),
+                                widget.disciplina.getId());
 
-                     //       salvar();
+                            //       salvar();
                           },
                         ),
                       ),
@@ -198,16 +193,15 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           onPressed: () async {
                             faltas = widget.disciplina.getFaltas();
                             setState(() {
-
                               if (faltas + 2 <=
                                   widget.disciplina.getLimFaltas()) {
                                 faltas = faltas + 2;
                               }
-
                             });
                             widget.disciplina.setFaltas(faltas);
-                            await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
-
+                            await databaseHelper.atualizarFaltas(
+                                widget.disciplina.getFaltas(),
+                                widget.disciplina.getId());
                           },
                         ),
                       ),
@@ -234,10 +228,27 @@ class _ViewDisciplina extends State<ViewDisciplina> {
     return this.context;
   }
 
-  String stringStatus(int status) {
-    if (status == 1) return "Cursando";
+  Text textStatus(int status) {
+    if (status == 1)  {
+      return Text(
+                  ("Cursando"),
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+    }
+    else if (status == 0) {
+      return Text( 
+           ("Encerrada"),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+      );
+    }
 
-    return "Encerrada";
+    return Text("");
   }
 
   void alertApagar(BuildContext context, Disciplina disciplina) async {
@@ -256,7 +267,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                  int result = await databaseHelper.apagar(disciplina.getId());
+                  int result = await databaseHelper.apagarDisciplina(disciplina.getId());
                   if (result != 0) {
                     //   _showSnackBar(getContext(), 'Disciplina apagada com sucesso!');
                   }
@@ -283,13 +294,10 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   //   Scaffold.of(context).showSnackBar(snackBar);
   //}
 
-  
+  void salvar() async {
+    widget.disciplina.setFaltas(faltas);
+    var result = await databaseHelper.atualizarDisciplina(widget.disciplina);
 
-  void salvar() async  {
-    widget.disciplina.setFaltas(faltas);    
-    var result = await databaseHelper.atualizar(widget.disciplina);
-
-    if (result != 0)
-    print("Erro ao salvar!");
+    if (result != 0) print("Erro ao salvar!");
   }
 }
