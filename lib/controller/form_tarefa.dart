@@ -23,15 +23,16 @@ class _FormTarefa extends State<FormTarefa> {
   String _descricao;
   String _disciplina;
   String _tipo;
-  String dropdownDefault = "";
+  String dropdownDefault = "Disciplina";
   String dropdownDefault2 = "Prioridade";
   String _nota;
   int _entrega;
   int _prioridade;
+  int count;
   double _valor;
 
-  List<String> lista = ["Nome1", "Nome2"];
   List<String> listaPrioridade = ["1", "2", "3"];
+  List<String> stringDisciplinas;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -53,61 +54,97 @@ class _FormTarefa extends State<FormTarefa> {
                   fontSize: 18.0),
             ),
             onPressed: () {
-              if (_formKey.currentState.validate()) {}
+              if (_formKey.currentState.validate()) {
+                salvarTarefa();
+              }
             },
           )
         ],
       ),
       body: Builder(builder: (BuildContext context) {
+            disciplinasDropdown();
+
         return Form(
             key: _formKey,
             child: ListView(
               children: <Widget>[
-                //   child: DropdownButtonHideUnderline(
-                //     child: DropdownButton<String>(
-                //       hint: Text(dropdownDefault,
-                //            style: TextStyle(
-                //         fontWeight: FontWeight.bold,
-                //         fontSize: 20.0
-                //       )),
-                //       onChanged: (String novoValor) {
-                //         setState(() {
-                //          dropdownDefault = novoValor;
-                //          _disciplina = novoValor;
-                //         });
-                //       },
-                //       items: await disciplinas().map<DropdownMenuItem<String>>((String valor) {
-                //         return DropdownMenuItem<String>(
-                //           value: valor,
-                //           child: Text(
-                //             valor,
-                //             style: TextStyle(fontWeight: FontWeight.bold),
+                // FutureBuilder<List<String>>(
+                //   future: disciplinas(), // a previously-obtained Future<String> or null
+                //   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+                //     switch (snapshot.connectionState) {
+                //       case ConnectionState.none:
+                //         return Text('Press button to start.');
+                //       case ConnectionState.active:
+                //       case ConnectionState.waiting:
+                //         return Text('Awaiting result...');
+                //       case ConnectionState.done:
+                //         if (snapshot.hasError)
+                //           return Text('Error: ${snapshot.error}');
+                //      //   lista = snapshot.data;
+                //         return Text('Result: ${snapshot.data}');
+                //     }
+                //     return null; // unreachable
+                //   },
+                // ),
+                 Row(
+                   children: <Widget>[
+                     Padding(padding: EdgeInsets.only(left:15.0),),
+                     Container(
+                       padding: EdgeInsets.only(top:30.0),
+                       child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            hint: Text(dropdownDefault,
+                                 style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0
+                            )),
+                            onChanged: (String novoValor) {
+                              setState(() {
+                               dropdownDefault = novoValor;
+                               _disciplina = novoValor;
+                              });
+                            },
+                            items: stringDisciplinas.map<DropdownMenuItem<String>>((String valor) {
+                              return DropdownMenuItem<String>(
+                                value: valor,
+                                child: Text(
+                                  valor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
 
-                //           ));
-                //       }).toList(),
-                //   ),
+                                ));
+                            }).toList(),
+                        ),
+                ),
+                     ),
+                   ],
+                 ),
+
+                // Row(
+                //   children: <Widget>[
+                //     Padding(
+                //       padding: EdgeInsets.only(top: 30.0, left: 15.0),
+                //       child: Row(children: <Widget>[
+                //         Column(children: <Widget>[
+                //           SizedBox(
+                //             height: 225.0,
+                //             width: 340.0,
+                //             child: DropDownField(
+                //                 value: dropdownDefault,
+                //                 hintStyle: TextStyle(fontWeight: FontWeight.w200),
+                //                 required: false,
+                //                 labelText: 'Disciplina',
+                //                 items: stringDisciplinas,
+                //                 setter: (dynamic newValue) {
+                //                   dropdownDefault2 = newValue;
+                //                   _disciplina = newValue;
+                //                 }),
+                //           ),
+                //         ]),
+                //       ]),
+                //     ),
+                //   ],
                 // ),
 
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0, left: 15.0),
-                  child: Row(children: <Widget>[
-                    Column(children: <Widget>[
-                      SizedBox(
-                        height: 60.0,
-                        width: 340.0,
-                        child: DropDownField(
-                            value: dropdownDefault,
-                            hintStyle: TextStyle(fontWeight: FontWeight.w200),
-                            required: false,
-                            labelText: 'Disciplina',
-                            items: lista,
-                            setter: (dynamic newValue) {
-                              dropdownDefault2 = newValue;
-                            }),
-                      ),
-                    ]),
-                  ]),
-                ),
                 Row(
                   children: <Widget>[
                     Padding(
@@ -206,6 +243,7 @@ class _FormTarefa extends State<FormTarefa> {
                                         fontSize: 20.0)),
                                 onChanged: (String novoValor) {
                                   setState(() {
+                                    print(stringDisciplinas);
                                     dropdownDefault2 = novoValor;
                                     _prioridade = int.parse(novoValor);
                                   });
@@ -355,17 +393,17 @@ class _FormTarefa extends State<FormTarefa> {
       return;
     }
 
-    if (_valor == "") {
+    if (_valor.toString() == "") {
       errorMsgCampoVazio("Valor");
       return;
     }
 
-    if (_prioridade == "") {
+    if (_prioridade.toString() == "") {
       errorMsgCampoVazio("Prioridade");
       return;
     }
 
-    if (_entrega == "") {
+    if (_entrega.toString() == "") {
       errorMsgCampoVazio("Entrega");
       return;
     }
@@ -392,5 +430,19 @@ class _FormTarefa extends State<FormTarefa> {
   Future<List<String>> disciplinas() async {
     List<String> result = await databaseHelper.getNomesDisciplina();
     return result;
+  }
+
+   void disciplinasDropdown() {
+    final Future<Database> dbFuture = databaseHelper.iniciarDb();
+    dbFuture.then((database) {
+      Future<List<String>> disciplinasListFuture =
+          databaseHelper.getNomesDisciplina();
+      disciplinasListFuture.then((listaTarefa) {
+        setState(() {
+          stringDisciplinas = listaTarefa;
+          this.count = listaTarefa.length;
+        });
+      });
+    });
   }
 }

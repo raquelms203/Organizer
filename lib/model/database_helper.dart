@@ -52,9 +52,11 @@ class DatabaseHelper {
     return _database;
   }
 
+  
+
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'database.db';
+    String path = dir.path + 'database3.db';
 
     var disciplinaDatabase =
         await openDatabase(path, version: 1, onCreate: _criarDb);
@@ -63,7 +65,7 @@ class DatabaseHelper {
 
   void _criarDb(Database db, int newVersion) async {
     await db.execute('''
-          CREATE TABLE $tableDisciplinas (
+          CREATE TABLE $tableDisciplinas(
             $colIdDisciplina INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             $colDisciplina TEXT NOT NULL,
             $colCod TEXT NOT NULL,
@@ -72,17 +74,19 @@ class DatabaseHelper {
             $colMeta DOUBLE NOT NULL,
             $colStatus INTEGER (1) NOT NULL,
             $colPeriodo TEXT NOT NULL);
-
-            CREATE TABLE tarefas (
+          ''');
+    await db.execute('''
+            CREATE TABLE $tableTarefas(
             $colIdTarefa INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             $colDescricao TEXT NOT NULL,
             $colValor DOUBLE NOT NULL,
-            $colDisciplina TEXT REFERENCES disciplinas (disciplina) NOT NULL,
+            $colDisciplina integer NOT NULL,
+              FOREIGN KEY ($colDisciplina) REFERENCES $tableDisciplinas($colDisciplina),
             $colNota DOUBLE NOT NULL,
             $colEntrega INTEGER NOT NULL,
             $colTipo TEXT NOT NULL,
-            $colPrioridade INTEGER (1) NOT NULL
-            )''');
+            $colPrioridade INTEGER (1) NOT NULL);
+          ''');
   }
 
   // funções disciplinas
@@ -96,7 +100,8 @@ class DatabaseHelper {
 
   Future<int> inserirDisciplina(Disciplina disciplina) async {
     Database db = await this.getDatabase();
-    var result = await db.insert(tableDisciplinas, disciplina.disciplinaToMap());
+    var result =
+        await db.insert(tableDisciplinas, disciplina.disciplinaToMap());
     return result;
   }
 
@@ -129,22 +134,21 @@ class DatabaseHelper {
     return result;
   }
 
-  Future <List<String>> getNomesDisciplina() async {
+  Future<List<String>> getNomesDisciplina() async {
     Database db = await this.getDatabase();
-    List<String> listaNomeDisciplinas;
+    List<String> listaNomeDisciplinas=[];
 
     var result = await db.rawQuery('SELECT disciplina FROM $tableDisciplinas');
-    var stringMapList = result.toList();
+    var stringMapList = result;
 
     int tam = stringMapList.length;
 
     //for para cada List<Map> ser List<String>
-    for (int i=0; i<tam; i++) {
-      listaNomeDisciplinas.add(Disciplina.fromMapObject(stringMapList[i]).toString());
+    for (int i = 0; i < tam; i++) {
+      listaNomeDisciplinas.add(Disciplina.fromMapObject(stringMapList[i]).getDisciplina().toString());
     }
 
     return listaNomeDisciplinas;
-    
   }
 
   //converter List<Map> para List<Disciplina>
@@ -162,14 +166,12 @@ class DatabaseHelper {
     return disciplinaLista;
   }
 
-  
-  //converter List<Map> em List<String>. Função para retornar uma lista de disciplinas
+  // //converter List<Map> em List<String>. Função para retornar uma lista de disciplinas
   //  Future<List<Disciplina>> getNomeDisciplinas() async {
   //   var disciplinaMapList = await getDisciplinaMapList();
   //   int tam = disciplinaMapList.length;
   //    List<String> disciplinaNomes = List<String>();
-    
-     
+
   //   return result;
   // }
 
@@ -182,7 +184,7 @@ class DatabaseHelper {
     return result;
   }
 
-   Future<int> inserirTarefa(Tarefa tarefa) async {
+  Future<int> inserirTarefa(Tarefa tarefa) async {
     Database db = await this.getDatabase();
     var result = await db.insert(tableTarefas, tarefa.tarefaToMap());
     return result;
@@ -224,6 +226,4 @@ class DatabaseHelper {
 
     return tarefaLista;
   }
-
-
 }

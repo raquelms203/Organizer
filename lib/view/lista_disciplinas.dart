@@ -44,7 +44,8 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return FormTarefa.add(listaTarefa: widget.listaTarefa, acao: "a");
                 }));
-              })
+              }),
+              
         ],
       ),
       floatingActionButton: FloatingActionButton(
