@@ -32,7 +32,7 @@ class Tarefa {
   void setEntrega(int entrega) => this._entrega = entrega;
   void setPrioridade(int prioridade) => this._prioridade = prioridade;
 
-  //converte l0 em Map
+  //converte Tarefa em Map
   Map<String, dynamic> tarefaToMap() {
     var map = Map<String, dynamic>();
 

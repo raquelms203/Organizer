@@ -6,12 +6,12 @@ import 'package:organizer/model/obj_tarefa.dart';
 
 void main() {
   List<Disciplina> listaDisciplinas = List<Disciplina>();
-  List<Tarefa> listaTarefas = List<Tarefa>();
+ // List<Tarefa> listaTarefas = List<Tarefa>();
   runApp(
     MaterialApp(
       title: "Organizer",
-     // home: ListaDisciplinas(listaDisciplina: listaDisciplinas,),
-     home: ListaDisciplinas(listaDisciplina:listaDisciplinas,)
+     home: ListaDisciplinas(listaDisciplina: listaDisciplinas,),
+    // home: ListaTarefas(listaTarefa:listaTarefas,)
     ),
   );
 }

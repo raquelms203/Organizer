@@ -307,18 +307,6 @@ class _FormDisciplina extends State<FormDisciplina> {
     }
     return Container();
   }
-  //  String valorInicialPeriodo() {
-  //    if (widget.acao == "e") {
-
-  //        dropdownDefault = widget.disciplina.getPeriodo();
-  //     _periodo = dropdownDefault;
-  //    }
-
-  //    else if (widget.acao == "a")
-  //    dropdownDefault = "Período";
-  //    return "";
-
-  //  }
 
   String valorInicialDisciplina() {
     if (widget.acao == "a")

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:organizer/view/lista_tarefas.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
@@ -45,6 +46,7 @@ class _FormTarefa extends State<FormTarefa> {
         title: Text(appbarTitulo()),
         backgroundColor: Colors.purple[300],
         actions: <Widget>[
+         
           MaterialButton(
             child: Text(
               "Salvar",
@@ -86,38 +88,38 @@ class _FormTarefa extends State<FormTarefa> {
                 //     return null; // unreachable
                 //   },
                 // ),
-                 Row(
-                   children: <Widget>[
-                     Padding(padding: EdgeInsets.only(left:15.0),),
-                     Container(
-                       padding: EdgeInsets.only(top:30.0),
-                       child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            hint: Text(dropdownDefault,
-                                 style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0
-                            )),
-                            onChanged: (String novoValor) {
-                              setState(() {
-                               dropdownDefault = novoValor;
-                               _disciplina = novoValor;
-                              });
-                            },
-                            items: stringDisciplinas.map<DropdownMenuItem<String>>((String valor) {
-                              return DropdownMenuItem<String>(
-                                value: valor,
-                                child: Text(
-                                  valor,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                //  Row(
+                //    children: <Widget>[
+                //      Padding(padding: EdgeInsets.only(left:15.0),),
+                //      Container(
+                //        padding: EdgeInsets.only(top:30.0),
+                //        child: DropdownButtonHideUnderline(
+                //           child: DropdownButton<String>(
+                //             hint: Text(dropdownDefault,
+                //                  style: TextStyle(
+                //               fontWeight: FontWeight.bold,
+                //               fontSize: 20.0
+                //             )),
+                //             onChanged: (String novoValor) {
+                //               setState(() {
+                //                dropdownDefault = novoValor;
+                //                _disciplina = novoValor;
+                //               });
+                //             },
+                //             items: stringDisciplinas.map<DropdownMenuItem<String>>((String valor) {
+                //               return DropdownMenuItem<String>(
+                //                 value: valor,
+                //                 child: Text(
+                //                   valor,
+                //                   style: TextStyle(fontWeight: FontWeight.bold),
 
-                                ));
-                            }).toList(),
-                        ),
-                ),
-                     ),
-                   ],
-                 ),
+                //                 ));
+                //             }).toList(),
+                //         ),
+                // ),
+                //      ),
+                //    ],
+                //  ),
 
                 // Row(
                 //   children: <Widget>[
@@ -153,7 +155,7 @@ class _FormTarefa extends State<FormTarefa> {
                         children: <Widget>[
                           SizedBox(
                               width: 150.0,
-                              height: 30.0,
+                              height: 55.0,
                               child: TextFormField(
                                 initialValue: valorInicialTipo(),
                                 validator: (value) {
@@ -176,7 +178,7 @@ class _FormTarefa extends State<FormTarefa> {
                         child: Column(
                           children: <Widget>[
                             SizedBox(
-                                height: 30.0,
+                                height: 55.0,
                                 width: 150.0,
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
@@ -200,13 +202,13 @@ class _FormTarefa extends State<FormTarefa> {
                   children: <Widget>[
                     Padding(
                         padding: EdgeInsets.only(
-                          top: 40.0,
+                          top: 10.0,
                           left: 15.0,
                         ),
                         child: Column(
                           children: <Widget>[
                             SizedBox(
-                                height: 30.0,
+                                height: 55.0,
                                 width: 150.0,
                                 child: TextFormField(
                                   initialValue: valorInicialEntrega(),
@@ -228,7 +230,6 @@ class _FormTarefa extends State<FormTarefa> {
                       padding: EdgeInsets.only(left: 28.0),
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: 40.0),
                       margin: EdgeInsets.only(top: 10.0),
                       child: Column(
                         children: <Widget>[
@@ -270,7 +271,7 @@ class _FormTarefa extends State<FormTarefa> {
                 Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(top: 40.0, left: 15.0),
+                      padding: EdgeInsets.only(top: 10.0, left: 15.0),
                       child: Column(
                         children: <Widget>[
                           SizedBox(
@@ -419,7 +420,7 @@ class _FormTarefa extends State<FormTarefa> {
 
       result = await databaseHelper.atualizarTarefa(widget.tarefa);
     } else if (widget.acao == "a") {
-      Tarefa tarefa = new Tarefa(_disciplina, _descricao, _tipo, _valor, 0.0, _entrega, _prioridade);
+      Tarefa tarefa = new Tarefa("OAC", _descricao, _tipo, _valor, 0.0, _entrega, _prioridade);
       result = await databaseHelper.inserirTarefa(tarefa);
     }
     if (result== 0) errorMsgSalvar();

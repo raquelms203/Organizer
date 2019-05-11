@@ -8,6 +8,7 @@ import 'package:organizer/controller/form_tarefa.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:organizer/model/obj_tarefa.dart';
+import 'package:organizer/view/lista_tarefas.dart';
 
 class ListaDisciplinas extends StatefulWidget {
   List<Disciplina> listaDisciplina;
@@ -42,7 +43,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
               child: Icon(Icons.remove_red_eye),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FormTarefa.add(listaTarefa: widget.listaTarefa, acao: "a");
+                  return ListaTarefas(listaTarefa: widget.listaTarefa);
                 }));
               }),
               

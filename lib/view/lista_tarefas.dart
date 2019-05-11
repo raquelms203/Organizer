@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/controller/form_disciplina.dart';
+import 'package:organizer/view/lista_disciplinas.dart';
 import './view_disciplina.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
@@ -9,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:organizer/model/obj_tarefa.dart';
+import 'package:organizer/view/view_tarefa.dart';
 
 class ListaTarefas extends StatefulWidget {
   List<Tarefa> listaTarefa;
@@ -33,27 +35,21 @@ class _ListaTarefas extends State<ListaTarefas> {
   Widget build(BuildContext context) {
     if (listaTarefa == null)
       listaTarefa = List<Tarefa>();
-      else 
+      else {
         atualizarListView();
+      }
 
     return Scaffold( 
       appBar: AppBar(  
         title: Text("Tarefas"),
         backgroundColor: Colors.purple[300],
         actions: <Widget>[ 
-         FlatButton(  
-           child: Icon(Icons.remove_red_eye),
-           onPressed: () async {
-             bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FormTarefa.add(listaTarefa: listaTarefa, acao: "a");
-           }));  
-           if (result == true) atualizarListView();       
-           }),
+        
            FlatButton(
               child: Icon(Icons.book),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FormDisciplina.add(listaDisciplina: widget.listaDisciplina, acao: "a");
+                  return ListaDisciplinas(listaDisciplina: widget.listaDisciplina);
                 }));
               })
         ],
@@ -61,7 +57,7 @@ class _ListaTarefas extends State<ListaTarefas> {
       floatingActionButton: FloatingActionButton(  
         onPressed: () async {
           bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return FormTarefa.add(acao: "a",listaTarefa: listaTarefa,);
+            return FormTarefa.add(listaTarefa: listaTarefa, acao: "a");
           }));
           if (result == true) atualizarListView();
         },
@@ -94,6 +90,7 @@ class _ListaTarefas extends State<ListaTarefas> {
 
   //getTarefaListView
   Expanded carregarLista() {
+
     return Expanded(  
       child: ListView.builder(  
         itemCount: count,
@@ -102,18 +99,23 @@ class _ListaTarefas extends State<ListaTarefas> {
             child: Card(  
               child: ListTile(  
                 leading: Icon(Icons.warning, size: 40.0),
-                title: Text(listaTarefa[index].getDisciplina()),
-                subtitle: Text(listaTarefa[index].getTipo()),
+                title: Text(listaTarefa[index].getTipo()),
+                subtitle: Text(listaTarefa[index].getDisciplina()),
                 trailing: Text(listaTarefa[index].getNota().toString()+"/"+
-                listaTarefa[index].getValor().toString()),
-                onTap: () => {},
-                //async {
-                //  bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    // return ViewTarefa;
-                //  }));
-                // if (result == true) atualizarListView();
+                listaTarefa[index].getValor().toString(), 
+                style: TextStyle(  
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey[600]
+                ),),
+                onTap: () async {
+                
+                 bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ViewTarefa(tarefa: listaTarefa[index]);
+                 }));
+                if (result == true) atualizarListView();
 
-               // },
+               },
 
               ),
             ),
@@ -128,12 +130,13 @@ class _ListaTarefas extends State<ListaTarefas> {
   }
 
   void atualizarListView() {
+  
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {
       Future<List<Tarefa>> tarefaListFuture = databaseHelper.getTarefaLista();
       tarefaListFuture.then((listaTarefa) {
         setState(() {
-         listaTarefa = listaTarefa;
+         this.listaTarefa = listaTarefa;
          this.count = listaTarefa.length;
         });
       });
