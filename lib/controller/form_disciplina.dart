@@ -406,13 +406,14 @@ class _FormDisciplina extends State<FormDisciplina> {
       widget.disciplina.setStatus(_status);
 
       result = await databaseHelper.atualizarDisciplina(widget.disciplina);
+
     } else if (widget.acao == "a") {
       Disciplina disciplina = new Disciplina(
           _disciplina, _cod, 0, _limFaltas, _meta, _periodo, _status);
 
-
       result = await databaseHelper.inserirDisciplina(disciplina);
     }
+    print(result);
 
     if (result == 0) errorMsgSalvar();
 

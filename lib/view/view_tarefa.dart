@@ -42,12 +42,12 @@ class _ViewTarefa extends State<ViewTarefa> {
             trailing: textPrioridade()
           )
          ),
-         Card( 
-           child: TextField(  
-             keyboardType: TextInputType.number,
-             e
-           ),
-         )
+        //  Card( 
+        //    child: TextField(  
+        //      keyboardType: TextInputType.number,
+        //      e
+        //    ),
+        //  )
           
         ],
       )),
