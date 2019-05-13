@@ -32,7 +32,7 @@ class DatabaseHelper {
   String colDisciplinas = 'disciplinas';
   String colValor = 'valor';
   String colNota = 'nota';
-  String colData = 'entrega';
+  String colData = 'data';
   String colTipo = 'tipo';
   String colPrioridade = 'prioridade';
 
@@ -54,7 +54,7 @@ class DatabaseHelper {
 
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'database3.db';
+    String path = dir.path + 'database4.db';
     var disciplinaDatabase =
         await openDatabase(path, version: 1, onCreate: _criarDb);
     return disciplinaDatabase;
@@ -72,17 +72,17 @@ class DatabaseHelper {
             $colStatus INTEGER (1) NOT NULL,
             $colPeriodo TEXT NOT NULL);
           ''');
-    await db.execute('''
-            CREATE TABLE $tableTarefas(
+ 
+   await db.execute('''
+            CREATE TABLE $tableTarefas (
             $colIdTarefa INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             $colDescricao TEXT NOT NULL,
             $colValor DOUBLE NOT NULL,
-            $colDisciplina integer NOT NULL,
-              FOREIGN KEY ($colDisciplina) REFERENCES $tableDisciplinas($colDisciplina),
+            $colDisciplina TEXT REFERENCES $tableDisciplinas ($colDisciplina) NOT NULL,
             $colNota DOUBLE NOT NULL,
-            $colData DATETIME NOT NULL,
+            $colData INTEGER NOT NULL,
             $colTipo TEXT NOT NULL,
-            $colPrioridade INTEGER (1) NOT NULL,
+            $colPrioridade INTEGER (1) NOT NULL);
           ''');
   }
 

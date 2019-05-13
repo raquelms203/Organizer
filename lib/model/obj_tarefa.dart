@@ -7,7 +7,7 @@ class Tarefa {
   double _valor;
   double _nota;
 
-  DateTime _data;
+  String _data;
 
   int _id;
   int _prioridade;
@@ -21,7 +21,7 @@ class Tarefa {
   double getValor() => this._valor;
   double getNota() => this._nota;
   int getId() => this._id;
-  DateTime getData() => this._data;
+  String getData() => this._data;
   int getPrioridade() => this._prioridade;
 
   void setDescricao(String descricao) => this._descricao = descricao;
@@ -30,7 +30,7 @@ class Tarefa {
   void setValor(double valor) => this._valor = valor;
   void setNota(double nota) => this._nota = nota;
   void setId(int id) => this._id = id;
-  void setData(DateTime data) => this._data = data;
+  void setData(String data) => this._data = data;
   void setPrioridade(int prioridade) => this._prioridade = prioridade;
 
   //converte Tarefa em Map
@@ -44,7 +44,7 @@ class Tarefa {
     map['tipo'] = _tipo;
     map['valor'] = _valor;
     map['nota'] = _nota;
-    map['entrega'] = _data;
+    map['data'] = _data;
     map['prioridade'] = _prioridade;
 
     return map;
@@ -58,7 +58,7 @@ class Tarefa {
     this._tipo = map['tipo'];
     this._valor = map['valor'];
     this._nota = map['nota'];
-    this._data = map['entrega'];
+    this._data = map['data'];
     this._prioridade = map['prioridade'];
   }
 

@@ -176,7 +176,7 @@ class _FormTarefa extends State<FormTarefa> {
                                 width: 150.0,
                                 child: FlatButton(
                                   child: Text("Entrega"),
-                                  onPressed: () => selecionarData(context),
+                                  onPressed: () => selecionarData(),
                                   color: Colors.blueGrey,
                                 ))
                           ],
@@ -371,11 +371,11 @@ class _FormTarefa extends State<FormTarefa> {
       widget.tarefa.setTipo(_tipo);
       widget.tarefa.setValor(_valor);
       widget.tarefa.setPrioridade(_prioridade);
-      widget.tarefa.setData(_data);
+      widget.tarefa.setData("");
 
       result = await databaseHelper.atualizarTarefa(widget.tarefa);
     } else if (widget.acao == "a") {
-      Tarefa tarefa = new Tarefa("OAC", _descricao, _tipo, _valor, 0.0, DateTime.now(), _prioridade);
+      Tarefa tarefa = new Tarefa(_disciplina, _descricao, _tipo, _valor, 0.0, "", _prioridade);
       result = await databaseHelper.inserirTarefa(tarefa);
     }
     if (result== 0) errorMsgSalvar();
@@ -402,7 +402,7 @@ class _FormTarefa extends State<FormTarefa> {
     });
   }
 
-  Future<Null> selecionarData(BuildContext context) async {
+  Future<Null> selecionarData() async {
     final DateTime selecionada = await showDatePicker(     
       context: context,
       initialDate: _data,
