@@ -96,27 +96,34 @@ class _ListaTarefas extends State<ListaTarefas> {
         itemCount: count,
         itemBuilder: (BuildContext context, int index) {
           return Container (  
-            child: Card(  
-              child: ListTile(  
-                leading: Icon(Icons.warning, size: 40.0),
-                title: Text(listaTarefa[index].getTipo()),
-                subtitle: Text(listaTarefa[index].getDisciplina()),
-                trailing: Text(listaTarefa[index].getNota().toString()+"/"+
-                listaTarefa[index].getValor().toString(), 
-                style: TextStyle(  
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey[600]
-                ),),
-                onTap: () async {
+            child: Dismissible(
+              key: Key("${listaTarefa[index].getId()}"),
+              background: Container(  
+                color: Colors.red,
                 
-                 bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ViewTarefa(tarefa: listaTarefa[index]);
-                 }));
-                if (result == true) atualizarListView();
+              ),
+                          child: Card(  
+                child: ListTile(  
+                  leading: iconePrioridade(listaTarefa[index].getPrioridade()),
+                  title: Text(listaTarefa[index].getTipo()),
+                  subtitle: Text(listaTarefa[index].getDisciplina()),
+                  trailing: Text(listaTarefa[index].getNota().toString()+"/"+
+                  listaTarefa[index].getValor().toString(), 
+                  style: TextStyle(  
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey[600]
+                  ),),
+                  onTap: () async {
+                  
+                   bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return ViewTarefa(tarefa: listaTarefa[index]);
+                   }));
+                  if (result == true) atualizarListView();
 
-               },
+                 },
 
+                ),
               ),
             ),
           );
@@ -141,5 +148,16 @@ class _ListaTarefas extends State<ListaTarefas> {
         });
       });
     });
+  }
+
+  Icon iconePrioridade(int prioridade) {
+    if (prioridade == 1)
+      return Icon(Icons.error, color: Colors.blue[400], size: 45.0);
+        else if (prioridade == 2)
+          return Icon(Icons.error, color: Colors.amberAccent, size: 45.0);
+            else if (prioridade == 3)
+              return Icon(Icons.error, color: Colors.red[400], size: 45.0);
+    
+    return Icon(Icons.warning, size: 40.0);
   }
 }

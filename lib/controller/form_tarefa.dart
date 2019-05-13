@@ -33,7 +33,7 @@ class _FormTarefa extends State<FormTarefa> {
   double _valor;
 
   List<String> listaPrioridade = ["1", "2", "3"];
-  List<String> stringDisciplinas;
+  List<String> stringDisciplinas = [];
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -88,38 +88,38 @@ class _FormTarefa extends State<FormTarefa> {
                 //     return null; // unreachable
                 //   },
                 // ),
-                //  Row(
-                //    children: <Widget>[
-                //      Padding(padding: EdgeInsets.only(left:15.0),),
-                //      Container(
-                //        padding: EdgeInsets.only(top:30.0),
-                //        child: DropdownButtonHideUnderline(
-                //           child: DropdownButton<String>(
-                //             hint: Text(dropdownDefault,
-                //                  style: TextStyle(
-                //               fontWeight: FontWeight.bold,
-                //               fontSize: 20.0
-                //             )),
-                //             onChanged: (String novoValor) {
-                //               setState(() {
-                //                dropdownDefault = novoValor;
-                //                _disciplina = novoValor;
-                //               });
-                //             },
-                //             items: stringDisciplinas.map<DropdownMenuItem<String>>((String valor) {
-                //               return DropdownMenuItem<String>(
-                //                 value: valor,
-                //                 child: Text(
-                //                   valor,
-                //                   style: TextStyle(fontWeight: FontWeight.bold),
+                 Row(
+                   children: <Widget>[
+                     Padding(padding: EdgeInsets.only(left:18.0),),
+                     Container(
+                       padding: EdgeInsets.only(top:30.0),
+                       child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            hint: Text(dropdownDefault,
+                                 style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0
+                            )),
+                            onChanged: (String novoValor) {
+                              setState(() {
+                               dropdownDefault = novoValor;
+                               _disciplina = novoValor;
+                              });
+                            },
+                            items: stringDisciplinas.map<DropdownMenuItem<String>>((String valor) {
+                              return DropdownMenuItem<String>(
+                                value: valor,
+                                child: Text(
+                                  valor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
 
-                //                 ));
-                //             }).toList(),
-                //         ),
-                // ),
-                //      ),
-                //    ],
-                //  ),
+                                ));
+                            }).toList(),
+                        ),
+                ),
+                     ),
+                   ],
+                 ),
 
                 // Row(
                 //   children: <Widget>[
@@ -293,7 +293,7 @@ class _FormTarefa extends State<FormTarefa> {
                       ),
                     )
                   ],
-                )
+                ),
               ],
             ));
       }),

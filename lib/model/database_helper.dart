@@ -23,7 +23,7 @@ class DatabaseHelper {
   String colPeriodo = 'periodo';
   String colFaltas = 'faltas';
   String colMeta = 'meta';
-  String colStatus = 'status';
+  String colStatusDisciplina = 'status';
 
   //tabela tarefas
   String tableTarefas = 'tarefas';
@@ -35,6 +35,7 @@ class DatabaseHelper {
   String colEntrega = 'entrega';
   String colTipo = 'tipo';
   String colPrioridade = 'prioridade';
+  String colStatusTarefa = 'status';
 
   DatabaseHelper._createInstance();
 
@@ -51,9 +52,7 @@ class DatabaseHelper {
     }
     return _database;
   }
-
   
-
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
     String path = dir.path + 'database3.db';
@@ -72,7 +71,7 @@ class DatabaseHelper {
             $colFaltas INTEGER (2) NOT NULL,
             $colLimFaltas INTEGER (2) NOT NULL,
             $colMeta DOUBLE NOT NULL,
-            $colStatus INTEGER (1) NOT NULL,
+            $colStatusDisciplina INTEGER (1) NOT NULL,
             $colPeriodo TEXT NOT NULL);
           ''');
     await db.execute('''
@@ -85,7 +84,8 @@ class DatabaseHelper {
             $colNota DOUBLE NOT NULL,
             $colEntrega INTEGER NOT NULL,
             $colTipo TEXT NOT NULL,
-            $colPrioridade INTEGER (1) NOT NULL);
+            $colPrioridade INTEGER (1) NOT NULL,
+            $colStatusTarefa INTEGER (1) NOT NULL);
           ''');
   }
 

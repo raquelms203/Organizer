@@ -58,7 +58,7 @@ class _ViewTarefa extends State<ViewTarefa> {
     if (tarefa.getPrioridade() == 1)
       return Text("Baixa", style: TextStyle(color: Colors.blue[300], fontWeight: FontWeight.bold));
       else if (tarefa.getPrioridade() == 2)
-        return Text("Média", style: TextStyle(color: Colors.yellow[800], fontWeight: FontWeight.bold));
+        return Text("Média", style: TextStyle(color: Colors.amber[600], fontWeight: FontWeight.bold));
           else if (tarefa.getPrioridade() == 3)
             return Text("Alta", style: TextStyle(color: Colors.red[300], fontWeight: FontWeight.bold));
 

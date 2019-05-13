@@ -10,6 +10,7 @@ class Tarefa {
   int _id;
   int _entrega;
   int _prioridade;
+  int _status;
 
   Tarefa(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._entrega, this._prioridade);
   Tarefa.comId(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._entrega, this._prioridade, this._id);
@@ -22,6 +23,7 @@ class Tarefa {
   int getId() => this._id;
   int getEntrega() => this._entrega;
   int getPrioridade() => this._prioridade;
+  int getStatus() => this._status;
 
   void setDescricao(String descricao) => this._descricao = descricao;
   void setDisciplina(String disciplina) => this._disciplina = disciplina;
@@ -31,6 +33,7 @@ class Tarefa {
   void setId(int id) => this._id = id;
   void setEntrega(int entrega) => this._entrega = entrega;
   void setPrioridade(int prioridade) => this._prioridade = prioridade;
+  void setStatus(int status) => this._status;
 
   //converte Tarefa em Map
   Map<String, dynamic> tarefaToMap() {
