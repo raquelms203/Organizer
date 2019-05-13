@@ -7,13 +7,13 @@ class Tarefa {
   double _valor;
   double _nota;
 
-  int _id;
-  int _entrega;
-  int _prioridade;
-  int _status;
+  DateTime _data;
 
-  Tarefa(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._entrega, this._prioridade);
-  Tarefa.comId(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._entrega, this._prioridade, this._id);
+  int _id;
+  int _prioridade;
+
+  Tarefa(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._data, this._prioridade);
+  Tarefa.comId(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._data, this._prioridade, _id);
 
   String getDescricao() => this._descricao;
   String getDisciplina() => this._disciplina;
@@ -21,9 +21,8 @@ class Tarefa {
   double getValor() => this._valor;
   double getNota() => this._nota;
   int getId() => this._id;
-  int getEntrega() => this._entrega;
+  DateTime getData() => this._data;
   int getPrioridade() => this._prioridade;
-  int getStatus() => this._status;
 
   void setDescricao(String descricao) => this._descricao = descricao;
   void setDisciplina(String disciplina) => this._disciplina = disciplina;
@@ -31,9 +30,8 @@ class Tarefa {
   void setValor(double valor) => this._valor = valor;
   void setNota(double nota) => this._nota = nota;
   void setId(int id) => this._id = id;
-  void setEntrega(int entrega) => this._entrega = entrega;
+  void setData(DateTime data) => this._data = data;
   void setPrioridade(int prioridade) => this._prioridade = prioridade;
-  void setStatus(int status) => this._status;
 
   //converte Tarefa em Map
   Map<String, dynamic> tarefaToMap() {
@@ -46,7 +44,7 @@ class Tarefa {
     map['tipo'] = _tipo;
     map['valor'] = _valor;
     map['nota'] = _nota;
-    map['entrega'] = _entrega;
+    map['entrega'] = _data;
     map['prioridade'] = _prioridade;
 
     return map;
@@ -60,7 +58,7 @@ class Tarefa {
     this._tipo = map['tipo'];
     this._valor = map['valor'];
     this._nota = map['nota'];
-    this._entrega = map['entrega'];
+    this._data = map['entrega'];
     this._prioridade = map['prioridade'];
   }
 

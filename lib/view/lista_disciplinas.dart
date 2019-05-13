@@ -96,6 +96,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
       child: ListView.builder(
           itemCount: count,
           itemBuilder: (BuildContext context, int index) {
+            if (listaDisciplina[index].getStatus() == 1) {
             return Container(
               child: Card(
                 child: ListTile(
@@ -115,7 +116,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
                 ),
               ),
             );
-          }),
+          }}),
     );
   }
 

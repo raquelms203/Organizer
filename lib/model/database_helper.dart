@@ -23,7 +23,7 @@ class DatabaseHelper {
   String colPeriodo = 'periodo';
   String colFaltas = 'faltas';
   String colMeta = 'meta';
-  String colStatusDisciplina = 'status';
+  String colStatus = 'status';
 
   //tabela tarefas
   String tableTarefas = 'tarefas';
@@ -32,10 +32,9 @@ class DatabaseHelper {
   String colDisciplinas = 'disciplinas';
   String colValor = 'valor';
   String colNota = 'nota';
-  String colEntrega = 'entrega';
+  String colData = 'entrega';
   String colTipo = 'tipo';
   String colPrioridade = 'prioridade';
-  String colStatusTarefa = 'status';
 
   DatabaseHelper._createInstance();
 
@@ -52,11 +51,10 @@ class DatabaseHelper {
     }
     return _database;
   }
-  
+
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
     String path = dir.path + 'database3.db';
-
     var disciplinaDatabase =
         await openDatabase(path, version: 1, onCreate: _criarDb);
     return disciplinaDatabase;
@@ -71,7 +69,7 @@ class DatabaseHelper {
             $colFaltas INTEGER (2) NOT NULL,
             $colLimFaltas INTEGER (2) NOT NULL,
             $colMeta DOUBLE NOT NULL,
-            $colStatusDisciplina INTEGER (1) NOT NULL,
+            $colStatus INTEGER (1) NOT NULL,
             $colPeriodo TEXT NOT NULL);
           ''');
     await db.execute('''
@@ -82,10 +80,9 @@ class DatabaseHelper {
             $colDisciplina integer NOT NULL,
               FOREIGN KEY ($colDisciplina) REFERENCES $tableDisciplinas($colDisciplina),
             $colNota DOUBLE NOT NULL,
-            $colEntrega INTEGER NOT NULL,
+            $colData DATETIME NOT NULL,
             $colTipo TEXT NOT NULL,
             $colPrioridade INTEGER (1) NOT NULL,
-            $colStatusTarefa INTEGER (1) NOT NULL);
           ''');
   }
 

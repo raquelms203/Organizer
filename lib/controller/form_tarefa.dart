@@ -6,12 +6,16 @@ import 'dart:async';
 import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class FormTarefa extends StatefulWidget {
   String acao;
   List<Tarefa> listaTarefa;
   Tarefa tarefa;
   int id;
+
+ // initializeDateFormatting("pt_BR", null).then((_) => _FormTarefa());
 
   FormTarefa.add({this.listaTarefa, this.acao});
   FormTarefa.editar({this.tarefa, this.id, this.acao});
@@ -27,10 +31,14 @@ class _FormTarefa extends State<FormTarefa> {
   String dropdownDefault = "Disciplina";
   String dropdownDefault2 = "Prioridade";
   String _nota;
+
   int _entrega;
   int _prioridade;
   int count;
+
   double _valor;
+
+  DateTime _data = new DateTime.now();
 
   List<String> listaPrioridade = ["1", "2", "3"];
   List<String> stringDisciplinas = [];
@@ -42,6 +50,7 @@ class _FormTarefa extends State<FormTarefa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         title: Text(appbarTitulo()),
         backgroundColor: Colors.purple[300],
@@ -70,24 +79,6 @@ class _FormTarefa extends State<FormTarefa> {
             key: _formKey,
             child: ListView(
               children: <Widget>[
-                // FutureBuilder<List<String>>(
-                //   future: disciplinas(), // a previously-obtained Future<String> or null
-                //   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-                //     switch (snapshot.connectionState) {
-                //       case ConnectionState.none:
-                //         return Text('Press button to start.');
-                //       case ConnectionState.active:
-                //       case ConnectionState.waiting:
-                //         return Text('Awaiting result...');
-                //       case ConnectionState.done:
-                //         if (snapshot.hasError)
-                //           return Text('Error: ${snapshot.error}');
-                //      //   lista = snapshot.data;
-                //         return Text('Result: ${snapshot.data}');
-                //     }
-                //     return null; // unreachable
-                //   },
-                // ),
                  Row(
                    children: <Widget>[
                      Padding(padding: EdgeInsets.only(left:18.0),),
@@ -120,33 +111,6 @@ class _FormTarefa extends State<FormTarefa> {
                      ),
                    ],
                  ),
-
-                // Row(
-                //   children: <Widget>[
-                //     Padding(
-                //       padding: EdgeInsets.only(top: 30.0, left: 15.0),
-                //       child: Row(children: <Widget>[
-                //         Column(children: <Widget>[
-                //           SizedBox(
-                //             height: 225.0,
-                //             width: 340.0,
-                //             child: DropDownField(
-                //                 value: dropdownDefault,
-                //                 hintStyle: TextStyle(fontWeight: FontWeight.w200),
-                //                 required: false,
-                //                 labelText: 'Disciplina',
-                //                 items: stringDisciplinas,
-                //                 setter: (dynamic newValue) {
-                //                   dropdownDefault2 = newValue;
-                //                   _disciplina = newValue;
-                //                 }),
-                //           ),
-                //         ]),
-                //       ]),
-                //     ),
-                //   ],
-                // ),
-
                 Row(
                   children: <Widget>[
                     Padding(
@@ -210,19 +174,10 @@ class _FormTarefa extends State<FormTarefa> {
                             SizedBox(
                                 height: 55.0,
                                 width: 150.0,
-                                child: TextFormField(
-                                  initialValue: valorInicialEntrega(),
-                                  keyboardType: TextInputType.datetime,
-                                  validator: (value) {
-                                    if (value.isEmpty) return 'Campo vazio!';
-                                    _entrega = int.parse(value);
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: 'Entrega',
-                                      hintText: '18/05/2019',
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0))),
+                                child: FlatButton(
+                                  child: Text("Entrega"),
+                                  onPressed: () => selecionarData(context),
+                                  color: Colors.blueGrey,
                                 ))
                           ],
                         )),
@@ -325,7 +280,7 @@ class _FormTarefa extends State<FormTarefa> {
   String valorInicialEntrega() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") return widget.tarefa.getEntrega().toString();
+    else if (widget.acao == "e") return widget.tarefa.getData().toString();
     return "";
   }
 
@@ -416,11 +371,11 @@ class _FormTarefa extends State<FormTarefa> {
       widget.tarefa.setTipo(_tipo);
       widget.tarefa.setValor(_valor);
       widget.tarefa.setPrioridade(_prioridade);
-      widget.tarefa.setEntrega(_entrega);
+      widget.tarefa.setData(_data);
 
       result = await databaseHelper.atualizarTarefa(widget.tarefa);
     } else if (widget.acao == "a") {
-      Tarefa tarefa = new Tarefa("OAC", _descricao, _tipo, _valor, 0.0, _entrega, _prioridade);
+      Tarefa tarefa = new Tarefa("OAC", _descricao, _tipo, _valor, 0.0, DateTime.now(), _prioridade);
       result = await databaseHelper.inserirTarefa(tarefa);
     }
     if (result== 0) errorMsgSalvar();
@@ -445,5 +400,21 @@ class _FormTarefa extends State<FormTarefa> {
         });
       });
     });
+  }
+
+  Future<Null> selecionarData(BuildContext context) async {
+    final DateTime selecionada = await showDatePicker(     
+      context: context,
+      initialDate: _data,
+      firstDate: DateTime(2019),
+      lastDate: DateTime(2022),
+     // locale: const Locale('pt', 'BR')
+    );
+    if (selecionada != null && selecionada != _data) {
+      print("Data selecionada: ${_data.toString()}");
+      setState(() {
+        _data = selecionada; 
+      });
+    }
   }
 }

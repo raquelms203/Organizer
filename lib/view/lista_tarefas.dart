@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:organizer/controller/form_disciplina.dart';
 import 'package:organizer/view/lista_disciplinas.dart';
@@ -15,7 +16,7 @@ import 'package:organizer/view/view_tarefa.dart';
 class ListaTarefas extends StatefulWidget {
   List<Tarefa> listaTarefa;
   List<Disciplina> listaDisciplina;
-  
+
   ListaTarefas({this.listaTarefa});
 
   @override
@@ -26,37 +27,38 @@ class _ListaTarefas extends State<ListaTarefas> {
   int count = 0;
 
   List<Tarefa> listaTarefa;
-  
-    DatabaseHelper databaseHelper = DatabaseHelper();
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   _ListaTarefas(this.listaTarefa);
 
-  @override  
+  @override
   Widget build(BuildContext context) {
     if (listaTarefa == null)
       listaTarefa = List<Tarefa>();
-      else {
-        atualizarListView();
-      }
+    else {
+      atualizarListView();
+    }
 
-    return Scaffold( 
-      appBar: AppBar(  
+    return Scaffold(
+      appBar: AppBar(
         title: Text("Tarefas"),
         backgroundColor: Colors.purple[300],
-        actions: <Widget>[ 
-        
-           FlatButton(
+        actions: <Widget>[
+          FlatButton(
               child: Icon(Icons.book),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ListaDisciplinas(listaDisciplina: widget.listaDisciplina);
+                  return ListaDisciplinas(
+                      listaDisciplina: widget.listaDisciplina);
                 }));
               })
         ],
       ),
-      floatingActionButton: FloatingActionButton(  
+      floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          bool result = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
             return FormTarefa.add(listaTarefa: listaTarefa, acao: "a");
           }));
           if (result == true) atualizarListView();
@@ -66,19 +68,22 @@ class _ListaTarefas extends State<ListaTarefas> {
         tooltip: "Adicionar Tarefa",
       ),
       body: Container(
-        child: Column(children: <Widget>[  
-          txtListaVazia(listaTarefa.length),
-          carregarLista()
-        ],),),
+        child: Column(
+          children: <Widget>[
+            txtListaVazia(listaTarefa.length),
+            carregarLista()
+          ],
+        ),
+      ),
     );
   }
 
   Container txtListaVazia(int tam) {
-    if (tam==0){
-      return Container(  
-        padding: EdgeInsets.only(top:260.0),
+    if (tam == 0) {
+      return Container(
+        padding: EdgeInsets.only(top: 260.0),
         alignment: Alignment.center,
-        child: Text(  
+        child: Text(
           "Não há tarefas cadastradas!",
           style: TextStyle(color: Colors.grey[600], fontSize: 18.0),
         ),
@@ -90,41 +95,34 @@ class _ListaTarefas extends State<ListaTarefas> {
 
   //getTarefaListView
   Expanded carregarLista() {
-
-    return Expanded(  
-      child: ListView.builder(  
+    return Expanded(
+      child: ListView.builder(
         itemCount: count,
         itemBuilder: (BuildContext context, int index) {
-          return Container (  
-            child: Dismissible(
-              key: Key("${listaTarefa[index].getId()}"),
-              background: Container(  
-                color: Colors.red,
-                
-              ),
-                          child: Card(  
-                child: ListTile(  
+          return Container(
+           
+              child: Card(
+                child: ListTile(
                   leading: iconePrioridade(listaTarefa[index].getPrioridade()),
                   title: Text(listaTarefa[index].getTipo()),
                   subtitle: Text(listaTarefa[index].getDisciplina()),
-                  trailing: Text(listaTarefa[index].getNota().toString()+"/"+
-                  listaTarefa[index].getValor().toString(), 
-                  style: TextStyle(  
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[600]
-                  ),),
+                  trailing: Text(
+                    listaTarefa[index].getNota().toString() +
+                        "/" +
+                        listaTarefa[index].getValor().toString(),
+                    style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueGrey[600]),
+                  ),
                   onTap: () async {
-                  
-                   bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    bool result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return ViewTarefa(tarefa: listaTarefa[index]);
-                   }));
-                  if (result == true) atualizarListView();
-
-                 },
-
+                    }));
+                    if (result == true) atualizarListView();
+                  },
                 ),
-              ),
             ),
           );
         },
@@ -133,18 +131,20 @@ class _ListaTarefas extends State<ListaTarefas> {
   }
 
   Visibility disableTxtVazia(Container cont) {
-    return Visibility(child: cont, visible: false,);
+    return Visibility(
+      child: cont,
+      visible: false,
+    );
   }
 
   void atualizarListView() {
-  
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {
       Future<List<Tarefa>> tarefaListFuture = databaseHelper.getTarefaLista();
       tarefaListFuture.then((listaTarefa) {
         setState(() {
-         this.listaTarefa = listaTarefa;
-         this.count = listaTarefa.length;
+          this.listaTarefa = listaTarefa;
+          this.count = listaTarefa.length;
         });
       });
     });
@@ -153,11 +153,11 @@ class _ListaTarefas extends State<ListaTarefas> {
   Icon iconePrioridade(int prioridade) {
     if (prioridade == 1)
       return Icon(Icons.error, color: Colors.blue[400], size: 45.0);
-        else if (prioridade == 2)
-          return Icon(Icons.error, color: Colors.amberAccent, size: 45.0);
-            else if (prioridade == 3)
-              return Icon(Icons.error, color: Colors.red[400], size: 45.0);
-    
+    else if (prioridade == 2)
+      return Icon(Icons.error, color: Colors.amberAccent, size: 45.0);
+    else if (prioridade == 3)
+      return Icon(Icons.error, color: Colors.red[400], size: 45.0);
+
     return Icon(Icons.warning, size: 40.0);
   }
 }
