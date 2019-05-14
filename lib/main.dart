@@ -3,8 +3,6 @@ import 'package:organizer/view/lista_disciplinas.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/view/lista_tarefas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 

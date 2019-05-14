@@ -7,8 +7,7 @@ import 'dart:async';
 import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:dropdownfield/dropdownfield.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+
 
 class FormTarefa extends StatefulWidget {
   String acao;
@@ -431,7 +430,7 @@ class _FormTarefa extends State<FormTarefa> {
   }
 
   Future<Null> selecionarData() async {
-    //final DateTime
+    //dataSelecionada is a final DateTime
     dataSelecionada = await showDatePicker(
         context: context,
         initialDate: dataAtual,
@@ -447,11 +446,5 @@ class _FormTarefa extends State<FormTarefa> {
             ],
           );
         });
-    if (dataSelecionada != null && dataSelecionada != dataAtual) {
-      print("Data selecionada: ${dataSelecionada.toString()}");
-      // setState(() {
-      //   _data = selecionada;
-      // });
-    }
   }
 }
