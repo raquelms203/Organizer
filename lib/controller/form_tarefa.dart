@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organizer/view/lista_tarefas.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,8 +16,6 @@ class FormTarefa extends StatefulWidget {
   Tarefa tarefa;
   int id;
 
- // initializeDateFormatting("pt_BR", null).then((_) => _FormTarefa());
-
   FormTarefa.add({this.listaTarefa, this.acao});
   FormTarefa.editar({this.tarefa, this.id, this.acao});
 
@@ -25,7 +24,7 @@ class FormTarefa extends StatefulWidget {
 }
 
 class _FormTarefa extends State<FormTarefa> {
-  String _descricao;
+  String _descricao = "";
   String _disciplina;
   String _tipo;
   String dropdownDefault = "Disciplina";
@@ -35,10 +34,12 @@ class _FormTarefa extends State<FormTarefa> {
   int _entrega;
   int _prioridade;
   int count;
+  int _data;
 
   double _valor;
 
-  DateTime _data = new DateTime.now();
+  DateTime dataAtual = new DateTime.now();
+  DateTime dataSelecionada;
 
   List<String> listaPrioridade = ["1", "2", "3"];
   List<String> stringDisciplinas = [];
@@ -50,12 +51,10 @@ class _FormTarefa extends State<FormTarefa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         title: Text(appbarTitulo()),
         backgroundColor: Colors.purple[300],
         actions: <Widget>[
-         
           MaterialButton(
             child: Text(
               "Salvar",
@@ -74,44 +73,46 @@ class _FormTarefa extends State<FormTarefa> {
       ),
       body: Container(
         child: Builder(builder: (BuildContext context) {
-              disciplinasDropdown();
+          disciplinasDropdown();
 
           return Form(
               key: _formKey,
               child: ListView(
                 children: <Widget>[
-                   Row(
-                     children: <Widget>[
-                       Padding(padding: EdgeInsets.only(left:18.0),),
-                       Container(
-                         padding: EdgeInsets.only(top:30.0),
-                         child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              hint: Text(dropdownDefault,
-                                   style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0
-                              )),
-                              onChanged: (String novoValor) {
-                                setState(() {
-                                 dropdownDefault = novoValor;
-                                 _disciplina = novoValor;
-                                });
-                              },
-                              items: stringDisciplinas.map<DropdownMenuItem<String>>((String valor) {
-                                return DropdownMenuItem<String>(
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 18.0),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 30.0),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            hint: Text(dropdownDefault,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
+                            onChanged: (String novoValor) {
+                              setState(() {
+                                dropdownDefault = novoValor;
+                                _disciplina = novoValor;
+                              });
+                            },
+                            items: stringDisciplinas
+                                .map<DropdownMenuItem<String>>((String valor) {
+                              return DropdownMenuItem<String>(
                                   value: valor,
                                   child: Text(
                                     valor,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ));
-                              }).toList(),
+                            }).toList(),
                           ),
+                        ),
+                      ),
+                    ],
                   ),
-                       ),
-                     ],
-                   ),
                   Row(
                     children: <Widget>[
                       Padding(
@@ -138,8 +139,8 @@ class _FormTarefa extends State<FormTarefa> {
                         ),
                       ),
                       Padding(
-                          padding:
-                              EdgeInsets.only(left: 25.0, top: 10.0, right: 10.0),
+                          padding: EdgeInsets.only(
+                              left: 25.0, top: 10.0, right: 10.0),
                           child: Column(
                             children: <Widget>[
                               SizedBox(
@@ -176,9 +177,30 @@ class _FormTarefa extends State<FormTarefa> {
                                   height: 55.0,
                                   width: 150.0,
                                   child: FlatButton(
-                                    child: Text("Entrega"),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.calendar_today,
+                                          size: 23.0,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 3.0),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            "Entrega",
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: 15.0),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     onPressed: () => selecionarData(),
-                                    color: Colors.blueGrey,
+                                    shape: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black)),
                                   ))
                             ],
                           )),
@@ -231,15 +253,16 @@ class _FormTarefa extends State<FormTarefa> {
                         child: Column(
                           children: <Widget>[
                             SizedBox(
-                              height: 80.0,
+                              height: 120.0,
                               width: 325.0,
                               child: TextFormField(
+                                maxLines: 5,
                                 initialValue: valorInicialDescricao(),
                                 validator: (value) {
                                   _descricao = value;
                                 },
                                 decoration: InputDecoration(
-                                    labelText: 'Descrição:',
+                                    hintText: 'Descrição (Opcional)',
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             style: BorderStyle.solid))),
@@ -367,20 +390,23 @@ class _FormTarefa extends State<FormTarefa> {
     }
 
     _tipo = (_tipo[0].toUpperCase() + _tipo.substring(1));
+    _data = dataSelecionada.millisecondsSinceEpoch;
 
     if (widget.acao == "e") {
       widget.tarefa.setDisciplina(_disciplina);
       widget.tarefa.setTipo(_tipo);
       widget.tarefa.setValor(_valor);
       widget.tarefa.setPrioridade(_prioridade);
-      widget.tarefa.setData("");
+      widget.tarefa.setData(_data);
 
       result = await databaseHelper.atualizarTarefa(widget.tarefa);
     } else if (widget.acao == "a") {
-      Tarefa tarefa = new Tarefa(_disciplina, _descricao, _tipo, _valor, 0.0, "", _prioridade);
+      Tarefa tarefa = new Tarefa(
+          _disciplina, _descricao, _tipo, _valor, 0.0, _data, _prioridade);
       result = await databaseHelper.inserirTarefa(tarefa);
+      print(tarefa.getData());
     }
-    if (result== 0) errorMsgSalvar();
+    if (result == 0) errorMsgSalvar();
 
     Navigator.pop(context, true);
   }
@@ -390,7 +416,7 @@ class _FormTarefa extends State<FormTarefa> {
     return result;
   }
 
-   void disciplinasDropdown() {
+  void disciplinasDropdown() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {
       Future<List<String>> disciplinasListFuture =
@@ -405,18 +431,27 @@ class _FormTarefa extends State<FormTarefa> {
   }
 
   Future<Null> selecionarData() async {
-    final DateTime selecionada = await showDatePicker(     
-      context: context,
-      initialDate: _data,
-      firstDate: DateTime(2019),
-      lastDate: DateTime(2022),
-     // locale: const Locale('pt', 'BR')
-    );
-    if (selecionada != null && selecionada != _data) {
-      print("Data selecionada: ${_data.toString()}");
-      setState(() {
-        _data = selecionada; 
-      });
+    //final DateTime
+    dataSelecionada = await showDatePicker(
+        context: context,
+        initialDate: dataAtual,
+        firstDate: DateTime(2019),
+        lastDate: DateTime(2022),
+        builder: (BuildContext context, Widget child) {
+          return ListView(
+            children: <Widget>[
+              Theme(
+                child: child,
+                data: ThemeData(primaryColor: Colors.purple[300]),
+              ),
+            ],
+          );
+        });
+    if (dataSelecionada != null && dataSelecionada != dataAtual) {
+      print("Data selecionada: ${dataSelecionada.toString()}");
+      // setState(() {
+      //   _data = selecionada;
+      // });
     }
   }
 }

@@ -54,7 +54,7 @@ class DatabaseHelper {
 
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'database4.db';
+    String path = dir.path + 'database5.db';
     var disciplinaDatabase =
         await openDatabase(path, version: 1, onCreate: _criarDb);
     return disciplinaDatabase;
@@ -162,15 +162,6 @@ class DatabaseHelper {
 
     return disciplinaLista;
   }
-
-  // //converter List<Map> em List<String>. Função para retornar uma lista de disciplinas
-  //  Future<List<Disciplina>> getNomeDisciplinas() async {
-  //   var disciplinaMapList = await getDisciplinaMapList();
-  //   int tam = disciplinaMapList.length;
-  //    List<String> disciplinaNomes = List<String>();
-
-  //   return result;
-  // }
 
   //funções tarefas
 
