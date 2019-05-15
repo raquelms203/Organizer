@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:organizer/controller/form_tarefa.dart';
+import 'package:organizer/controller/form_tarefa.dart';
+import 'package:organizer/controller/form_tarefa.dart';
+import 'package:organizer/controller/form_tarefa.dart';
+import 'package:organizer/controller/form_tarefa.dart';
+import 'package:organizer/controller/form_tarefa.dart';
 import 'package:organizer/view/lista_disciplinas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:intl/intl.dart';
+import 'package:organizer/model/database_helper.dart';
+import 'package:flutter/services.dart';
 
 class ViewTarefa extends StatefulWidget {
   Tarefa tarefa;
@@ -13,15 +21,54 @@ class ViewTarefa extends StatefulWidget {
 }
 
 class _ViewTarefa extends State<ViewTarefa> {
+  double _nota;
+  bool erro = false;
   Tarefa tarefa;
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  final FocusNode _focus = FocusNode();
 
   _ViewTarefa(this.tarefa);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[300],
         title: Text(tarefa.getTipo()),
+        actions: <Widget>[
+            SizedBox(
+              height: 30.0,
+              width: 50.0,
+              child: FlatButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return FormTarefa.editar(acao: "e", id: tarefa.getId(), tarefa: tarefa);
+                          
+                    }));
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.blue[300],
+                    size: 30.0,
+                  )),
+            ),
+            SizedBox(
+              height: 30.0,
+              width: 50.0,
+              child: FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      alertApagar(context, tarefa);
+                    });
+                  },
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white70,
+                    size: 30.0,
+                  )),
+            ),
+        ],
       ),
       body: Container(
           child: Column(
@@ -61,25 +108,69 @@ class _ViewTarefa extends State<ViewTarefa> {
                     "Nota:",
                     style: TextStyle(fontSize: 16.0),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 170.0
-                  )),
-                  
+                  Padding(padding: EdgeInsets.only(left: 170.0)),
                   SizedBox(
-                    height: 50.0,
-                    width: 55.0,
+                    height: 46.0,
+                    width: 52.0,
                     child: TextField(
                       keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(bottom: 2, top: 12.0),
+                          hintText: tarefa.getNota().toString(),
+                          hintStyle: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                          errorStyle:
+                              (erro ? TextStyle(color: Colors.red) : null)),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(5),
+                      ],
+                      onSubmitted: (String valor) {
+                        _nota = double.parse(valor);
+                        if (_nota > tarefa.getNota()) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  "Valor maior que ${tarefa.getValor()}!",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+                        databaseHelper.atualizarNota(
+                            tarefa, _nota, tarefa.getId());
+                      },
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20.0),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(left:10.0),),
-                  Text("/${tarefa.getValor()}", 
-                  style: TextStyle(fontSize: 20.0, 
-                  color: Colors.blueGrey[600],
-                   fontWeight: FontWeight.bold),)
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                  ),
+                  Text(
+                    "/${tarefa.getValor()}",
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.blueGrey[600],
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
-          )
+          ),
+         cardDescricao(tarefa.getDescricao())
         ],
       )),
     );
@@ -103,8 +194,100 @@ class _ViewTarefa extends State<ViewTarefa> {
   }
 
   String dataFormatada() {
-    DateTime entrega = DateTime.fromMillisecondsSinceEpoch(tarefa.getData());
-    String dataFormatada = ("${entrega.day}/${entrega.month}/${entrega.year}");
+    DateTime data = DateTime.fromMillisecondsSinceEpoch(tarefa.getData());
+    String dataFormatada = ("${data.day}/${data.month}/${data.year}");
     return dataFormatada;
   }
+
+   void alertApagar(BuildContext context, Tarefa tarefa) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(
+            "Deseja apagar essa tarefa?",
+            style: TextStyle(color: Colors.blue[600]),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: new Text(
+                  "Sim",
+                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+                onPressed: () async {
+                   int result = await databaseHelper.apagarTarefa(tarefa.getId());
+                  Navigator.pop(context);
+                }),
+            FlatButton(
+              child: new Text(
+                "Não",
+                style: TextStyle(color: Colors.black, fontSize: 15.0),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+ 
+ Card cardDescricao (String descricao) {
+   if (descricao.length > 44) {
+     return Card(
+            child: SizedBox(
+              height: 110,
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.0, left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Descrição: ",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 4.0),
+                    ),
+                    Text("${tarefa.getDescricao()}",
+                        style: TextStyle(
+                            fontSize: 16.0, color: Colors.blueGrey[600])),
+                  ],
+                ),
+              ),
+            ),
+          );
+   
+ } else if (descricao.length <= 44) {
+   return Card(
+            child: SizedBox(
+              height: 110,
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.0, left: 15.0),
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Descrição: ",
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 4.0),
+                        ),
+                        Text("${tarefa.getDescricao()}",
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.blueGrey[600])),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+    }
+    return Card();
+ }
 }

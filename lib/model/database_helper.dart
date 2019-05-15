@@ -184,6 +184,13 @@ class DatabaseHelper {
         where: '$colIdTarefa = ?', whereArgs: [tarefa.getId()]);
     return result;
   }
+  
+  Future<int> atualizarNota(Tarefa tarefa, double nota, int id) async {
+    Database db = await this.getDatabase();
+    var result = await db.rawUpdate("UPDATE $tableTarefas SET $colNota = ? WHERE $colIdTarefa = ?",
+    [nota, id]);
+    return result;
+  }
 
   Future<int> apagarTarefa(int id) async {
     var db = await this.getDatabase();

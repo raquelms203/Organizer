@@ -24,18 +24,16 @@ class FormTarefa extends StatefulWidget {
 
 class _FormTarefa extends State<FormTarefa> {
   String _descricao = "";
-  String _disciplina;
-  String _tipo;
+  String _disciplina = "";
+  String _tipo = "";
   String dropdownDefault = "Disciplina";
   String dropdownDefault2 = "Prioridade";
-  String _nota;
 
-  int _entrega;
-  int _prioridade;
+  int _prioridade=0;
   int count;
   int _data;
 
-  double _valor;
+  double _valor = 0.0;
 
   DateTime dataAtual = new DateTime.now();
   DateTime dataSelecionada;
@@ -54,6 +52,11 @@ class _FormTarefa extends State<FormTarefa> {
         title: Text(appbarTitulo()),
         backgroundColor: Colors.purple[300],
         actions: <Widget>[
+          MaterialButton(  
+            child: Icon(Icons.remove_red_eye),
+            height: 20.0,
+            onPressed: () => disciplinasDropdown(),
+          ),
           MaterialButton(
             child: Text(
               "Salvar",
@@ -72,8 +75,6 @@ class _FormTarefa extends State<FormTarefa> {
       ),
       body: Container(
         child: Builder(builder: (BuildContext context) {
-          disciplinasDropdown();
-
           return Form(
               key: _formKey,
               child: ListView(
@@ -95,6 +96,7 @@ class _FormTarefa extends State<FormTarefa> {
                               setState(() {
                                 dropdownDefault = novoValor;
                                 _disciplina = novoValor;
+                                
                               });
                             },
                             items: stringDisciplinas
@@ -221,7 +223,6 @@ class _FormTarefa extends State<FormTarefa> {
                                           fontSize: 20.0)),
                                   onChanged: (String novoValor) {
                                     setState(() {
-                                      print(stringDisciplinas);
                                       dropdownDefault2 = novoValor;
                                       _prioridade = int.parse(novoValor);
                                     });
@@ -255,6 +256,7 @@ class _FormTarefa extends State<FormTarefa> {
                               height: 120.0,
                               width: 325.0,
                               child: TextFormField(
+                                maxLength: 110,
                                 maxLines: 5,
                                 initialValue: valorInicialDescricao(),
                                 validator: (value) {
@@ -315,7 +317,7 @@ class _FormTarefa extends State<FormTarefa> {
     return "";
   }
 
-  bool errorMsgCampoVazio(String campo) {
+  void errorMsgCampoVazio(String campo) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -335,7 +337,6 @@ class _FormTarefa extends State<FormTarefa> {
         );
       },
     );
-    return true;
   }
 
   void errorMsgSalvar() {
@@ -368,23 +369,12 @@ class _FormTarefa extends State<FormTarefa> {
       return;
     }
 
-    if (_tipo == "") {
-      errorMsgCampoVazio("Tipo");
-      return;
+    if (dataSelecionada.millisecondsSinceEpoch == null) {
+      errorMsgCampoVazio("Data");
     }
 
-    if (_valor.toString() == "") {
-      errorMsgCampoVazio("Valor");
-      return;
-    }
-
-    if (_prioridade.toString() == "") {
+    if (_prioridade == 0) {
       errorMsgCampoVazio("Prioridade");
-      return;
-    }
-
-    if (_entrega.toString() == "") {
-      errorMsgCampoVazio("Entrega");
       return;
     }
 
@@ -397,8 +387,11 @@ class _FormTarefa extends State<FormTarefa> {
       widget.tarefa.setValor(_valor);
       widget.tarefa.setPrioridade(_prioridade);
       widget.tarefa.setData(_data);
+      widget.tarefa.setDescricao(_descricao);
 
       result = await databaseHelper.atualizarTarefa(widget.tarefa);
+      
+
     } else if (widget.acao == "a") {
       Tarefa tarefa = new Tarefa(
           _disciplina, _descricao, _tipo, _valor, 0.0, _data, _prioridade);
