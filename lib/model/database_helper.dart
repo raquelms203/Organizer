@@ -168,7 +168,7 @@ class DatabaseHelper {
   // fecth -> SELECT todas as disciplinas do db [objeto Map]
   Future<List<Map<String, dynamic>>> getTarefaMapList() async {
     Database db = await this.getDatabase();
-    var result = await db.rawQuery('SELECT * FROM $tableTarefas');
+    var result = await db.rawQuery('SELECT * FROM $tableTarefas ORDER BY $colData');
     return result;
   }
 

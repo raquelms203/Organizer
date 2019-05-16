@@ -71,6 +71,19 @@ class _ListaTarefas extends State<ListaTarefas> {
         child: Column(
           children: <Widget>[
             txtListaVazia(listaTarefa.length),
+            Container(  
+              padding: EdgeInsets.only(left: 10.0, right: 10.0),
+              margin: EdgeInsets.only(top:5.0, bottom:5.0),
+              decoration: BoxDecoration(  
+              color: Colors.grey[400],
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Text("Maio 2019", 
+              style: TextStyle(  
+              fontSize: 16.0
+              ),
+              )
+            ),
             carregarLista()
           ],
         ),
@@ -107,9 +120,7 @@ class _ListaTarefas extends State<ListaTarefas> {
                   title: Text(listaTarefa[index].getTipo()),
                   subtitle: Text(listaTarefa[index].getDisciplina()),
                   trailing: Text(
-                    listaTarefa[index].getNota().toString() +
-                        "/" +
-                        listaTarefa[index].getValor().toString(),
+                    dataFormatada(listaTarefa[index]),
                     style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
@@ -129,6 +140,16 @@ class _ListaTarefas extends State<ListaTarefas> {
       ),
     );
   }
+
+  // trailing: Text(
+  //                   listaTarefa[index].getNota().toString() +
+  //                       "/" +
+  //                       listaTarefa[index].getValor().toString(),
+  //                   style: TextStyle(
+  //                       fontSize: 15.0,
+  //                       fontWeight: FontWeight.bold,
+  //                       color: Colors.blueGrey[600]),
+  //                 ),
 
   Visibility disableTxtVazia(Container cont) {
     return Visibility(
@@ -159,5 +180,11 @@ class _ListaTarefas extends State<ListaTarefas> {
       return Icon(Icons.error, color: Colors.red[400], size: 45.0);
 
     return Icon(Icons.warning, size: 40.0);
+  }
+
+  String dataFormatada(Tarefa tarefa) {
+    DateTime data = DateTime.fromMillisecondsSinceEpoch(tarefa.getData());
+    String dataFormatada = ("${data.day}/${data.month}/${data.year}");
+    return dataFormatada;
   }
 }

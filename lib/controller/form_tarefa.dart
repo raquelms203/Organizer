@@ -8,7 +8,6 @@ import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:dropdownfield/dropdownfield.dart';
 
-
 class FormTarefa extends StatefulWidget {
   String acao;
   List<Tarefa> listaTarefa;
@@ -29,7 +28,7 @@ class _FormTarefa extends State<FormTarefa> {
   String dropdownDefault = "Disciplina";
   String dropdownDefault2 = "Prioridade";
 
-  int _prioridade=0;
+  int _prioridade = 0;
   int count;
   int _data;
 
@@ -52,7 +51,7 @@ class _FormTarefa extends State<FormTarefa> {
         title: Text(appbarTitulo()),
         backgroundColor: Colors.purple[300],
         actions: <Widget>[
-          MaterialButton(  
+          MaterialButton(
             child: Icon(Icons.remove_red_eye),
             height: 20.0,
             onPressed: () => disciplinasDropdown(),
@@ -96,7 +95,6 @@ class _FormTarefa extends State<FormTarefa> {
                               setState(() {
                                 dropdownDefault = novoValor;
                                 _disciplina = novoValor;
-                                
                               });
                             },
                             items: stringDisciplinas
@@ -120,9 +118,8 @@ class _FormTarefa extends State<FormTarefa> {
                         padding: EdgeInsets.only(left: 15.0, top: 10.0),
                         child: Column(
                           children: <Widget>[
-                            SizedBox(
+                            Container(
                                 width: 150.0,
-                                height: 55.0,
                                 child: TextFormField(
                                   initialValue: valorInicialTipo(),
                                   validator: (value) {
@@ -144,8 +141,7 @@ class _FormTarefa extends State<FormTarefa> {
                               left: 25.0, top: 10.0, right: 10.0),
                           child: Column(
                             children: <Widget>[
-                              SizedBox(
-                                  height: 55.0,
+                              Container(
                                   width: 150.0,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
@@ -390,8 +386,6 @@ class _FormTarefa extends State<FormTarefa> {
       widget.tarefa.setDescricao(_descricao);
 
       result = await databaseHelper.atualizarTarefa(widget.tarefa);
-      
-
     } else if (widget.acao == "a") {
       Tarefa tarefa = new Tarefa(
           _disciplina, _descricao, _tipo, _valor, 0.0, _data, _prioridade);
@@ -430,13 +424,13 @@ class _FormTarefa extends State<FormTarefa> {
         firstDate: DateTime(2019),
         lastDate: DateTime(2022),
         builder: (BuildContext context, Widget child) {
-          return ListView(
-            children: <Widget>[
-              Theme(
-                child: child,
-                data: ThemeData(primaryColor: Colors.purple[300]),
+          return FittedBox(
+            child: Theme(
+              child: child,
+              data: ThemeData(
+                primaryColor: Colors.purple[300],
               ),
-            ],
+            ),
           );
         });
   }

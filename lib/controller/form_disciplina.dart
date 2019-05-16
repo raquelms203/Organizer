@@ -28,7 +28,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   String _cod = "";
   int _limFaltas = 0;
   String _periodo = "";
-  int _status = 0;
+  int _status = -1;
   double _meta = 0.0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
@@ -332,13 +332,13 @@ class _FormDisciplina extends State<FormDisciplina> {
     return "";
   }
 
-  bool errorMsgCampoVazio(String campo) {
+  void errorMsg(String mensagem) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text(
-            "Selecione o " + campo + "!",
+            "$mensagem",
             style: TextStyle(color: Colors.red),
           ),
           actions: <Widget>[
@@ -352,46 +352,33 @@ class _FormDisciplina extends State<FormDisciplina> {
         );
       },
     );
-    return true;
   }
 
-  void errorMsgSalvar() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text(
-            "Erro ao salvar Disciplina!",
-            style: TextStyle(color: Colors.red),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  bool disciplinaExiste(String disciplina) {
+    int tam = widget.listaDisciplina.length;
+
+    for (int i=0; i<tam; i++) 
+      if (disciplina == widget.listaDisciplina[i].getDisciplina())
+        return true;
+    
+    return false;
   }
 
   void salvarDisciplina() async {
     int result;
 
     if (_periodo == "") {
-      errorMsgCampoVazio("Período");
+      errorMsg("Selecione o Período!");
       return;
     }
 
     if (_limFaltas == 0) {
-      errorMsgCampoVazio("Máx de Faltas");
+      errorMsg("Selecione o Máx de Faltas!");
       return;
     }
 
-    if (_status != 0 && _status != 1) {
-      errorMsgCampoVazio("Status");
+    if (_status == -1) {
+      errorMsg("Selecione o Status!");
       return;
     }
     _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
@@ -408,6 +395,12 @@ class _FormDisciplina extends State<FormDisciplina> {
       result = await databaseHelper.atualizarDisciplina(widget.disciplina);
 
     } else if (widget.acao == "a") {
+
+      if(disciplinaExiste(_disciplina)){
+        errorMsg("Disciplina já cadastrada!");
+        return;
+      }
+
       Disciplina disciplina = new Disciplina(
           _disciplina, _cod, 0, _limFaltas, _meta, _periodo, _status);
 
@@ -415,7 +408,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     }
     print(result);
 
-    if (result == 0) errorMsgSalvar();
+    if (result == 0) errorMsg("Erro ao Salvar!");
 
     Navigator.pop(context, true);
   }
