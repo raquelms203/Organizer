@@ -38,9 +38,15 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
   bool get wantKeepAlive => true;
   
 
+ @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     if (listaTarefa == null)
       listaTarefa = List<Tarefa>();
     else {
@@ -48,8 +54,9 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
     }
 
     return Scaffold(
-      
+     
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn2",
         onPressed: () async {
           bool result = await Navigator.push(context,
               MaterialPageRoute(builder: (context) {

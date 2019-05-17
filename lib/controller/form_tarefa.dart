@@ -25,12 +25,12 @@ class _FormTarefa extends State<FormTarefa> {
   String _descricao = "";
   String _disciplina = "";
   String _tipo = "";
-  String dropdownDefault = "Disciplina";
-  String dropdownDefault2 = "Prioridade";
+  String dropdownDisciplina = "Disciplina";
+  String dropdownPrioridade = "Prioridade";
 
   int _prioridade = 0;
   int count;
-  int _data;
+  int _data=0;
 
   double _valor = 0.0;
 
@@ -47,15 +47,15 @@ class _FormTarefa extends State<FormTarefa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text(appbarTitulo()),
-        backgroundColor: Colors.purple[300],
+        backgroundColor: Colors.pink[600],
         actions: <Widget>[
-          MaterialButton(
-            child: Icon(Icons.remove_red_eye),
-            height: 20.0,
-            onPressed: () => disciplinasDropdown(),
-          ),
+         FlatButton(  
+           child: Icon(Icons.remove_red_eye),
+           onPressed: () => disciplinasDropdown()
+         ),
           MaterialButton(
             child: Text(
               "Salvar",
@@ -74,6 +74,7 @@ class _FormTarefa extends State<FormTarefa> {
       ),
       body: Container(
         child: Builder(builder: (BuildContext context) {
+
           return Form(
               key: _formKey,
               child: ListView(
@@ -87,13 +88,13 @@ class _FormTarefa extends State<FormTarefa> {
                         padding: EdgeInsets.only(top: 30.0),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
-                            hint: Text(dropdownDefault,
+                            hint: Text(dropdownDisciplina,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0)),
                             onChanged: (String novoValor) {
                               setState(() {
-                                dropdownDefault = novoValor;
+                                dropdownDisciplina = novoValor;
                                 _disciplina = novoValor;
                               });
                             },
@@ -148,6 +149,7 @@ class _FormTarefa extends State<FormTarefa> {
                                     initialValue: valorInicialValor(),
                                     validator: (value) {
                                       if (value.isEmpty) return 'Campo vazio!';
+                                      if(double.parse(value) > 100) return 'Valor maior que 100.0!';
                                       _valor = double.parse(value);
                                     },
                                     decoration: InputDecoration(
@@ -213,13 +215,13 @@ class _FormTarefa extends State<FormTarefa> {
                               height: 30.0,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  hint: Text(dropdownDefault2,
+                                  hint: Text(dropdownPrioridade,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20.0)),
                                   onChanged: (String novoValor) {
                                     setState(() {
-                                      dropdownDefault2 = novoValor;
+                                      dropdownPrioridade = novoValor;
                                       _prioridade = int.parse(novoValor);
                                     });
                                   },
@@ -277,6 +279,16 @@ class _FormTarefa extends State<FormTarefa> {
     );
   }
 
+  void valoresDropdown() {
+    if (widget.acao == 'a')
+      return;
+    
+    dropdownDisciplina = widget.tarefa.getDisciplina();
+    dropdownPrioridade = widget.tarefa.getPrioridade().toString();
+
+    return;
+  }
+
   String appbarTitulo() {
     if (widget.acao == "a")
       return "Adicionar Tarefa";
@@ -319,7 +331,7 @@ class _FormTarefa extends State<FormTarefa> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Selecione o $campo!",
+            "Campo '$campo' vazio!",
             style: TextStyle(color: Colors.red),
           ),
           actions: <Widget>[
@@ -365,8 +377,8 @@ class _FormTarefa extends State<FormTarefa> {
       return;
     }
 
-    if (dataSelecionada.millisecondsSinceEpoch == null) {
-      errorMsgCampoVazio("Data");
+    if (_data == 0) {
+      errorMsgCampoVazio("Entrega");
     }
 
     if (_prioridade == 0) {

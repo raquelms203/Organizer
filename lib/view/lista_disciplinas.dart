@@ -42,6 +42,8 @@ class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveC
 
   @override
   Widget build(BuildContext context) {
+        super.build(context);
+
     if (listaDisciplina == null)
       listaDisciplina = List<Disciplina>();
     else
@@ -50,6 +52,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveC
     return Scaffold(
      
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn1",
         onPressed: () async {
           bool result = await Navigator.push(context,
               MaterialPageRoute(builder: (context) {

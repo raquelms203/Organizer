@@ -7,22 +7,19 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:organizer/model/database_helper.dart';
 
 void main() {
-
-   
-
   List<Disciplina> listaDisciplinas = List<Disciplina>();
   List<Tarefa> listaTarefas = List<Tarefa>();
+
   runApp(
     MaterialApp(
       title: "Organizer",
-      //  home: ListaDisciplinas(listaDisciplina: listaDisciplinas,),
-      // home: ListaTarefas(listaTarefa:listaTarefas,)
-       
-     home: DefaultTabController(
+      home: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.pink[400],
             bottom: TabBar(
+              indicatorColor: Colors.white,
               tabs: <Widget>[
                 Tab(
                   text: "Tarefas",
@@ -36,18 +33,16 @@ void main() {
           ),
           body: TabBarView(
             children: <Widget>[
-             
-                ListaTarefas(
-                 listaTarefa: listaTarefas,
-               ),
-                ListaDisciplinas(
+              ListaTarefas(
+                listaTarefa: listaTarefas,
+              ),
+              ListaDisciplinas(
                 listaDisciplina: listaDisciplinas,
               ),
             ],
           ),
         ),
       ),
-     
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
