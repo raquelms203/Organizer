@@ -272,7 +272,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     //   _showSnackBar(getContext(), 'Disciplina apagada com sucesso!');
                   }
                   //  widget.lista.removeLast();
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 }),
             FlatButton(
               child: new Text(

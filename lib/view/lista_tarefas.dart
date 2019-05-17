@@ -23,14 +23,21 @@ class ListaTarefas extends StatefulWidget {
   State createState() => new _ListaTarefas(this.listaTarefa);
 }
 
-class _ListaTarefas extends State<ListaTarefas> {
+class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMixin {
   int count = 0;
+      DateTime dataAtual = new DateTime.now();
 
   List<Tarefa> listaTarefa;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 
   _ListaTarefas(this.listaTarefa);
+
+  
+ @override
+  bool get wantKeepAlive => true;
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +48,7 @@ class _ListaTarefas extends State<ListaTarefas> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Tarefas"),
-        backgroundColor: Colors.purple[300],
-        actions: <Widget>[
-          FlatButton(
-              child: Icon(Icons.book),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ListaDisciplinas(
-                      listaDisciplina: widget.listaDisciplina);
-                }));
-              })
-        ],
-      ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           bool result = await Navigator.push(context,
@@ -71,19 +65,7 @@ class _ListaTarefas extends State<ListaTarefas> {
         child: Column(
           children: <Widget>[
             txtListaVazia(listaTarefa.length),
-            Container(  
-              padding: EdgeInsets.only(left: 10.0, right: 10.0),
-              margin: EdgeInsets.only(top:5.0, bottom:5.0),
-              decoration: BoxDecoration(  
-              color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Text("Maio 2019", 
-              style: TextStyle(  
-              fontSize: 16.0
-              ),
-              )
-            ),
+            
             carregarLista()
           ],
         ),
@@ -119,12 +101,23 @@ class _ListaTarefas extends State<ListaTarefas> {
                   leading: iconePrioridade(listaTarefa[index].getPrioridade()),
                   title: Text(listaTarefa[index].getTipo()),
                   subtitle: Text(listaTarefa[index].getDisciplina()),
-                  trailing: Text(
-                    dataFormatada(listaTarefa[index]),
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey[600]),
+                  trailing: Column(
+                    children: <Widget>[
+                      Text(
+                        diasRestantes(listaTarefa[index].getData()),
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey[600]),
+                      ),
+                      Text(
+                        "DIAS",
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey[600]),
+                      ),
+                    ],
                   ),
                   onTap: () async {
                     bool result = await Navigator.push(context,
@@ -140,6 +133,24 @@ class _ListaTarefas extends State<ListaTarefas> {
       ),
     );
   }
+
+  
+   
+    // Container(  
+    //           padding: EdgeInsets.only(left: 10.0, right: 10.0),
+    //           margin: EdgeInsets.only(top:5.0, bottom:5.0),
+    //           decoration: BoxDecoration(  
+    //           color: Colors.grey[400],
+    //             borderRadius: BorderRadius.circular(10.0),
+    //           ),
+    //           child: Text("Maio 2019", 
+    //           style: TextStyle(  
+    //           fontSize: 16.0
+    //           ),
+    //           )
+    //         );
+
+  
 
   // trailing: Text(
   //                   listaTarefa[index].getNota().toString() +
@@ -186,5 +197,10 @@ class _ListaTarefas extends State<ListaTarefas> {
     DateTime data = DateTime.fromMillisecondsSinceEpoch(tarefa.getData());
     String dataFormatada = ("${data.day}/${data.month}/${data.year}");
     return dataFormatada;
+  }
+
+  String diasRestantes(int data) {
+    DateTime dataTarefa = DateTime.fromMillisecondsSinceEpoch(data);
+    return dataTarefa.difference(dataAtual).inDays.toString();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:organizer/controller/form_disciplina.dart';
 import './view_disciplina.dart';
 import 'package:organizer/model/obj_disciplina.dart';
@@ -12,20 +13,32 @@ import 'package:organizer/view/lista_tarefas.dart';
 
 class ListaDisciplinas extends StatefulWidget {
   List<Disciplina> listaDisciplina;
-  List<Tarefa> listaTarefa;
 
   ListaDisciplinas({this.listaDisciplina});
 
   @override
   State createState() => new _ListaDisciplinas(this.listaDisciplina);
+
+ 
 }
 
-class _ListaDisciplinas extends State<ListaDisciplinas> {
+class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveClientMixin{
+  
   int count = 0;
-  DatabaseHelper databaseHelper = DatabaseHelper();
   List<Disciplina> listaDisciplina;
+    DatabaseHelper databaseHelper = DatabaseHelper();
 
   _ListaDisciplinas(this.listaDisciplina);
+
+ 
+ @override
+  bool get wantKeepAlive => true;
+  
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +48,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> {
       atualizarListView();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Organizer"),
-        backgroundColor: Colors.purple[300],
-        actions: <Widget>[
-          FlatButton(
-              child: Icon(Icons.remove_red_eye),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ListaTarefas(listaTarefa: widget.listaTarefa);
-                }));
-              }),
-              
-        ],
-      ),
+     
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           bool result = await Navigator.push(context,

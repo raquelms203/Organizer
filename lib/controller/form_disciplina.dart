@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
+import 'package:organizer/view/lista_disciplinas.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Disciplina> listaDisciplina;
@@ -20,6 +21,7 @@ class FormDisciplina extends StatefulWidget {
 }
 
 class _FormDisciplina extends State<FormDisciplina> {
+
   String dropdownDefault = "Período";
   String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "Status";
@@ -32,12 +34,14 @@ class _FormDisciplina extends State<FormDisciplina> {
   double _meta = 0.0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
+   @override
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+
       onTap: () => valorInicialDropdown(),
       child: Scaffold(
         appBar: AppBar(
@@ -345,7 +349,7 @@ class _FormDisciplina extends State<FormDisciplina> {
             new FlatButton(
               child: new Text("OK"),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context, true);
               },
             ),
           ],
