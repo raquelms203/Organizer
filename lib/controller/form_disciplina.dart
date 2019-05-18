@@ -39,14 +39,17 @@ class _FormDisciplina extends State<FormDisciplina> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  void initState() {
+    valorInicialDropdown();
+    super.initState();
+  }
 
-      onTap: () => valorInicialDropdown(),
-      child: Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         appBar: AppBar(
           title: Text(appbarTitulo()),
-          backgroundColor: Colors.purple[300],
+          backgroundColor: Colors.pink[600],
           actions: <Widget>[
             MaterialButton(
                 child: Text(
@@ -266,7 +269,7 @@ class _FormDisciplina extends State<FormDisciplina> {
             ),
           );
         }),
-      ),
+      
     );
   }
 
@@ -415,5 +418,6 @@ class _FormDisciplina extends State<FormDisciplina> {
     if (result == 0) errorMsg("Erro ao Salvar!");
 
     Navigator.pop(context, true);
+
   }
 }

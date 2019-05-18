@@ -140,25 +140,6 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
       ),
     );
   }
-
-  
-   
-    // Container(  
-    //           padding: EdgeInsets.only(left: 10.0, right: 10.0),
-    //           margin: EdgeInsets.only(top:5.0, bottom:5.0),
-    //           decoration: BoxDecoration(  
-    //           color: Colors.grey[400],
-    //             borderRadius: BorderRadius.circular(10.0),
-    //           ),
-    //           child: Text("Maio 2019", 
-    //           style: TextStyle(  
-    //           fontSize: 16.0
-    //           ),
-    //           )
-    //         );
-
-  
-
   // trailing: Text(
   //                   listaTarefa[index].getNota().toString() +
   //                       "/" +

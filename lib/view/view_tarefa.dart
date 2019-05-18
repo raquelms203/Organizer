@@ -33,7 +33,7 @@ class _ViewTarefa extends State<ViewTarefa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple[300],
+        backgroundColor: Colors.pink[600],
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
             SizedBox(
@@ -127,7 +127,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                       ],
                       onSubmitted: (String valor) {
                         _nota = double.parse(valor);
-                        if (_nota > tarefa.getNota()) {
+                        if (_nota > tarefa.getValor()) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {

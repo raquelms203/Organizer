@@ -30,7 +30,7 @@ class _FormTarefa extends State<FormTarefa> {
 
   int _prioridade = 0;
   int count;
-  int _data=0;
+  int _data = 0;
 
   double _valor = 0.0;
 
@@ -45,17 +45,19 @@ class _FormTarefa extends State<FormTarefa> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    disciplinasDropdown();
+    valorInicialDropdown();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text(appbarTitulo()),
         backgroundColor: Colors.pink[600],
         actions: <Widget>[
-         FlatButton(  
-           child: Icon(Icons.remove_red_eye),
-           onPressed: () => disciplinasDropdown()
-         ),
           MaterialButton(
             child: Text(
               "Salvar",
@@ -67,6 +69,7 @@ class _FormTarefa extends State<FormTarefa> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 salvarTarefa();
+                Navigator.pop(context, true);
               }
             },
           )
@@ -74,7 +77,6 @@ class _FormTarefa extends State<FormTarefa> {
       ),
       body: Container(
         child: Builder(builder: (BuildContext context) {
-
           return Form(
               key: _formKey,
               child: ListView(
@@ -149,7 +151,8 @@ class _FormTarefa extends State<FormTarefa> {
                                     initialValue: valorInicialValor(),
                                     validator: (value) {
                                       if (value.isEmpty) return 'Campo vazio!';
-                                      if(double.parse(value) > 100) return 'Valor maior que 100.0!';
+                                      if (double.parse(value) > 100)
+                                        return 'Valor maior que 100.0!';
                                       _valor = double.parse(value);
                                     },
                                     decoration: InputDecoration(
@@ -280,13 +283,17 @@ class _FormTarefa extends State<FormTarefa> {
   }
 
   void valoresDropdown() {
-    if (widget.acao == 'a')
-      return;
-    
+    if (widget.acao == 'a') return;
+
     dropdownDisciplina = widget.tarefa.getDisciplina();
     dropdownPrioridade = widget.tarefa.getPrioridade().toString();
+  }
 
-    return;
+  void valorInicialDropdown() {
+    if (widget.acao == 'a') return;
+
+    dropdownDisciplina = widget.tarefa.getDisciplina();
+    dropdownPrioridade = widget.tarefa.getPrioridade().toString();
   }
 
   String appbarTitulo() {
@@ -407,6 +414,8 @@ class _FormTarefa extends State<FormTarefa> {
     if (result == 0) errorMsgSalvar();
 
     Navigator.pop(context, true);
+
+
   }
 
   Future<List<String>> disciplinas() async {
@@ -440,7 +449,7 @@ class _FormTarefa extends State<FormTarefa> {
             child: Theme(
               child: child,
               data: ThemeData(
-                primaryColor: Colors.purple[300],
+                primaryColor: Colors.pink[600],
               ),
             ),
           );
