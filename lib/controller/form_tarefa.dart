@@ -418,11 +418,6 @@ class _FormTarefa extends State<FormTarefa> {
 
   }
 
-  Future<List<String>> disciplinas() async {
-    List<String> result = await databaseHelper.getNomesDisciplina();
-    return result;
-  }
-
   void disciplinasDropdown() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {

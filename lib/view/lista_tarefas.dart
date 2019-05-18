@@ -19,6 +19,8 @@ class ListaTarefas extends StatefulWidget {
 
   ListaTarefas({this.listaTarefa});
 
+  
+
   @override
   State createState() => new _ListaTarefas(this.listaTarefa);
 }
@@ -96,50 +98,7 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
   }
 
   //getTarefaListView
-  Expanded carregarLista() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: count,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-           
-              child: Card(
-                child: ListTile(
-                  leading: iconePrioridade(listaTarefa[index].getPrioridade()),
-                  title: Text(listaTarefa[index].getTipo()),
-                  subtitle: Text(listaTarefa[index].getDisciplina()),
-                  trailing: Column(
-                    children: <Widget>[
-                      Text(
-                        diasRestantes(listaTarefa[index].getData()),
-                        style: TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey[600]),
-                      ),
-                      Text(
-                        "DIAS",
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey[600]),
-                      ),
-                    ],
-                  ),
-                  onTap: () async {
-                    bool result = await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ViewTarefa(tarefa: listaTarefa[index]);
-                    }));
-                    if (result == true) atualizarListView();
-                  },
-                ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+ 
   // trailing: Text(
   //                   listaTarefa[index].getNota().toString() +
   //                       "/" +

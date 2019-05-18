@@ -4,10 +4,12 @@ import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/view/lista_disciplinas.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'dart:async';
+import 'package:organizer/model/obj_tarefa.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:organizer/view/lista_tarefas.dart';
 
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
-  List<Container> lista;
   List<Disciplina> listaDisciplina;
   int id;
 
@@ -23,6 +25,7 @@ class ViewDisciplina extends StatefulWidget {
 
 class _ViewDisciplina extends State<ViewDisciplina> {
   int faltas = 0;
+  List<Tarefa> listaTarefa=[];
   DatabaseHelper databaseHelper = DatabaseHelper();
 
   @override
@@ -220,17 +223,18 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     ],
                   ),
                 ),
-                Container(
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                    margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Text(
-                      "Tarefas Cadastradas",
-                      style: TextStyle(fontSize: 16.0),
-                    )),
+                // Container(
+                //     padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                //     margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                //     decoration: BoxDecoration(
+                //       color: Colors.grey[400],
+                //       borderRadius: BorderRadius.circular(10.0),
+                //     ),
+                //     child: Text(
+                //       "Tarefas Cadastradas",
+                //       style: TextStyle(fontSize: 16.0),
+                //     )),
+                 
               ],
             ),
           ],
@@ -304,11 +308,19 @@ class _ViewDisciplina extends State<ViewDisciplina> {
     );
   }
 
-  // void _showSnackBar(BuildContext context, String msg) {
-  //   final snackBar = SnackBar (content: Text(msg),);
-  //   Scaffold.of(context).showSnackBar(snackBar);
-  //}
-
+   void carregarListaTarefas() {
+    final Future<Database> dbFuture = databaseHelper.iniciarDb();
+    dbFuture.then((database) {
+      Future<List<Tarefa>> tarefasListFuture =
+          databaseHelper.getTarefasPorDisciplina(widget.disciplina.getDisciplina());
+      tarefasListFuture.then((listaTarefas) {
+        setState(() {
+          this.listaTarefa = listaTarefa;
+        });
+      });
+    });
+  }
+ 
   void salvar() async {
     widget.disciplina.setFaltas(faltas);
     var result = await databaseHelper.atualizarDisciplina(widget.disciplina);

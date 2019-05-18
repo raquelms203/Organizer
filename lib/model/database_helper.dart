@@ -95,43 +95,7 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> inserirDisciplina(Disciplina disciplina) async {
-    Database db = await this.getDatabase();
-    var result =
-        await db.insert(tableDisciplinas, disciplina.disciplinaToMap());
-    return result;
-  }
-
-  Future<int> atualizarDisciplina(Disciplina disciplina) async {
-    var db = await this.getDatabase();
-    var result = await db.update(tableDisciplinas, disciplina.disciplinaToMap(),
-        where: '$colIdDisciplina = ?', whereArgs: [disciplina.getId()]);
-    return result;
-  }
-
-  Future<int> apagarDisciplina(int id) async {
-    var db = await this.getDatabase();
-    int result = await db.rawDelete(
-        'DELETE FROM $tableDisciplinas WHERE $colIdDisciplina = $id');
-    return result;
-  }
-
-  Future<int> atualizarFaltas(int faltas, int id) async {
-    var db = await this.getDatabase();
-    int result = await db.rawUpdate(
-        'UPDATE $tableDisciplinas SET faltas = $faltas WHERE id = $id');
-    return result;
-  }
-
-  Future<int> getCountDisciplina() async {
-    Database db = await this.getDatabase();
-    List<Map<String, dynamic>> lista =
-        await db.rawQuery('SELECT COUNT (*) from $tableDisciplinas');
-    int result = Sqflite.firstIntValue(lista);
-    return result;
-  }
-
-  Future<List<String>> getNomesDisciplina() async {
+   Future<List<String>> getNomesDisciplina() async {
     Database db = await this.getDatabase();
     List<String> listaNomeDisciplinas=[];
 
@@ -163,6 +127,36 @@ class DatabaseHelper {
     return disciplinaLista;
   }
 
+
+  Future<int> inserirDisciplina(Disciplina disciplina) async {
+    Database db = await this.getDatabase();
+    var result =
+        await db.insert(tableDisciplinas, disciplina.disciplinaToMap());
+    return result;
+  }
+
+  Future<int> atualizarDisciplina(Disciplina disciplina) async {
+    var db = await this.getDatabase();
+    var result = await db.update(tableDisciplinas, disciplina.disciplinaToMap(),
+        where: '$colIdDisciplina = ?', whereArgs: [disciplina.getId()]);
+    return result;
+  }
+
+  Future<int> apagarDisciplina(int id) async {
+    var db = await this.getDatabase();
+    int result = await db.rawDelete(
+        'DELETE FROM $tableDisciplinas WHERE $colIdDisciplina = $id');
+    return result;
+  }
+
+  Future<int> atualizarFaltas(int faltas, int id) async {
+    var db = await this.getDatabase();
+    int result = await db.rawUpdate(
+        'UPDATE $tableDisciplinas SET faltas = $faltas WHERE id = $id');
+    return result;
+  }
+
+ 
   //funções tarefas
 
   // fecth -> SELECT todas as disciplinas do db [objeto Map]
@@ -170,6 +164,22 @@ class DatabaseHelper {
     Database db = await this.getDatabase();
     var result = await db.rawQuery('SELECT * FROM $tableTarefas ORDER BY $colData');
     return result;
+  }
+
+  Future<List<Tarefa>> getTarefasPorDisciplina(String disciplina) async {
+    Database db = await this.getDatabase();
+    List<Tarefa> listaTarefasPorDisciplinas=[];
+
+    var tarefaMapList = await db.rawQuery('SELECT * FROM $tableTarefas WHERE disciplina = ?', ['$disciplina']);
+
+    int tam = tarefaMapList.length;
+
+    //for para cada List<Map> ser List<String>
+    for (int i = 0; i < tam; i++) {
+      listaTarefasPorDisciplinas.add(Tarefa.fromMapObject(tarefaMapList[i]));
+    }
+
+    return listaTarefasPorDisciplinas;
   }
 
   Future<int> inserirTarefa(Tarefa tarefa) async {
