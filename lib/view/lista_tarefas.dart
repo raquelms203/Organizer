@@ -16,10 +16,9 @@ import 'package:organizer/view/view_tarefa.dart';
 class ListaTarefas extends StatefulWidget {
   List<Tarefa> listaTarefa;
   List<Disciplina> listaDisciplina;
+  bool appBar = false;
 
-  ListaTarefas({this.listaTarefa});
-
-  
+  ListaTarefas({this.listaTarefa, this.appBar});
 
   @override
   State createState() => new _ListaTarefas(this.listaTarefa);
@@ -56,7 +55,7 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
     }
 
     return Scaffold(
-     
+   
       floatingActionButton: FloatingActionButton(
         heroTag: "btn2",
         onPressed: () async {
@@ -82,6 +81,17 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
     );
   }
 
+  AppBar mostrarAppBar() {
+    if (widget.appBar == false)
+      return AppBar();
+        else if (widget.appBar == true) {
+          return AppBar( 
+            title: Text("Tarefas"),
+          ); 
+        }
+    return AppBar();
+  }
+
   Container txtListaVazia(int tam) {
     if (tam == 0) {
       return Container(
@@ -98,18 +108,66 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
   }
 
   //getTarefaListView
- 
-  // trailing: Text(
-  //                   listaTarefa[index].getNota().toString() +
-  //                       "/" +
-  //                       listaTarefa[index].getValor().toString(),
-  //                   style: TextStyle(
-  //                       fontSize: 15.0,
-  //                       fontWeight: FontWeight.bold,
-  //                       color: Colors.blueGrey[600]),
-  //                 ),
+  Expanded carregarLista() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: count,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+           
+              child: Card(
+                child: ListTile(
+                  leading: iconePrioridade(listaTarefa[index].getPrioridade()),
+                  title: Text(listaTarefa[index].getTipo()),
+                  subtitle: Text(listaTarefa[index].getDisciplina()),
+                  trailing: Column(
+                    children: <Widget>[
+                      Text(
+                        diasRestantes(listaTarefa[index].getData()),
+                        style: TextStyle(
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey[600]),
+                      ),
+                      Text(
+                        "DIAS",
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey[600]),
+                      ),
+                    ],
+                  ),
+                  onTap: () async {
+                    bool result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ViewTarefa(tarefa: listaTarefa[index]);
+                    }));
+                    if (result == true) atualizarListView();
+                  },
+                ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
+    // Container(  
+    //           padding: EdgeInsets.only(left: 10.0, right: 10.0),
+    //           margin: EdgeInsets.only(top:5.0, bottom:5.0),
+    //           decoration: BoxDecoration(  
+    //           color: Colors.grey[400],
+    //             borderRadius: BorderRadius.circular(10.0),
+    //           ),
+    //           child: Text("Maio 2019", 
+    //           style: TextStyle(  
+    //           fontSize: 16.0
+    //           ),
+    //           )
+    //         );
   Visibility disableTxtVazia(Container cont) {
+    
     return Visibility(
       child: cont,
       visible: false,

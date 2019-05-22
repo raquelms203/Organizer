@@ -46,10 +46,11 @@ class _FormDisciplina extends State<FormDisciplina> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  
+     return Scaffold(
         appBar: AppBar(
           title: Text(appbarTitulo()),
-          backgroundColor: Colors.pink[600],
+          backgroundColor: Colors.pink[400],
           actions: <Widget>[
             MaterialButton(
                 child: Text(
@@ -247,24 +248,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                     ],
                   ),
                 ),
-                // Container(
-                //   alignment: Alignment.center,
-                //   padding: EdgeInsets.only(top: 20.0),
-                //   child: RaisedButton(
-                //       padding: EdgeInsets.only(
-                //           top: 15.0, bottom: 15.0, left: 10.0, right: 10.0),
-                //       color: Colors.green[500],
-                //       child: Text("Salvar",
-                //           style: TextStyle(
-                //             color: Colors.white,
-                //             fontWeight: FontWeight.bold,
-                //           )),
-                //       onPressed: () {
-                //         if (_formKey.currentState.validate()) {
-                //           salvarDisciplina();
-                //         }
-                //       }),
-                // )
+              
               ],
             ),
           );
@@ -295,8 +279,12 @@ class _FormDisciplina extends State<FormDisciplina> {
       return "Período";
   }
 
-  Container valorInicialDropdown() {
-    if (widget.acao == "e") {
+  void valorInicialDropdown() {
+
+    if (widget.acao == "a") 
+      return;
+
+     else if (widget.acao == "e") {
       dropdownDefault = widget.disciplina.getPeriodo();
       _periodo = widget.disciplina.getPeriodo();
 
@@ -312,7 +300,7 @@ class _FormDisciplina extends State<FormDisciplina> {
         _status = 1;
       }
     }
-    return Container();
+ 
   }
 
   String valorInicialDisciplina() {
@@ -418,6 +406,5 @@ class _FormDisciplina extends State<FormDisciplina> {
     if (result == 0) errorMsg("Erro ao Salvar!");
 
     Navigator.pop(context, true);
-
   }
 }

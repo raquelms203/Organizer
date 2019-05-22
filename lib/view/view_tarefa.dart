@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/controller/form_tarefa.dart';
-import 'package:organizer/controller/form_tarefa.dart';
-import 'package:organizer/controller/form_tarefa.dart';
-import 'package:organizer/controller/form_tarefa.dart';
-import 'package:organizer/controller/form_tarefa.dart';
-import 'package:organizer/controller/form_tarefa.dart';
 import 'package:organizer/view/lista_disciplinas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +20,6 @@ class _ViewTarefa extends State<ViewTarefa> {
   bool erro = false;
   Tarefa tarefa;
   DatabaseHelper databaseHelper = DatabaseHelper();
-  final FocusNode _focus = FocusNode();
 
   _ViewTarefa(this.tarefa);
 
@@ -33,7 +27,7 @@ class _ViewTarefa extends State<ViewTarefa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[600],
+        backgroundColor: Colors.pink[400],
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
             SizedBox(
@@ -127,7 +121,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                       ],
                       onSubmitted: (String valor) {
                         _nota = double.parse(valor);
-                        if (_nota > tarefa.getValor()) {
+                        if (_nota < tarefa.getNota()) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -290,4 +284,6 @@ class _ViewTarefa extends State<ViewTarefa> {
     }
     return Card();
  }
+
+
 }

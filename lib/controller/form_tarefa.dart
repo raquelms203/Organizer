@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_time_patterns.dart';
 import 'package:organizer/view/lista_tarefas.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,7 +48,7 @@ class _FormTarefa extends State<FormTarefa> {
   @override
   void initState() {
     disciplinasDropdown();
-    valorInicialDropdown();
+    valoresDropdown();
     super.initState();
   }
 
@@ -56,7 +57,7 @@ class _FormTarefa extends State<FormTarefa> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
-        backgroundColor: Colors.pink[600],
+        backgroundColor: Colors.pink[400],
         actions: <Widget>[
           MaterialButton(
             child: Text(
@@ -69,7 +70,6 @@ class _FormTarefa extends State<FormTarefa> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 salvarTarefa();
-                Navigator.pop(context, true);
               }
             },
           )
@@ -199,7 +199,10 @@ class _FormTarefa extends State<FormTarefa> {
                                         ),
                                       ],
                                     ),
-                                    onPressed: () => selecionarData(),
+                                    onPressed: () {
+                                        selecionarData();
+                                               
+                                    },
                                     shape: OutlineInputBorder(
                                         borderSide:
                                             BorderSide(color: Colors.black)),
@@ -285,15 +288,17 @@ class _FormTarefa extends State<FormTarefa> {
   void valoresDropdown() {
     if (widget.acao == 'a') return;
 
-    dropdownDisciplina = widget.tarefa.getDisciplina();
-    dropdownPrioridade = widget.tarefa.getPrioridade().toString();
-  }
-
-  void valorInicialDropdown() {
-    if (widget.acao == 'a') return;
+    else if (widget.acao == 'e') {
 
     dropdownDisciplina = widget.tarefa.getDisciplina();
     dropdownPrioridade = widget.tarefa.getPrioridade().toString();
+    _data = widget.tarefa.getData();
+    _tipo = widget.tarefa.getTipo();
+    _valor = widget.tarefa.getValor();
+    _data = widget.tarefa.getData();
+    _disciplina = widget.tarefa.getDisciplina();
+    _prioridade = widget.tarefa.getPrioridade();
+    }
   }
 
   String appbarTitulo() {
@@ -307,28 +312,38 @@ class _FormTarefa extends State<FormTarefa> {
   String valorInicialTipo() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") return widget.tarefa.getTipo();
+    else if (widget.acao == "e") {
+      return _tipo;
+    }
     return "";
   }
 
   String valorInicialValor() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") return widget.tarefa.getValor().toString();
+    else if (widget.acao == "e") {
+      return _valor.toString();
+    }
+
     return "";
   }
 
   String valorInicialEntrega() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") return widget.tarefa.getData().toString();
+    else if (widget.acao == "e") {
+      DateTime data = DateTime.fromMillisecondsSinceEpoch(_data);
+      return ("${data.day}/${data.month}/${data.year}");
+    }
     return "";
   }
 
   String valorInicialDescricao() {
     if (widget.acao == "a")
       return "";
-    else if (widget.acao == "e") return widget.tarefa.getDescricao();
+    else if (widget.acao == "e") {
+      return widget.tarefa.getDescricao();
+    }
     return "";
   }
 
@@ -379,6 +394,8 @@ class _FormTarefa extends State<FormTarefa> {
   void salvarTarefa() async {
     int result;
 
+    _tipo = (_tipo[0].toUpperCase() + _tipo.substring(1));
+
     if (_disciplina == "") {
       errorMsgCampoVazio("Disciplina");
       return;
@@ -392,9 +409,6 @@ class _FormTarefa extends State<FormTarefa> {
       errorMsgCampoVazio("Prioridade");
       return;
     }
-
-    _tipo = (_tipo[0].toUpperCase() + _tipo.substring(1));
-    _data = dataSelecionada.millisecondsSinceEpoch;
 
     if (widget.acao == "e") {
       widget.tarefa.setDisciplina(_disciplina);
@@ -412,10 +426,7 @@ class _FormTarefa extends State<FormTarefa> {
       print(tarefa.getData());
     }
     if (result == 0) errorMsgSalvar();
-
     Navigator.pop(context, true);
-
-
   }
 
   void disciplinasDropdown() {
@@ -433,7 +444,7 @@ class _FormTarefa extends State<FormTarefa> {
   }
 
   Future<Null> selecionarData() async {
-    //dataSelecionada is a final DateTime
+     
     dataSelecionada = await showDatePicker(
         context: context,
         initialDate: dataAtual,
@@ -444,10 +455,12 @@ class _FormTarefa extends State<FormTarefa> {
             child: Theme(
               child: child,
               data: ThemeData(
-                primaryColor: Colors.pink[600],
+                primaryColor: Colors.pink[400],
               ),
             ),
           );
         });
-  }
+        _data = dataSelecionada.millisecondsSinceEpoch;
+      
+}
 }

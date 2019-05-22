@@ -112,21 +112,7 @@ class DatabaseHelper {
     return listaNomeDisciplinas;
   }
 
-  //converter List<Map> para List<Disciplina>
-  Future<List<Disciplina>> getDisciplinaLista() async {
-    var disciplinaMapList = await getDisciplinaMapList();
-    int tam = disciplinaMapList.length;
-
-    List<Disciplina> disciplinaLista = List<Disciplina>();
-
-    // for para cada List<Map> ser List<Disciplina>
-    for (int i = 0; i < tam; i++) {
-      disciplinaLista.add(Disciplina.fromMapObject(disciplinaMapList[i]));
-    }
-
-    return disciplinaLista;
-  }
-
+  
 
   Future<int> inserirDisciplina(Disciplina disciplina) async {
     Database db = await this.getDatabase();
@@ -156,7 +142,31 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<int> getCountDisciplina() async {
+    Database db = await this.getDatabase();
+    List<Map<String, dynamic>> lista =
+        await db.rawQuery('SELECT COUNT (*) from $tableDisciplinas');
+    int result = Sqflite.firstIntValue(lista);
+    return result;
+  }
+
  
+
+  //converter List<Map> para List<Disciplina>
+  Future<List<Disciplina>> getDisciplinaLista() async {
+    var disciplinaMapList = await getDisciplinaMapList();
+    int tam = disciplinaMapList.length;
+
+    List<Disciplina> disciplinaLista = List<Disciplina>();
+
+    // for para cada List<Map> ser List<Disciplina>
+    for (int i = 0; i < tam; i++) {
+      disciplinaLista.add(Disciplina.fromMapObject(disciplinaMapList[i]));
+    }
+
+    return disciplinaLista;
+  }
+
   //funções tarefas
 
   // fecth -> SELECT todas as disciplinas do db [objeto Map]
@@ -166,21 +176,24 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<List<Tarefa>> getTarefasPorDisciplina(String disciplina) async {
+   Future<List<Tarefa>> getTarefasPorDisciplina(Disciplina disciplina) async {
     Database db = await this.getDatabase();
-    List<Tarefa> listaTarefasPorDisciplinas=[];
+    List<Tarefa> listaTarefasPorDisciplina=[];
 
-    var tarefaMapList = await db.rawQuery('SELECT * FROM $tableTarefas WHERE disciplina = ?', ['$disciplina']);
+    var tarefaMapList = await db.rawQuery('SELECT * FROM $tableTarefas WHERE disciplina = ?', ['${disciplina.getDisciplina()}']);
+   
 
     int tam = tarefaMapList.length;
 
     //for para cada List<Map> ser List<String>
     for (int i = 0; i < tam; i++) {
-      listaTarefasPorDisciplinas.add(Tarefa.fromMapObject(tarefaMapList[i]));
+      listaTarefasPorDisciplina.add(Tarefa.fromMapObject(tarefaMapList[i]));
     }
 
-    return listaTarefasPorDisciplinas;
+    return listaTarefasPorDisciplina;
   }
+
+   
 
   Future<int> inserirTarefa(Tarefa tarefa) async {
     Database db = await this.getDatabase();
