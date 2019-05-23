@@ -16,9 +16,8 @@ import 'package:organizer/view/view_tarefa.dart';
 class ListaTarefas extends StatefulWidget {
   List<Tarefa> listaTarefa;
   List<Disciplina> listaDisciplina;
-  bool appBar = false;
 
-  ListaTarefas({this.listaTarefa, this.appBar});
+  ListaTarefas({this.listaTarefa});
 
   @override
   State createState() => new _ListaTarefas(this.listaTarefa);
@@ -81,16 +80,7 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
     );
   }
 
-  AppBar mostrarAppBar() {
-    if (widget.appBar == false)
-      return AppBar();
-        else if (widget.appBar == true) {
-          return AppBar( 
-            title: Text("Tarefas"),
-          ); 
-        }
-    return AppBar();
-  }
+ 
 
   Container txtListaVazia(int tam) {
     if (tam == 0) {

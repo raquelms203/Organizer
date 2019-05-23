@@ -38,7 +38,7 @@ class _FormTarefa extends State<FormTarefa> {
   DateTime dataAtual = new DateTime.now();
   DateTime dataSelecionada;
 
-  List<String> listaPrioridade = ["1", "2", "3"];
+  List<String> listaPrioridade = ["Baixa", "Média", "Alta"];
   List<String> stringDisciplinas = [];
 
   DatabaseHelper databaseHelper = DatabaseHelper();
@@ -228,7 +228,7 @@ class _FormTarefa extends State<FormTarefa> {
                                   onChanged: (String novoValor) {
                                     setState(() {
                                       dropdownPrioridade = novoValor;
-                                      _prioridade = int.parse(novoValor);
+                                      _prioridade = valorPrioridade(novoValor);
                                     });
                                   },
                                   items: listaPrioridade
@@ -299,6 +299,19 @@ class _FormTarefa extends State<FormTarefa> {
     _disciplina = widget.tarefa.getDisciplina();
     _prioridade = widget.tarefa.getPrioridade();
     }
+  }
+
+  int valorPrioridade(String string) {
+    if (string == "Baixa")
+      return 1;
+    
+    if (string == "Média")
+      return 2;
+    
+    if (string == "Alta")
+      return 3;
+  
+  return 0;
   }
 
   String appbarTitulo() {

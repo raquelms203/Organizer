@@ -176,11 +176,11 @@ class DatabaseHelper {
     return result;
   }
 
-   Future<List<Tarefa>> getTarefasPorDisciplina(Disciplina disciplina) async {
+   Future<List<Tarefa>> getTarefasPorDisciplina(String disciplina) async {
     Database db = await this.getDatabase();
     List<Tarefa> listaTarefasPorDisciplina=[];
 
-    var tarefaMapList = await db.rawQuery('SELECT * FROM $tableTarefas WHERE disciplina = ?', ['${disciplina.getDisciplina()}']);
+    var tarefaMapList = await db.rawQuery('SELECT * FROM $tableTarefas WHERE disciplina = ?', ['$disciplina']);
    
 
     int tam = tarefaMapList.length;

@@ -229,7 +229,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                         onPressed: () {
                           tarefas();
                           Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return ListaTarefas(listaTarefa: widget.listaTarefa, appBar: true,);
+                              return ListaTarefas(listaTarefa: widget.listaTarefa);
                           }));
                         },
                       ),
@@ -321,10 +321,11 @@ class _ViewDisciplina extends State<ViewDisciplina> {
   }
 
    void tarefas() {
+     widget.listaTarefa = [];
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {
       Future<List<Tarefa>> disciplinasListFuture =
-          databaseHelper.getTarefasPorDisciplina(widget.disciplina);
+          databaseHelper.getTarefasPorDisciplina(widget.disciplina.getDisciplina());
       disciplinasListFuture.then((listaTarefa) {
         setState(() {
           widget.listaTarefa = listaTarefa;
