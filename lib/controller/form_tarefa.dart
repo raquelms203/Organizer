@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_time_patterns.dart';
-import 'package:organizer/view/lista_tarefas.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
-import 'package:dropdownfield/dropdownfield.dart';
 
 class FormTarefa extends StatefulWidget {
   String acao;
@@ -28,6 +24,7 @@ class _FormTarefa extends State<FormTarefa> {
   String _tipo = "";
   String dropdownDisciplina = "Disciplina";
   String dropdownPrioridade = "Prioridade";
+  String txtData;
 
   int _prioridade = 0;
   int count;
@@ -36,6 +33,7 @@ class _FormTarefa extends State<FormTarefa> {
   double _valor = 0.0;
 
   DateTime dataAtual = new DateTime.now();
+  DateTime dataInicial;
   DateTime dataSelecionada;
 
   List<String> listaPrioridade = ["Baixa", "Média", "Alta"];
@@ -48,7 +46,7 @@ class _FormTarefa extends State<FormTarefa> {
   @override
   void initState() {
     disciplinasDropdown();
-    valoresDropdown();
+    valoresIniciais();
     super.initState();
   }
 
@@ -191,7 +189,7 @@ class _FormTarefa extends State<FormTarefa> {
                                         Container(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            "Entrega",
+                                            txtData,
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: 15.0),
@@ -200,8 +198,7 @@ class _FormTarefa extends State<FormTarefa> {
                                       ],
                                     ),
                                     onPressed: () {
-                                        selecionarData();
-                                               
+                                      selecionarData();
                                     },
                                     shape: OutlineInputBorder(
                                         borderSide:
@@ -285,33 +282,43 @@ class _FormTarefa extends State<FormTarefa> {
     );
   }
 
-  void valoresDropdown() {
-    if (widget.acao == 'a') return;
-
-    else if (widget.acao == 'e') {
-
-    dropdownDisciplina = widget.tarefa.getDisciplina();
-    dropdownPrioridade = widget.tarefa.getPrioridade().toString();
-    _data = widget.tarefa.getData();
-    _tipo = widget.tarefa.getTipo();
-    _valor = widget.tarefa.getValor();
-    _data = widget.tarefa.getData();
-    _disciplina = widget.tarefa.getDisciplina();
-    _prioridade = widget.tarefa.getPrioridade();
+  void valoresIniciais() {
+    if (widget.acao == 'a') {
+      dataInicial = DateTime.now();
+      txtData = "Data";
+      return;
+    } else if (widget.acao == 'e') {
+      dropdownDisciplina = widget.tarefa.getDisciplina();
+      dropdownPrioridade = nomePrioridade(widget.tarefa.getPrioridade());
+      _data = widget.tarefa.getData();
+      _tipo = widget.tarefa.getTipo();
+      _valor = widget.tarefa.getValor();
+      _data = widget.tarefa.getData();
+      _disciplina = widget.tarefa.getDisciplina();
+      _prioridade = widget.tarefa.getPrioridade();
+      dataInicial = DateTime.fromMillisecondsSinceEpoch(_data);
+      txtData = ("${dataInicial.day}/${dataInicial.month}/${dataInicial.year}");
     }
   }
 
+  String nomePrioridade(int prioridade) {
+    if (prioridade == 1) return "Baixa";
+
+    if (prioridade == 2) return "Média";
+
+    if (prioridade == 3) return "Alta";
+
+    return "";
+  }
+
   int valorPrioridade(String string) {
-    if (string == "Baixa")
-      return 1;
-    
-    if (string == "Média")
-      return 2;
-    
-    if (string == "Alta")
-      return 3;
-  
-  return 0;
+    if (string == "Baixa") return 1;
+
+    if (string == "Média") return 2;
+
+    if (string == "Alta") return 3;
+
+    return 0;
   }
 
   String appbarTitulo() {
@@ -341,16 +348,6 @@ class _FormTarefa extends State<FormTarefa> {
     return "";
   }
 
-  String valorInicialEntrega() {
-    if (widget.acao == "a")
-      return "";
-    else if (widget.acao == "e") {
-      DateTime data = DateTime.fromMillisecondsSinceEpoch(_data);
-      return ("${data.day}/${data.month}/${data.year}");
-    }
-    return "";
-  }
-
   String valorInicialDescricao() {
     if (widget.acao == "a")
       return "";
@@ -358,6 +355,12 @@ class _FormTarefa extends State<FormTarefa> {
       return widget.tarefa.getDescricao();
     }
     return "";
+  }
+
+  String dataFormatada(int _data) {
+    DateTime data = DateTime.fromMillisecondsSinceEpoch(_data);
+    String dataFormatada = ("${data.day}/${data.month}/${data.year}");
+    return dataFormatada;
   }
 
   void errorMsgCampoVazio(String campo) {
@@ -436,7 +439,6 @@ class _FormTarefa extends State<FormTarefa> {
       Tarefa tarefa = new Tarefa(
           _disciplina, _descricao, _tipo, _valor, 0.0, _data, _prioridade);
       result = await databaseHelper.inserirTarefa(tarefa);
-      print(tarefa.getData());
     }
     if (result == 0) errorMsgSalvar();
     Navigator.pop(context, true);
@@ -457,10 +459,9 @@ class _FormTarefa extends State<FormTarefa> {
   }
 
   Future<Null> selecionarData() async {
-     
     dataSelecionada = await showDatePicker(
         context: context,
-        initialDate: dataAtual,
+        initialDate: dataInicial,
         firstDate: DateTime(2019),
         lastDate: DateTime(2022),
         builder: (BuildContext context, Widget child) {
@@ -473,7 +474,10 @@ class _FormTarefa extends State<FormTarefa> {
             ),
           );
         });
-        _data = dataSelecionada.millisecondsSinceEpoch;
-      
-}
+    _data = dataSelecionada.millisecondsSinceEpoch;
+
+    setState(() {
+      txtData = dataFormatada(_data);
+    });
+  }
 }

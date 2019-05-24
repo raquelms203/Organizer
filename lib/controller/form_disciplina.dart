@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
-import 'package:organizer/view/lista_disciplinas.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Disciplina> listaDisciplina;
@@ -21,7 +20,6 @@ class FormDisciplina extends StatefulWidget {
 }
 
 class _FormDisciplina extends State<FormDisciplina> {
-
   String dropdownDefault = "Período";
   String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "Status";
@@ -35,8 +33,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   double _nota = 0.0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-   @override
-
+  @override
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -47,220 +44,210 @@ class _FormDisciplina extends State<FormDisciplina> {
 
   @override
   Widget build(BuildContext context) {
-  
-     return Scaffold(
-        appBar: AppBar(
-          title: Text(appbarTitulo()),
-          backgroundColor: Colors.pink[400],
-          actions: <Widget>[
-            MaterialButton(
-                child: Text(
-                  "Salvar",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                      fontSize: 18.0),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    salvarDisciplina();
-                  }
-                })
-          ],
-        ),
-        body: Builder(builder: (BuildContext context) {
-          return Form(
-            key: _formKey,
-            child: ListView(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 30.0),
-                    width: 300.0,
-                    child: TextFormField(
-                      initialValue: valorInicialDisciplina(),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Campo vazio!';
-                        }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(appbarTitulo()),
+        backgroundColor: Colors.pink[400],
+        actions: <Widget>[
+          MaterialButton(
+              child: Text(
+                "Salvar",
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.white,
+                    fontSize: 18.0),
+              ),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  salvarDisciplina();
+                }
+              })
+        ],
+      ),
+      body: Builder(builder: (BuildContext context) {
+        return Form(
+          key: _formKey,
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Container(
+                  margin: EdgeInsets.only(top: 30.0),
+                  width: 300.0,
+                  child: TextFormField(
+                    initialValue: valorInicialDisciplina(),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Campo vazio!';
+                      }
 
-                        _disciplina = value;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Nome',
-                          hintText: 'Ex. Prog Móvel',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
-                    ),
+                      _disciplina = value;
+                    },
+                    decoration: InputDecoration(
+                        labelText: 'Nome',
+                        hintText: 'Ex. Prog Móvel',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0))),
                   ),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
-                  child: Container(
-                    width: 300.0,
-                    child: TextFormField(
-                      initialValue: valorInicialCod(),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Campo vazio!';
-                        }
-                        _cod = value;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Código',
-                          hintText: 'Ex. CSI 401',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
-                    ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
+                child: Container(
+                  width: 300.0,
+                  child: TextFormField(
+                    initialValue: valorInicialCod(),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Campo vazio!';
+                      }
+                      _cod = value;
+                    },
+                    decoration: InputDecoration(
+                        labelText: 'Código',
+                        hintText: 'Ex. CSI 401',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0))),
                   ),
                 ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.only(left: 15.0)),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              top: 10.0, bottom: 10.0, right: 2.0),
-                          child: TextFormField(
-                            initialValue: valorInicialMeta(),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value.isEmpty) return 'Campo vazio!';
-
-                              if (double.parse("$value") < 60.0)
-                                return 'Meta menor que 60.0!';
-
-                              if (double.parse("$value") > 100.0)
-                                return 'Meta maior que 100.0!';
-
-                              _meta = double.parse(value);
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'Meta',
-                                hintText: 'Ex. 60 pts',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5.0))),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 30.0, right: 35.0)),
-                      Container(
-                        padding: EdgeInsets.only(right: 20.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            hint: Text(dropdownDefault,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0)),
-                            onChanged: (String novoValor) {
-                              setState(() {
-                                dropdownDefault = novoValor;
-                                _periodo = novoValor;
-                              });
-                            },
-                            items: periodos()
-                                .map<DropdownMenuItem<String>>((String valor) {
-                              return DropdownMenuItem<String>(
-                                  value: valor,
-                                  child: Text(
-                                    valor,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ));
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 17.0, right: 15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(padding: EdgeInsets.only(left: 1.0)),
-                      Container(
-                        width: 128.0,
-                        height: 50.0,
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            hint: Text(dropdownDefault2,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0)),
-                            onChanged: (String novoValor) {
-                              setState(() {
-                                dropdownDefault2 = novoValor;
-                                _limFaltas = int.parse(
-                                    dropdownDefault2[0] + dropdownDefault2[1]);
-                              });
-                            },
-                            items: ['9 Faltas', '18 Faltas']
-                                .map<DropdownMenuItem<String>>((String valor) {
-                              return DropdownMenuItem<String>(
-                                  value: valor,
-                                  child: Text(
-                                    valor,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ));
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 73.0)),
-                      Container(
-                        width: 125.0,
-                        height: 50.0,
+              ),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.only(left: 15.0)),
+                    Expanded(
+                      child: Container(
                         padding: EdgeInsets.only(
-                            top: 5.0, bottom: 5.0, right: 5.0, left: 5.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            hint: Text(dropdownDefault3,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0)),
-                            onChanged: (String novoValor) {
-                              setState(() {
-                                dropdownDefault3 = novoValor;
-                                if (novoValor == "Cursando")
-                                  _status = 1;
-                                else if (novoValor == "Encerrada") _status = 0;
-                              });
-                            },
-                            items: ['Cursando', 'Encerrada']
-                                .map<DropdownMenuItem<String>>((String valor) {
-                              return DropdownMenuItem<String>(
-                                  value: valor,
-                                  child: Text(
-                                    valor,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ));
-                            }).toList(),
-                          ),
+                            top: 10.0, bottom: 10.0, right: 2.0),
+                        child: TextFormField(
+                          initialValue: valorInicialMeta(),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) return 'Campo vazio!';
+
+                            if (double.parse("$value") < 60.0)
+                              return 'Meta menor que 60.0!';
+
+                            if (double.parse("$value") > 100.0)
+                              return 'Meta maior que 100.0!';
+
+                            _meta = double.parse(value);
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'Meta',
+                              hintText: 'Ex. 60 pts',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0))),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 30.0, right: 35.0)),
+                    Container(
+                      padding: EdgeInsets.only(right: 20.0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          hint: Text(dropdownDefault,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                          onChanged: (String novoValor) {
+                            setState(() {
+                              dropdownDefault = novoValor;
+                              _periodo = novoValor;
+                            });
+                          },
+                          items: periodos()
+                              .map<DropdownMenuItem<String>>((String valor) {
+                            return DropdownMenuItem<String>(
+                                value: valor,
+                                child: Text(
+                                  valor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ));
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              
-              ],
-            ),
-          );
-        }),
-      
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 17.0, right: 15.0),
+                child: Row(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.only(left: 1.0)),
+                    Container(
+                      width: 128.0,
+                      height: 50.0,
+                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          hint: Text(dropdownDefault2,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                          onChanged: (String novoValor) {
+                            setState(() {
+                              dropdownDefault2 = novoValor;
+                              _limFaltas = int.parse(
+                                  dropdownDefault2[0] + dropdownDefault2[1]);
+                            });
+                          },
+                          items: ['9 Faltas', '18 Faltas']
+                              .map<DropdownMenuItem<String>>((String valor) {
+                            return DropdownMenuItem<String>(
+                                value: valor,
+                                child: Text(
+                                  valor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ));
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 73.0)),
+                    Container(
+                      width: 125.0,
+                      height: 50.0,
+                      padding: EdgeInsets.only(
+                          top: 5.0, bottom: 5.0, right: 5.0, left: 5.0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          hint: Text(dropdownDefault3,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                          onChanged: (String novoValor) {
+                            setState(() {
+                              dropdownDefault3 = novoValor;
+                              if (novoValor == "Cursando")
+                                _status = 1;
+                              else if (novoValor == "Encerrada") _status = 0;
+                            });
+                          },
+                          items: ['Cursando', 'Encerrada']
+                              .map<DropdownMenuItem<String>>((String valor) {
+                            return DropdownMenuItem<String>(
+                                value: valor,
+                                child: Text(
+                                  valor,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ));
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
   List<String> periodos() {
     List<String> periodos = [""];
     int i;
+
     for (i = 1; i <= 10; i++) periodos.add("$iº P");
 
     periodos.add("Eletiva");
@@ -281,11 +268,9 @@ class _FormDisciplina extends State<FormDisciplina> {
   }
 
   void valorInicialDropdown() {
-
-    if (widget.acao == "a") 
+    if (widget.acao == "a")
       return;
-
-     else if (widget.acao == "e") {
+    else if (widget.acao == "e") {
       dropdownDefault = widget.disciplina.getPeriodo();
       _periodo = widget.disciplina.getPeriodo();
 
@@ -301,7 +286,6 @@ class _FormDisciplina extends State<FormDisciplina> {
         _status = 1;
       }
     }
- 
   }
 
   String valorInicialDisciplina() {
@@ -353,10 +337,9 @@ class _FormDisciplina extends State<FormDisciplina> {
   bool disciplinaExiste(String disciplina) {
     int tam = widget.listaDisciplina.length;
 
-    for (int i=0; i<tam; i++) 
-      if (disciplina == widget.listaDisciplina[i].getDisciplina())
-        return true;
-    
+    for (int i = 0; i < tam; i++)
+      if (disciplina == widget.listaDisciplina[i].getDisciplina()) return true;
+
     return false;
   }
 
@@ -389,10 +372,8 @@ class _FormDisciplina extends State<FormDisciplina> {
       widget.disciplina.setStatus(_status);
 
       result = await databaseHelper.atualizarDisciplina(widget.disciplina);
-
     } else if (widget.acao == "a") {
-
-      if(disciplinaExiste(_disciplina)){
+      if (disciplinaExiste(_disciplina)) {
         errorMsg("Disciplina já cadastrada!");
         return;
       }
@@ -402,7 +383,6 @@ class _FormDisciplina extends State<FormDisciplina> {
 
       result = await databaseHelper.inserirDisciplina(disciplina);
     }
-    print(result);
 
     if (result == 0) errorMsg("Erro ao Salvar!");
 

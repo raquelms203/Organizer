@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -25,7 +24,6 @@ class DatabaseHelper {
   String colMeta = 'meta';
   String colStatus = 'status';
   String colNotaDisciplina = 'nota';
-
 
   //tabela tarefas
   String tableTarefas = 'tarefas';
@@ -75,8 +73,8 @@ class DatabaseHelper {
             $colPeriodo TEXT NOT NULL,
             $colNotaDisciplina DOUBLE NOT NULL);
           ''');
- 
-   await db.execute('''
+
+    await db.execute('''
             CREATE TABLE $tableTarefas (
             $colIdTarefa INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
             $colDescricao TEXT NOT NULL,
@@ -98,9 +96,9 @@ class DatabaseHelper {
     return result;
   }
 
-   Future<List<String>> getNomesDisciplina() async {
+  Future<List<String>> getNomesDisciplina() async {
     Database db = await this.getDatabase();
-    List<String> listaNomeDisciplinas=[];
+    List<String> listaNomeDisciplinas = [];
 
     var result = await db.rawQuery('SELECT disciplina FROM $tableDisciplinas');
     var stringMapList = result;
@@ -109,25 +107,26 @@ class DatabaseHelper {
 
     //for para cada List<Map> ser List<String>
     for (int i = 0; i < tam; i++) {
-      listaNomeDisciplinas.add(Disciplina.fromMapObject(stringMapList[i]).getDisciplina().toString());
+      listaNomeDisciplinas.add(Disciplina.fromMapObject(stringMapList[i])
+          .getDisciplina()
+          .toString());
     }
 
     return listaNomeDisciplinas;
   }
 
-
   Future<double> getNotaDisciplina(String disciplina) async {
     Database db = await this.getDatabase();
     double notaDisciplina;
 
-    var doubleMap = await db.rawQuery('SELECT $colNotaDisciplina FROM $tableDisciplinas WHERE disciplina = ?', ['$disciplina']);
-   
+    var doubleMap = await db.rawQuery(
+        'SELECT $colNotaDisciplina FROM $tableDisciplinas WHERE disciplina = ?',
+        ['$disciplina']);
+
     notaDisciplina = Disciplina.fromMapObject(doubleMap.first).getNota();
-    
+
     return notaDisciplina;
   }
-
-  
 
   Future<int> inserirDisciplina(Disciplina disciplina) async {
     Database db = await this.getDatabase();
@@ -143,15 +142,18 @@ class DatabaseHelper {
     return result;
   }
 
-  //  Future<int> atualizarNotaDisciplina(double nota, String disciplina) async {
-  //   var db = await this.getDatabase();
+  Future<int> atualizarNotaDisciplina(double nota, String disciplina) async {
+    var db = await this.getDatabase();
 
-  //   double notaDisciplina = await getNotaDisciplina(disciplina);
-  //   double somaNota = notaDisciplina + nota;
-    
-  //   var result = await db.rawUpdate('UPDATE $tableDisciplinas SET $colNota = ? WHERE $colDisciplina = ?', ['$somaNota', '$disciplina']);
-  //   return result;
-  // }
+    double notaDisciplina = await getNotaDisciplina(disciplina);
+
+    double somaNota = notaDisciplina + nota;
+
+    var result = await db.rawUpdate(
+        'UPDATE $tableDisciplinas SET $colNotaDisciplina = ? WHERE $colDisciplina = ?',
+        ['$somaNota', '$disciplina']);
+    return result;
+  }
 
   Future<int> apagarDisciplina(int id) async {
     var db = await this.getDatabase();
@@ -175,8 +177,6 @@ class DatabaseHelper {
     return result;
   }
 
- 
-
   //converter List<Map> para List<Disciplina>
   Future<List<Disciplina>> getDisciplinaLista() async {
     var disciplinaMapList = await getDisciplinaMapList();
@@ -197,29 +197,27 @@ class DatabaseHelper {
   // fecth -> SELECT todas as disciplinas do db [objeto Map]
   Future<List<Map<String, dynamic>>> getTarefaMapList() async {
     Database db = await this.getDatabase();
-    var result = await db.rawQuery('SELECT * FROM $tableTarefas ORDER BY $colData');
+    var result =
+        await db.rawQuery('SELECT * FROM $tableTarefas ORDER BY $colData');
     return result;
   }
 
-   Future<List<Tarefa>> getTarefasPorDisciplina(String disciplina) async {
+  Future<List<Tarefa>> getTarefasPorDisciplina(String disciplina) async {
     Database db = await this.getDatabase();
-    List<Tarefa> listaTarefasPorDisciplina=[];
+    List<Tarefa> listaTarefasPorDisciplina = [];
 
-    var tarefaMapList = await db.rawQuery('SELECT * FROM $tableTarefas WHERE disciplina = ?', ['$disciplina']);
-   
+    var tarefaMapList = await db.rawQuery(
+        'SELECT * FROM $tableTarefas WHERE disciplina = ?', ['$disciplina']);
 
     int tam = tarefaMapList.length;
 
     //for para cada List<Map> ser List<String>
     for (int i = 0; i < tam; i++) {
       listaTarefasPorDisciplina.add(Tarefa.fromMapObject(tarefaMapList[i]));
-      print(listaTarefasPorDisciplina[i].getTipo());
     }
 
     return listaTarefasPorDisciplina;
   }
-
-   
 
   Future<int> inserirTarefa(Tarefa tarefa) async {
     Database db = await this.getDatabase();
@@ -233,11 +231,12 @@ class DatabaseHelper {
         where: '$colIdTarefa = ?', whereArgs: [tarefa.getId()]);
     return result;
   }
-  
+
   Future<int> atualizarNota(Tarefa tarefa, double nota, int id) async {
     Database db = await this.getDatabase();
-    var result = await db.rawUpdate("UPDATE $tableTarefas SET $colNotaTarefa = ? WHERE $colIdTarefa = ?",
-    [nota, id]);
+    var result = await db.rawUpdate(
+        "UPDATE $tableTarefas SET $colNotaTarefa = ? WHERE $colIdTarefa = ?",
+        [nota, id]);
     return result;
   }
 

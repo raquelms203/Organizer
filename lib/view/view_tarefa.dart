@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/controller/form_tarefa.dart';
-import 'package:organizer/view/lista_disciplinas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
-import 'package:intl/intl.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:flutter/services.dart';
 
@@ -151,7 +149,8 @@ class _ViewTarefa extends State<ViewTarefa> {
                         tarefa.setNota(_nota);
                         await databaseHelper.atualizarNota(
                             tarefa, _nota, tarefa.getId());
-                        //      await databaseHelper.atualizarNotaDisciplina(_nota, tarefa.getDisciplina());
+                        databaseHelper.atualizarNotaDisciplina(
+                            _nota, tarefa.getDisciplina());
                       },
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20.0),
@@ -171,7 +170,33 @@ class _ViewTarefa extends State<ViewTarefa> {
               ),
             ),
           ),
-          cardDescricao(tarefa.getDescricao())
+          Card(
+            child: SizedBox(
+              height: 110,
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.0, left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Descrição: ",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 4.0),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(right: 15.0),
+                      child: Text("${tarefa.getDescricao()}",
+                          style: TextStyle(
+                              fontSize: 16.0, color: Colors.blueGrey[600])),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
         ],
       )),
     );
@@ -216,8 +241,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                  int result =
-                      await databaseHelper.apagarTarefa(tarefa.getId());
+                  await databaseHelper.apagarTarefa(tarefa.getId());
                   Navigator.pop(context);
                 }),
             FlatButton(
@@ -233,64 +257,5 @@ class _ViewTarefa extends State<ViewTarefa> {
         );
       },
     );
-  }
-
-  Card cardDescricao(String descricao) {
-    if (descricao.length > 44) {
-      return Card(
-        child: SizedBox(
-          height: 110,
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Descrição: ",
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 4.0),
-                ),
-                FittedBox(
-                  child: Text("${tarefa.getDescricao()}",
-                      style: TextStyle(
-                          fontSize: 16.0, color: Colors.blueGrey[600])),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    } else if (descricao.length <= 44) {
-      return Card(
-        child: SizedBox(
-          height: 110,
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0),
-            child: Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Descrição: ",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 4.0),
-                    ),
-                    Text("${tarefa.getDescricao()}",
-                        style: TextStyle(
-                            fontSize: 16.0, color: Colors.blueGrey[600])),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    return Card();
   }
 }

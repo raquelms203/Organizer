@@ -1,15 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:organizer/controller/form_disciplina.dart';
-import 'package:organizer/view/lista_disciplinas.dart';
-import './view_disciplina.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:organizer/controller/form_tarefa.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:organizer/model/obj_tarefa.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:organizer/view/view_tarefa.dart';
 
@@ -19,7 +12,6 @@ class ListaTarefas extends StatefulWidget {
   bool apenasVisualizar = false;
   ListaTarefas({this.listaTarefa});
   ListaTarefas.visualizar({this.listaTarefa, this.apenasVisualizar});
-
 
   @override
   State createState() => new _ListaTarefas(this.listaTarefa);
@@ -36,21 +28,19 @@ class _ListaTarefas extends State<ListaTarefas>
 
   _ListaTarefas(this.listaTarefa);
 
-
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
-     if (listaTarefa != null && widget.apenasVisualizar == true){
-           super.initState();
-            return;
-     }
+    if (listaTarefa != null && widget.apenasVisualizar == true) {
+      super.initState();
+      return;
+    }
 
     if (listaTarefa != null && widget.apenasVisualizar == false)
       atualizarListView();
-      if (listaTarefa == null)
-        listaTarefa = List<Tarefa>();
+    if (listaTarefa == null) listaTarefa = List<Tarefa>();
 
     super.initState();
   }
@@ -143,20 +133,6 @@ class _ListaTarefas extends State<ListaTarefas>
       ),
     );
   }
-
-  // Container(
-  //           padding: EdgeInsets.only(left: 10.0, right: 10.0),
-  //           margin: EdgeInsets.only(top:5.0, bottom:5.0),
-  //           decoration: BoxDecoration(
-  //           color: Colors.grey[400],
-  //             borderRadius: BorderRadius.circular(10.0),
-  //           ),
-  //           child: Text("Maio 2019",
-  //           style: TextStyle(
-  //           fontSize: 16.0
-  //           ),
-  //           )
-  //         );
 
   void atualizarListView() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();

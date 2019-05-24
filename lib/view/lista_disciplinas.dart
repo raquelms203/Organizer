@@ -5,11 +5,6 @@ import './view_disciplina.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:organizer/controller/form_tarefa.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:organizer/model/obj_tarefa.dart';
-import 'package:organizer/view/lista_tarefas.dart';
 
 class ListaDisciplinas extends StatefulWidget {
   List<Disciplina> listaDisciplina;
@@ -18,31 +13,27 @@ class ListaDisciplinas extends StatefulWidget {
 
   @override
   State createState() => new _ListaDisciplinas(this.listaDisciplina);
-
- 
 }
 
-class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveClientMixin{
-  
+class _ListaDisciplinas extends State<ListaDisciplinas>
+    with AutomaticKeepAliveClientMixin {
   int count = 0;
   List<Disciplina> listaDisciplina;
-    DatabaseHelper databaseHelper = DatabaseHelper();
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   _ListaDisciplinas(this.listaDisciplina);
 
- 
- @override
+  @override
   bool get wantKeepAlive => true;
-  
+
   @override
   void initState() {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-        super.build(context);
+    super.build(context);
 
     if (listaDisciplina == null)
       listaDisciplina = List<Disciplina>();
@@ -50,7 +41,6 @@ class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveC
       atualizarListView();
 
     return Scaffold(
-     
       floatingActionButton: FloatingActionButton(
         heroTag: "btn1",
         onPressed: () async {
@@ -100,26 +90,30 @@ class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveC
           itemCount: count,
           itemBuilder: (BuildContext context, int index) {
             if (listaDisciplina[index].getStatus() == 1) {
-            return Container(
-              child: Card(
-                child: ListTile(
-                  leading: Icon(Icons.assignment, size: 40.0),
-                  title: Text(listaDisciplina[index].getDisciplina()),
-                  subtitle: Text(listaDisciplina[index].getCod()),
-                  trailing: Text("${listaDisciplina[index].getNota()}/100",
-                      style: new TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.red[400])),
-                  onTap: () async {
-                    bool result = await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ViewDisciplina(disciplina: listaDisciplina[index]);
-                    }));
-                    if (result == true) atualizarListView();
-                  },
+              return Container(
+                child: Card(
+                  child: ListTile(
+                    leading: Icon(Icons.assignment, size: 40.0),
+                    title: Text(listaDisciplina[index].getDisciplina()),
+                    subtitle: Text(listaDisciplina[index].getCod()),
+                    trailing: Text("${listaDisciplina[index].getNota()}/100",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey[600],
+                            fontSize: 18.0)),
+                    onTap: () async {
+                      bool result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ViewDisciplina(
+                            disciplina: listaDisciplina[index]);
+                      }));
+                      if (result == true) atualizarListView();
+                    },
+                  ),
                 ),
-              ),
-            );
-          }}),
+              );
+            }
+          }),
     );
   }
 

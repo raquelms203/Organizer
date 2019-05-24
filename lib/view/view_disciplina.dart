@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/controller/form_disciplina.dart';
-import 'package:organizer/controller/form_tarefa.dart';
 import 'package:organizer/model/obj_disciplina.dart';
-import 'package:organizer/view/lista_disciplinas.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:organizer/view/lista_tarefas.dart';
@@ -103,14 +101,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     size: 30.0,
                   )),
             ),
-            // FlatButton(
-            //   child: Icon(Icons.remove_red_eye),
-            //   onPressed: () async {
-            //      int result = await databaseHelper.atualizarFaltas(widget.disciplina.getFaltas(), widget.disciplina.getId());
-            //      print(widget.disciplina.getFaltas());
-
-            //   }
-            // )
           ],
           backgroundColor: Colors.pink[400],
         ),
@@ -223,11 +213,12 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(top:10.0),),
+            Padding(
+              padding: EdgeInsets.only(top: 10.0),
+            ),
             Center(
                 child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              
               children: <Widget>[
                 Container(
                   color: Colors.green[400],
@@ -248,10 +239,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
         ),
       ),
     );
-  }
-
-  BuildContext getContext() {
-    return this.context;
   }
 
   Text textStatus(int status) {
@@ -315,16 +302,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
     );
   }
 
-  // void _showSnackBar(BuildContext context, String msg) {
-  //   final snackBar = SnackBar (content: Text(msg),);
-  //   Scaffold.of(context).showSnackBar(snackBar);
-  //}
-
   void salvar() async {
     widget.disciplina.setFaltas(faltas);
-    var result = await databaseHelper.atualizarDisciplina(widget.disciplina);
-
-    if (result != 0) print("Erro ao salvar!");
+    await databaseHelper.atualizarDisciplina(widget.disciplina);
   }
 
   void tarefas() {

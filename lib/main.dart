@@ -4,7 +4,6 @@ import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/view/lista_tarefas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:organizer/model/database_helper.dart';
 
 void main() {
   List<Disciplina> listaDisciplinas = List<Disciplina>();
