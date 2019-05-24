@@ -24,6 +24,8 @@ class DatabaseHelper {
   String colFaltas = 'faltas';
   String colMeta = 'meta';
   String colStatus = 'status';
+  String colNotaDisciplina = 'nota';
+
 
   //tabela tarefas
   String tableTarefas = 'tarefas';
@@ -31,7 +33,7 @@ class DatabaseHelper {
   String colDescricao = 'descricao';
   String colDisciplinas = 'disciplinas';
   String colValor = 'valor';
-  String colNota = 'nota';
+  String colNotaTarefa = 'nota';
   String colData = 'data';
   String colTipo = 'tipo';
   String colPrioridade = 'prioridade';
@@ -54,7 +56,7 @@ class DatabaseHelper {
 
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'database5.db';
+    String path = dir.path + 'database7.db';
     var disciplinaDatabase =
         await openDatabase(path, version: 1, onCreate: _criarDb);
     return disciplinaDatabase;
@@ -70,7 +72,8 @@ class DatabaseHelper {
             $colLimFaltas INTEGER (2) NOT NULL,
             $colMeta DOUBLE NOT NULL,
             $colStatus INTEGER (1) NOT NULL,
-            $colPeriodo TEXT NOT NULL);
+            $colPeriodo TEXT NOT NULL,
+            $colNotaDisciplina DOUBLE NOT NULL);
           ''');
  
    await db.execute('''
@@ -79,7 +82,7 @@ class DatabaseHelper {
             $colDescricao TEXT NOT NULL,
             $colValor DOUBLE NOT NULL,
             $colDisciplina TEXT REFERENCES $tableDisciplinas ($colDisciplina) NOT NULL,
-            $colNota DOUBLE NOT NULL,
+            $colNotaTarefa DOUBLE NOT NULL,
             $colData INTEGER NOT NULL,
             $colTipo TEXT NOT NULL,
             $colPrioridade INTEGER (1) NOT NULL);
@@ -112,6 +115,18 @@ class DatabaseHelper {
     return listaNomeDisciplinas;
   }
 
+
+  Future<double> getNotaDisciplina(String disciplina) async {
+    Database db = await this.getDatabase();
+    double notaDisciplina;
+
+    var doubleMap = await db.rawQuery('SELECT $colNotaDisciplina FROM $tableDisciplinas WHERE disciplina = ?', ['$disciplina']);
+   
+    notaDisciplina = Disciplina.fromMapObject(doubleMap.first).getNota();
+    
+    return notaDisciplina;
+  }
+
   
 
   Future<int> inserirDisciplina(Disciplina disciplina) async {
@@ -127,6 +142,16 @@ class DatabaseHelper {
         where: '$colIdDisciplina = ?', whereArgs: [disciplina.getId()]);
     return result;
   }
+
+  //  Future<int> atualizarNotaDisciplina(double nota, String disciplina) async {
+  //   var db = await this.getDatabase();
+
+  //   double notaDisciplina = await getNotaDisciplina(disciplina);
+  //   double somaNota = notaDisciplina + nota;
+    
+  //   var result = await db.rawUpdate('UPDATE $tableDisciplinas SET $colNota = ? WHERE $colDisciplina = ?', ['$somaNota', '$disciplina']);
+  //   return result;
+  // }
 
   Future<int> apagarDisciplina(int id) async {
     var db = await this.getDatabase();
@@ -188,6 +213,7 @@ class DatabaseHelper {
     //for para cada List<Map> ser List<String>
     for (int i = 0; i < tam; i++) {
       listaTarefasPorDisciplina.add(Tarefa.fromMapObject(tarefaMapList[i]));
+      print(listaTarefasPorDisciplina[i].getTipo());
     }
 
     return listaTarefasPorDisciplina;
@@ -210,7 +236,7 @@ class DatabaseHelper {
   
   Future<int> atualizarNota(Tarefa tarefa, double nota, int id) async {
     Database db = await this.getDatabase();
-    var result = await db.rawUpdate("UPDATE $tableTarefas SET $colNota = ? WHERE $colIdTarefa = ?",
+    var result = await db.rawUpdate("UPDATE $tableTarefas SET $colNotaTarefa = ? WHERE $colIdTarefa = ?",
     [nota, id]);
     return result;
   }

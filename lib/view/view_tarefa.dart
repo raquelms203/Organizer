@@ -24,44 +24,49 @@ class _ViewTarefa extends State<ViewTarefa> {
   _ViewTarefa(this.tarefa);
 
   @override
+  void initState() {
+    _nota = tarefa.getNota();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[400],
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
-            SizedBox(
-              height: 30.0,
-              width: 50.0,
-              child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return FormTarefa.editar(acao: "e", id: tarefa.getId(), tarefa: tarefa);
-                          
-                    }));
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.blue[300],
-                    size: 30.0,
-                  )),
-            ),
-            SizedBox(
-              height: 30.0,
-              width: 50.0,
-              child: FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      alertApagar(context, tarefa);
-                    });
-                  },
-                  child: Icon(
-                    Icons.delete,
-                    color: Colors.white70,
-                    size: 30.0,
-                  )),
-            ),
+          SizedBox(
+            height: 30.0,
+            width: 50.0,
+            child: FlatButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return FormTarefa.editar(
+                        acao: "e", id: tarefa.getId(), tarefa: tarefa);
+                  }));
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.blue[300],
+                  size: 30.0,
+                )),
+          ),
+          SizedBox(
+            height: 30.0,
+            width: 50.0,
+            child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    alertApagar(context, tarefa);
+                  });
+                },
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white70,
+                  size: 30.0,
+                )),
+          ),
         ],
       ),
       body: Container(
@@ -102,10 +107,10 @@ class _ViewTarefa extends State<ViewTarefa> {
                     "Nota:",
                     style: TextStyle(fontSize: 16.0),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 170.0)),
+                  Padding(padding: EdgeInsets.only(left: 175.0)),
                   SizedBox(
                     height: 46.0,
-                    width: 52.0,
+                    width: 48.0,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
@@ -119,9 +124,9 @@ class _ViewTarefa extends State<ViewTarefa> {
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(5),
                       ],
-                      onSubmitted: (String valor) {
+                      onSubmitted: (String valor) async {
                         _nota = double.parse(valor);
-                        if (_nota < tarefa.getNota()) {
+                        if (_nota > tarefa.getValor()) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -143,8 +148,10 @@ class _ViewTarefa extends State<ViewTarefa> {
                           );
                           return;
                         }
-                        databaseHelper.atualizarNota(
+                        tarefa.setNota(_nota);
+                        await databaseHelper.atualizarNota(
                             tarefa, _nota, tarefa.getId());
+                        //      await databaseHelper.atualizarNotaDisciplina(_nota, tarefa.getDisciplina());
                       },
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20.0),
@@ -164,7 +171,7 @@ class _ViewTarefa extends State<ViewTarefa> {
               ),
             ),
           ),
-         cardDescricao(tarefa.getDescricao())
+          cardDescricao(tarefa.getDescricao())
         ],
       )),
     );
@@ -193,7 +200,7 @@ class _ViewTarefa extends State<ViewTarefa> {
     return dataFormatada;
   }
 
-   void alertApagar(BuildContext context, Tarefa tarefa) async {
+  void alertApagar(BuildContext context, Tarefa tarefa) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -209,7 +216,8 @@ class _ViewTarefa extends State<ViewTarefa> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                   int result = await databaseHelper.apagarTarefa(tarefa.getId());
+                  int result =
+                      await databaseHelper.apagarTarefa(tarefa.getId());
                   Navigator.pop(context);
                 }),
             FlatButton(
@@ -226,15 +234,43 @@ class _ViewTarefa extends State<ViewTarefa> {
       },
     );
   }
- 
- Card cardDescricao (String descricao) {
-   if (descricao.length > 44) {
-     return Card(
-            child: SizedBox(
-              height: 110,
-              child: Padding(
-                padding: EdgeInsets.only(top: 10.0, left: 15.0),
-                child: Column(
+
+  Card cardDescricao(String descricao) {
+    if (descricao.length > 44) {
+      return Card(
+        child: SizedBox(
+          height: 110,
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.0, left: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Descrição: ",
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 4.0),
+                ),
+                FittedBox(
+                  child: Text("${tarefa.getDescricao()}",
+                      style: TextStyle(
+                          fontSize: 16.0, color: Colors.blueGrey[600])),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (descricao.length <= 44) {
+      return Card(
+        child: SizedBox(
+          height: 110,
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.0, left: 15.0),
+            child: Row(
+              children: <Widget>[
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
@@ -249,41 +285,12 @@ class _ViewTarefa extends State<ViewTarefa> {
                             fontSize: 16.0, color: Colors.blueGrey[600])),
                   ],
                 ),
-              ),
+              ],
             ),
-          );
-   
- } else if (descricao.length <= 44) {
-   return Card(
-            child: SizedBox(
-              height: 110,
-              child: Padding(
-                padding: EdgeInsets.only(top: 10.0, left: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Descrição: ",
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 4.0),
-                        ),
-                        Text("${tarefa.getDescricao()}",
-                            style: TextStyle(
-                                fontSize: 16.0, color: Colors.blueGrey[600])),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+          ),
+        ),
+      );
     }
     return Card();
- }
-
-
+  }
 }

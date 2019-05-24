@@ -8,12 +8,11 @@ class Disciplina {
   int _limFaltas;
   int _faltas;
   double _meta;
+  double _nota;
 
   Disciplina(this._disciplina, this._cod, this._faltas, this._limFaltas,
-      this._meta, this._periodo, this._status);
+      this._meta, this._periodo,this._nota, this._status);
 
-  Disciplina.comId(this._disciplina, this._cod, this._faltas, this._limFaltas,
-      this._meta, this._periodo, this._status, this._id);
 
   String getDisciplina() {
     return this._disciplina;
@@ -41,6 +40,10 @@ class Disciplina {
 
   double getMeta() {
     return this._meta;
+  }
+
+  double getNota() {
+    return this._nota;
   }
 
   int getId() {
@@ -75,6 +78,10 @@ class Disciplina {
     this._meta = meta;
   }
 
+  void setNota(double nota) {
+    this._nota = nota;
+  }
+
   void setId(int id) {
     this._id = id;
   }
@@ -92,6 +99,7 @@ class Disciplina {
     map['lim_faltas'] = _limFaltas;
     map['status'] = _status;
     map['faltas'] = 0;
+    map['nota'] = _nota;
 
     return map;
   }
@@ -106,5 +114,6 @@ class Disciplina {
     this._limFaltas = map['lim_faltas'];
     this._status = map['status'];
     this._faltas = map['faltas'];
+    this._nota = map['nota'];
   }
 }

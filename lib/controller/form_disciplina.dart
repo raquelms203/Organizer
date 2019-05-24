@@ -32,6 +32,7 @@ class _FormDisciplina extends State<FormDisciplina> {
   String _periodo = "";
   int _status = -1;
   double _meta = 0.0;
+  double _nota = 0.0;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
    @override
@@ -397,7 +398,7 @@ class _FormDisciplina extends State<FormDisciplina> {
       }
 
       Disciplina disciplina = new Disciplina(
-          _disciplina, _cod, 0, _limFaltas, _meta, _periodo, _status);
+          _disciplina, _cod, 0, _limFaltas, _meta, _periodo, _nota, _status);
 
       result = await databaseHelper.inserirDisciplina(disciplina);
     }

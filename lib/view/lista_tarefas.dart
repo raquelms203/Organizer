@@ -16,16 +16,19 @@ import 'package:organizer/view/view_tarefa.dart';
 class ListaTarefas extends StatefulWidget {
   List<Tarefa> listaTarefa;
   List<Disciplina> listaDisciplina;
-
+  bool apenasVisualizar = false;
   ListaTarefas({this.listaTarefa});
+  ListaTarefas.visualizar({this.listaTarefa, this.apenasVisualizar});
+
 
   @override
   State createState() => new _ListaTarefas(this.listaTarefa);
 }
 
-class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMixin {
-  int count = 0;
-      DateTime dataAtual = new DateTime.now();
+class _ListaTarefas extends State<ListaTarefas>
+    with AutomaticKeepAliveClientMixin {
+  DateTime dataAtual = new DateTime.now();
+  bool apenasVisualizar;
 
   List<Tarefa> listaTarefa;
 
@@ -33,13 +36,22 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
 
   _ListaTarefas(this.listaTarefa);
 
-  
- @override
-  bool get wantKeepAlive => true;
-  
 
- @override
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
+     if (listaTarefa != null && widget.apenasVisualizar == true){
+           super.initState();
+            return;
+     }
+
+    if (listaTarefa != null && widget.apenasVisualizar == false)
+      atualizarListView();
+      if (listaTarefa == null)
+        listaTarefa = List<Tarefa>();
+
     super.initState();
   }
 
@@ -47,14 +59,7 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
   Widget build(BuildContext context) {
     super.build(context);
 
-    if (listaTarefa == null)
-      listaTarefa = List<Tarefa>();
-    else {
-      atualizarListView();
-    }
-
     return Scaffold(
-   
       floatingActionButton: FloatingActionButton(
         heroTag: "btn2",
         onPressed: () async {
@@ -72,7 +77,6 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
         child: Column(
           children: <Widget>[
             txtListaVazia(listaTarefa.length),
-            
             carregarLista()
           ],
         ),
@@ -80,10 +84,10 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
     );
   }
 
- 
-
   Container txtListaVazia(int tam) {
-    if (tam == 0) {
+    if (tam > 0)
+      return Container();
+    else {
       return Container(
         padding: EdgeInsets.only(top: 260.0),
         alignment: Alignment.center,
@@ -92,8 +96,6 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
           style: TextStyle(color: Colors.grey[600], fontSize: 18.0),
         ),
       );
-    } else {
-      return Container();
     }
   }
 
@@ -101,41 +103,40 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
   Expanded carregarLista() {
     return Expanded(
       child: ListView.builder(
-        itemCount: count,
+        itemCount: listaTarefa.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
-           
-              child: Card(
-                child: ListTile(
-                  leading: iconePrioridade(listaTarefa[index].getPrioridade()),
-                  title: Text(listaTarefa[index].getTipo()),
-                  subtitle: Text(listaTarefa[index].getDisciplina()),
-                  trailing: Column(
-                    children: <Widget>[
-                      Text(
-                        diasRestantes(listaTarefa[index].getData()),
-                        style: TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey[600]),
-                      ),
-                      Text(
-                        "DIAS",
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey[600]),
-                      ),
-                    ],
-                  ),
-                  onTap: () async {
-                    bool result = await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ViewTarefa(tarefa: listaTarefa[index]);
-                    }));
-                    if (result == true) atualizarListView();
-                  },
+            child: Card(
+              child: ListTile(
+                leading: iconePrioridade(listaTarefa[index].getPrioridade()),
+                title: Text(listaTarefa[index].getTipo()),
+                subtitle: Text(listaTarefa[index].getDisciplina()),
+                trailing: Column(
+                  children: <Widget>[
+                    Text(
+                      diasRestantes(listaTarefa[index].getData()),
+                      style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueGrey[600]),
+                    ),
+                    Text(
+                      "DIAS",
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueGrey[600]),
+                    ),
+                  ],
                 ),
+                onTap: () async {
+                  bool result = await Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                    return ViewTarefa(tarefa: listaTarefa[index]);
+                  }));
+                  if (result == true) atualizarListView();
+                },
+              ),
             ),
           );
         },
@@ -143,26 +144,19 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
     );
   }
 
-    // Container(  
-    //           padding: EdgeInsets.only(left: 10.0, right: 10.0),
-    //           margin: EdgeInsets.only(top:5.0, bottom:5.0),
-    //           decoration: BoxDecoration(  
-    //           color: Colors.grey[400],
-    //             borderRadius: BorderRadius.circular(10.0),
-    //           ),
-    //           child: Text("Maio 2019", 
-    //           style: TextStyle(  
-    //           fontSize: 16.0
-    //           ),
-    //           )
-    //         );
-  Visibility disableTxtVazia(Container cont) {
-    
-    return Visibility(
-      child: cont,
-      visible: false,
-    );
-  }
+  // Container(
+  //           padding: EdgeInsets.only(left: 10.0, right: 10.0),
+  //           margin: EdgeInsets.only(top:5.0, bottom:5.0),
+  //           decoration: BoxDecoration(
+  //           color: Colors.grey[400],
+  //             borderRadius: BorderRadius.circular(10.0),
+  //           ),
+  //           child: Text("Maio 2019",
+  //           style: TextStyle(
+  //           fontSize: 16.0
+  //           ),
+  //           )
+  //         );
 
   void atualizarListView() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
@@ -171,7 +165,6 @@ class _ListaTarefas extends State<ListaTarefas> with AutomaticKeepAliveClientMix
       tarefaListFuture.then((listaTarefa) {
         setState(() {
           this.listaTarefa = listaTarefa;
-          this.count = listaTarefa.length;
         });
       });
     });

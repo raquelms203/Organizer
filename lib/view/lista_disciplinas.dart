@@ -106,7 +106,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas> with AutomaticKeepAliveC
                   leading: Icon(Icons.assignment, size: 40.0),
                   title: Text(listaDisciplina[index].getDisciplina()),
                   subtitle: Text(listaDisciplina[index].getCod()),
-                  trailing: Text("0.0/100",
+                  trailing: Text("${listaDisciplina[index].getNota()}/100",
                       style: new TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.red[400])),
                   onTap: () async {
