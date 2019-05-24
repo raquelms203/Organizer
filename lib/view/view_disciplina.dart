@@ -189,9 +189,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                         onPressed: () async {
                           faltas = widget.disciplina.getFaltas();
                           setState(() {
-                            if (faltas + 2 <=
+                            if (faltas + 1 <=
                                 widget.disciplina.getLimFaltas()) {
-                              faltas = faltas + 2;
+                              faltas = faltas + 1;
                             }
                           });
                           widget.disciplina.setFaltas(faltas);
@@ -223,7 +223,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 Container(
                   color: Colors.green[400],
                   child: FlatButton(
-                    child: Text("Mostrar Tarefas"),
+                    
+                    child: Text("Mostrar Tarefas", 
+                    style: TextStyle(color: Colors.white),),
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {

@@ -50,22 +50,11 @@ class _ListaTarefas extends State<ListaTarefas>
     super.build(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn2",
-        onPressed: () async {
-          bool result = await Navigator.push(context,
-              MaterialPageRoute(builder: (context) {
-            return FormTarefa.add(listaTarefa: listaTarefa, acao: "a");
-          }));
-          if (result == true) atualizarListView();
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green[400],
-        tooltip: "Adicionar Tarefa",
-      ),
+      floatingActionButton: floatingBtn(),
       body: Container(
         child: Column(
           children: <Widget>[
+            showAppBar(),
             txtListaVazia(listaTarefa.length),
             carregarLista()
           ],
@@ -87,6 +76,28 @@ class _ListaTarefas extends State<ListaTarefas>
         ),
       );
     }
+  }
+
+  Container showAppBar() {
+    if (widget.apenasVisualizar == false) return Container();
+
+    return Container(
+      height: 80.0,
+      color: Colors.pink[400],
+      child: Row(
+        
+        children: <Widget>[
+          
+          Padding(
+            padding: EdgeInsets.only(top:25.0),
+                      child: FlatButton(
+              child: Icon(Icons.arrow_back, size: 30.0, color: Colors.white,),
+              onPressed: () => Navigator.pop(context),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   //getTarefaListView
@@ -131,6 +142,24 @@ class _ListaTarefas extends State<ListaTarefas>
           );
         },
       ),
+    );
+  }
+
+  FloatingActionButton floatingBtn() {
+    if (widget.apenasVisualizar == true) return null;
+
+    return FloatingActionButton(
+      heroTag: "btn2",
+      onPressed: () async {
+        bool result =
+            await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return FormTarefa.add(listaTarefa: listaTarefa, acao: "a");
+        }));
+        if (result == true) atualizarListView();
+      },
+      child: Icon(Icons.add),
+      backgroundColor: Colors.green[400],
+      tooltip: "Adicionar Tarefa",
     );
   }
 
