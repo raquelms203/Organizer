@@ -17,7 +17,6 @@ class ListaDisciplinas extends StatefulWidget {
 
 class _ListaDisciplinas extends State<ListaDisciplinas>
     with AutomaticKeepAliveClientMixin {
-  int count = 0;
   List<Disciplina> listaDisciplina;
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -87,7 +86,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
   Expanded carregarLista() {
     return Expanded(
       child: ListView.builder(
-          itemCount: count,
+          itemCount: listaDisciplina.length,
           itemBuilder: (BuildContext context, int index) {
             if (listaDisciplina[index].getStatus() == 1) {
               return Container(
@@ -129,7 +128,6 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
       disciplinaListFuture.then((listaDisciplina) {
         setState(() {
           this.listaDisciplina = listaDisciplina;
-          this.count = listaDisciplina.length;
         });
       });
     });

@@ -247,6 +247,12 @@ class DatabaseHelper {
     return result;
   }
 
+  Future<int> apagarTarefaPorDisciplina(String disciplina) async {
+    var db = await this.getDatabase();
+    int result = await db.rawDelete('DELETE FROM $tableTarefas WHERE $colDisciplina = ?', ['$disciplina']);
+    return result;
+  }
+
   Future<int> getCountTarefa() async {
     Database db = await this.getDatabase();
     List<Map<String, dynamic>> lista =

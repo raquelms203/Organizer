@@ -57,7 +57,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
           ),
           title: Container(
-            height: 50.0,
+            height: double.infinity,
             padding: EdgeInsets.only(top: 5.0),
             child: Text(
                 widget.disciplina.getDisciplina() +
@@ -281,12 +281,9 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                  int result =
+                      await databaseHelper.apagarTarefaPorDisciplina(disciplina.getDisciplina());
                       await databaseHelper.apagarDisciplina(disciplina.getId());
-                  if (result != 0) {
-                    //   _showSnackBar(getContext(), 'Disciplina apagada com sucesso!');
-                  }
-                  //  widget.lista.removeLast();
+                  Navigator.pop(context, true);
                   Navigator.pop(context, true);
                 }),
             FlatButton(

@@ -15,6 +15,8 @@ class ViewTarefa extends StatefulWidget {
 
 class _ViewTarefa extends State<ViewTarefa> {
   double _nota;
+  double saldoNotaDisciplina;
+  double notaDisciplina;
   bool erro = false;
   Tarefa tarefa;
   DatabaseHelper databaseHelper = DatabaseHelper();
@@ -125,32 +127,29 @@ class _ViewTarefa extends State<ViewTarefa> {
                       onSubmitted: (String valor) async {
                         _nota = double.parse(valor);
                         if (_nota > tarefa.getValor()) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(
-                                  "Valor maior que ${tarefa.getValor()}!",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text("OK"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                                ],
-                              );
-                            },
-                          );
+                          alertError(context, "Nota maior que ${tarefa.getValor()}");
+                        }
+                        if (_nota < 0){
+                          alertError(context, "Nota menor que 0.0!");
+                          return;
+                        }
+                        if (tarefa.getNota() != 0) 
+                          saldoNotaDisciplina = _nota - tarefa.getNota();
+                         else 
+                          saldoNotaDisciplina = _nota;
+                       
+                        notaDisciplina = await databaseHelper.getNotaDisciplina(tarefa.getDisciplina());
+                        
+                        if (notaDisciplina + saldoNotaDisciplina > 100) {
+                          alertError(context, "Nota total da Disciplina passou de 100.0!");
                           return;
                         }
                         tarefa.setNota(_nota);
                         await databaseHelper.atualizarNota(
                             tarefa, _nota, tarefa.getId());
-                        databaseHelper.atualizarNotaDisciplina(
-                            _nota, tarefa.getDisciplina());
+                        await databaseHelper.atualizarNotaDisciplina(
+                            saldoNotaDisciplina, tarefa.getDisciplina());
+                           
                       },
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20.0),
@@ -241,8 +240,10 @@ class _ViewTarefa extends State<ViewTarefa> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
+                  await databaseHelper.atualizarNotaDisciplina(-tarefa.getNota(), tarefa.getDisciplina());
                   await databaseHelper.apagarTarefa(tarefa.getId());
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
+                  Navigator.pop(context, true);
                 }),
             FlatButton(
               child: new Text(
@@ -253,6 +254,31 @@ class _ViewTarefa extends State<ViewTarefa> {
                 Navigator.pop(context);
               },
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  void alertError(BuildContext context, String erro) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(
+            erro,
+            style: TextStyle(color: Colors.red[600]),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: new Text(
+                  "OK",
+                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                ),
+                onPressed: () async {
+                 Navigator.pop(context);
+                }),
+            
           ],
         );
       },
