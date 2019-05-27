@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
+import 'package:organizer/view/lista_disciplinas.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Disciplina> listaDisciplina;

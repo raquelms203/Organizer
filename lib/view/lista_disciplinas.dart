@@ -27,18 +27,20 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
 
   @override
   void initState() {
+    
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    if (listaDisciplina == null)
+     if (listaDisciplina == null) {
       listaDisciplina = List<Disciplina>();
-    else
+     }
+    else 
       atualizarListView();
 
+   
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: "btn1",
@@ -77,18 +79,20 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
           style: TextStyle(color: Colors.grey[600], fontSize: 18.0),
         ),
       );
-    } else {
+    } else if (tam > 0){
       return Container();
     }
+    return Container();
   }
 
 //getDisciplinaListView
   Expanded carregarLista() {
+    
     return Expanded(
       child: ListView.builder(
           itemCount: listaDisciplina.length,
           itemBuilder: (BuildContext context, int index) {
-            if (listaDisciplina[index].getStatus() == 1) {
+           
               return Container(
                 child: Card(
                   child: ListTile(
@@ -111,7 +115,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
                   ),
                 ),
               );
-            }
+            
           }),
     );
   }

@@ -164,8 +164,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           await databaseHelper.atualizarFaltas(
                               widget.disciplina.getFaltas(),
                               widget.disciplina.getId());
-
-                          //       salvar();
                         },
                       ),
                     ),
@@ -281,8 +279,8 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                      await databaseHelper.apagarTarefaPorDisciplina(disciplina.getDisciplina());
-                      await databaseHelper.apagarDisciplina(disciplina.getId());
+                  await databaseHelper.apagarTarefaPorDisciplina(disciplina.getDisciplina());
+                  await databaseHelper.apagarDisciplina(disciplina.getId());
                   Navigator.pop(context, true);
                   Navigator.pop(context, true);
                 }),
@@ -299,11 +297,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
         );
       },
     );
-  }
-
-  void salvar() async {
-    widget.disciplina.setFaltas(faltas);
-    await databaseHelper.atualizarDisciplina(widget.disciplina);
   }
 
   void tarefas() {

@@ -48,16 +48,13 @@ class _FormTarefa extends State<FormTarefa> {
   @override
   void initState() {
     disciplinasDropdown();
-  
+
     valoresIniciais();
     super.initState();
-  
   }
 
- 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
@@ -81,47 +78,41 @@ class _FormTarefa extends State<FormTarefa> {
       ),
       body: Container(
         child: Builder(builder: (BuildContext context) {
-         
           return Form(
               key: _formKey,
               child: ListView(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      
                       Container(
-                        
                         padding: EdgeInsets.only(top: 30.0),
                         child: FlatButton(
                           onPressed: () {
                             if (stringDisciplinas.isEmpty) {
                               errorMsg("Cadastre as Disciplinas primeiro!", 2);
-                             
-                          }
-                            // if (listaDisciplinaVazia)
-                            // Navigator.pop(context);
+                            }
                           },
-                                                  child: DropdownButtonHideUnderline(
+                          child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               hint: Text(dropdownDisciplina,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20.0)),
                               onChanged: (String novoValor) {
-                                
                                 setState(() {
                                   dropdownDisciplina = novoValor;
                                   _disciplina = novoValor;
                                 });
                               },
                               items: stringDisciplinas
-                                  .map<DropdownMenuItem<String>>((String valor) {
+                                  .map<DropdownMenuItem<String>>(
+                                      (String valor) {
                                 return DropdownMenuItem<String>(
                                     value: valor,
                                     child: Text(
                                       valor,
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ));
                               }).toList(),
                             ),
@@ -394,8 +385,7 @@ class _FormTarefa extends State<FormTarefa> {
               child: Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
-                if (vezesVoltarTela == 2)
-                  Navigator.pop(context);
+                if (vezesVoltarTela == 2) Navigator.pop(context);
               },
             )
           ],
@@ -403,7 +393,7 @@ class _FormTarefa extends State<FormTarefa> {
       },
     );
   }
-  
+
   void errorMsgSalvar() {
     showDialog(
       context: context,
@@ -473,11 +463,11 @@ class _FormTarefa extends State<FormTarefa> {
           stringDisciplinas = listaDisciplinas;
         });
       });
-   });
-   if (stringDisciplinas.isEmpty)
-    listaDisciplinaVazia = true;
-    else  
-       listaDisciplinaVazia = false;
+    });
+    if (stringDisciplinas.isEmpty)
+      listaDisciplinaVazia = true;
+    else
+      listaDisciplinaVazia = false;
   }
 
   Future<Null> selecionarData() async {

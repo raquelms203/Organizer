@@ -16,6 +16,7 @@ void main() {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            action
             backgroundColor: Colors.pink[400],
             bottom: TabBar(
               indicatorColor: Colors.white,

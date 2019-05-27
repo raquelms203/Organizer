@@ -10,6 +10,7 @@ class ListaTarefas extends StatefulWidget {
   List<Tarefa> listaTarefa;
   List<Disciplina> listaDisciplina;
   bool apenasVisualizar = false;
+
   ListaTarefas({this.listaTarefa});
   ListaTarefas.visualizar({this.listaTarefa, this.apenasVisualizar});
 
@@ -21,7 +22,6 @@ class _ListaTarefas extends State<ListaTarefas>
     with AutomaticKeepAliveClientMixin {
   DateTime dataAtual = new DateTime.now();
   bool apenasVisualizar;
-
   List<Tarefa> listaTarefa;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
@@ -33,21 +33,23 @@ class _ListaTarefas extends State<ListaTarefas>
 
   @override
   void initState() {
-    if (listaTarefa != null && widget.apenasVisualizar == true) {
-      super.initState();
-      return;
-    }
-
-    if (listaTarefa != null && widget.apenasVisualizar == false)
-      atualizarListView();
-    if (listaTarefa == null) listaTarefa = List<Tarefa>();
-
+    
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    // if (listaTarefa != null && widget.apenasVisualizar == true) {
+      
+    // }
+
+    if (listaTarefa != null && widget.apenasVisualizar == false)
+      atualizarListView();
+
+    if (listaTarefa == null) listaTarefa = List<Tarefa>();
+
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
