@@ -51,7 +51,39 @@ class _ListaTarefas extends State<ListaTarefas>
     if (listaTarefa == null) listaTarefa = List<Tarefa>();
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      appBar: appBar(),
+      floatingActionButton: floatingBtn(),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            // btnTarefasAntiga(),
+            txtListaVazia(listaTarefa.length),
+            carregarLista()
+          ],
+        ),
+      ),
+    );
+  }
+
+  AppBar appBar() {
+    if (!widget.apenasVisualizar)
+      return null;
+      else {
+        return AppBar(  
+          backgroundColor: Colors.pink[400],
+          leading: FlatButton(  
+            child: Icon(Icons.arrow_back, size: 30, color: Colors.white,),
+            onPressed: () => Navigator.pop(context),
+          ),
+        );
+      }
+  }
+
+  FloatingActionButton floatingBtn() {
+    if (widget.apenasVisualizar) 
+      return null;
+      else {
+        return FloatingActionButton(
         heroTag: "btn2",
         onPressed: () async {
           bool result = await Navigator.push(context,
@@ -63,20 +95,8 @@ class _ListaTarefas extends State<ListaTarefas>
         child: Icon(Icons.add),
         backgroundColor: Colors.green[400],
         tooltip: "Adicionar Tarefa",
-      ),
-      body: 
-      
-              Container(
-          child: Column(
-            children: <Widget>[
-              btnTarefasAntiga(),
-              txtListaVazia(listaTarefa.length),
-              carregarLista()
-            ],
-          ),
-        ),
-      
-    );
+      );
+      }
   }
 
   Container txtListaVazia(int tam) {
@@ -96,43 +116,41 @@ class _ListaTarefas extends State<ListaTarefas>
 
   Container btnTarefasAntiga() {
     if (mostrarBtn) {
-    return Container(
-      color: Colors.blueGrey[200],
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: mediaQuery.size.height / 8),
-            child: Container(
-              child: FlatButton(
-                color: Colors.blueGrey[400],
-                child: Text(
-                  "Mostrar Tarefas Antigas",
-                  style: TextStyle(color: Colors.white),
+      return Container(
+        color: Colors.blueGrey[200],
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: mediaQuery.size.height / 8),
+              child: Container(
+                child: FlatButton(
+                  color: Colors.blueGrey[400],
+                  child: Text(
+                    "Mostrar Tarefas Antigas",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      mostrarBtn = false;
+                      mostrarAntigas = true;
+                    });
+                  },
                 ),
-                onPressed: () {  
-                  setState(() {
-                    mostrarBtn = false;
-                    mostrarAntigas = true;
-                  });
-                },
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
     }
     return Container();
   }
 
   //getTarefaListView
-  Expanded carregarLista() {
+ Expanded carregarLista() {
     return Expanded(
       child: ListView.builder(
         itemCount: listaTarefa.length,
         itemBuilder: (BuildContext context, int index) {
-         
-          if (diasRestantes(listaTarefa[index].getData()) > 0) {
           return Container(
             child: Card(
               child: ListTile(
@@ -164,53 +182,13 @@ class _ListaTarefas extends State<ListaTarefas>
                   }));
                   if (result == true) atualizarListView();
                 },
-          
               ),
             ),
           );
-          
-        // } else if (mostrarAntigas && diasRestantes(listaTarefa[index].getData()) < 0){
-        //   return Container(
-        //     child: Card(
-        //       child: ListTile(
-        //         leading: iconePrioridade(listaTarefa[index].getPrioridade()),
-        //         title: Text(listaTarefa[index].getTipo()),
-        //         subtitle: Text(listaTarefa[index].getDisciplina()),
-        //         trailing: Column(
-        //           children: <Widget>[
-        //             Text(
-        //               diasRestantes(listaTarefa[index].getData()).toString(),
-        //               style: TextStyle(
-        //                   fontSize: 30.0,
-        //                   fontWeight: FontWeight.bold,
-        //                   color: Colors.blueGrey[600]),
-        //             ),
-        //             Text(
-        //               "DIAS",
-        //               style: TextStyle(
-        //                   fontSize: 12.0,
-        //                   fontWeight: FontWeight.bold,
-        //                   color: Colors.blueGrey[600]),
-        //             ),
-        //           ],
-        //         ),
-        //         onTap: () async {
-        //           bool result = await Navigator.push(context,
-        //               MaterialPageRoute(builder: (context) {
-        //             return ViewTarefa(tarefa: listaTarefa[index]);
-        //           }));
-        //           if (result == true) atualizarListView();
-        //         },
-          
-          }}));
-            
-          
-          }
-        
-        
-      
-        
-  
+        },
+      ),
+    );
+}
 
   void atualizarListView() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
