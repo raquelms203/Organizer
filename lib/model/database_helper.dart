@@ -100,7 +100,7 @@ class DatabaseHelper {
     Database db = await this.getDatabase();
     List<String> listaNomeDisciplinas = [];
 
-    var result = await db.rawQuery('SELECT disciplina FROM $tableDisciplinas');
+    var result = await db.rawQuery('SELECT disciplina FROM $tableDisciplinas WHERE $colStatus = ?', ['1']);
     var stringMapList = result;
 
     int tam = stringMapList.length;

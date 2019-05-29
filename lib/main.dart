@@ -4,6 +4,7 @@ import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/view/lista_tarefas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:organizer/view/configuracoes.dart';
 
 void main() {
   List<Disciplina> listaDisciplinas = List<Disciplina>();
@@ -16,7 +17,14 @@ void main() {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            action
+            actions: <Widget>[  
+              // FlatButton(  
+              //   child: Icon(Icons.settings, 
+              //   size: 25.0,
+              //   color: Colors.white,),
+              //   onPressed: () => {}
+              // )
+            ],
             backgroundColor: Colors.pink[400],
             bottom: TabBar(
               indicatorColor: Colors.white,

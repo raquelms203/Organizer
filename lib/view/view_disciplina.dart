@@ -4,8 +4,10 @@ import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:organizer/view/lista_tarefas.dart';
+import 'package:organizer/view/graficos.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
+
 
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
@@ -221,7 +223,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 Container(
                   color: Colors.green[400],
                   child: FlatButton(
-                    
                     child: Text("Mostrar Tarefas", 
                     style: TextStyle(color: Colors.white),),
                     onPressed: () {
@@ -233,6 +234,20 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                     },
                   ),
                 ),
+                  // Container(
+                  //   margin: EdgeInsets.only(left: 10.0),
+                  //   color: Colors.lightBlue[400],
+                  //   child: FlatButton(  
+                  //      child: Text("Mostrar Gráficos", 
+                  //     style: TextStyle(color: Colors.white),),
+                  //     onPressed: () {
+                  //       Navigator.push(context,
+                  //           MaterialPageRoute(builder: (context) {
+                  //         return SimpleSeriesLegend();
+                  //       }));
+                  //     },
+                  //   ),
+                  // )
               ],
             )),
           ]),

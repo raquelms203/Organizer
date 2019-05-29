@@ -19,6 +19,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
     with AutomaticKeepAliveClientMixin {
   List<Disciplina> listaDisciplina;
   DatabaseHelper databaseHelper = DatabaseHelper();
+  MediaQueryData mediaQuery;
 
   _ListaDisciplinas(this.listaDisciplina);
 
@@ -32,8 +33,11 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     super.build(context);
+
+    mediaQuery = MediaQuery.of(context);
+
      if (listaDisciplina == null) {
       listaDisciplina = List<Disciplina>();
      }
@@ -72,7 +76,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
   Container txtListaVazia(int tam) {
     if (tam == 0) {
       return Container(
-        padding: EdgeInsets.only(top: 260.0),
+        padding: EdgeInsets.only(top: mediaQuery.size.height/3),
         alignment: Alignment.center,
         child: Text(
           "Não há disciplinas cadastradas!",

@@ -22,7 +22,10 @@ class _ListaTarefas extends State<ListaTarefas>
     with AutomaticKeepAliveClientMixin {
   DateTime dataAtual = new DateTime.now();
   bool apenasVisualizar;
+  bool mostrarBtn = true;
+  bool mostrarAntigas = false;
   List<Tarefa> listaTarefa;
+  MediaQueryData mediaQuery;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -33,7 +36,6 @@ class _ListaTarefas extends State<ListaTarefas>
 
   @override
   void initState() {
-    
     super.initState();
   }
 
@@ -41,15 +43,12 @@ class _ListaTarefas extends State<ListaTarefas>
   Widget build(BuildContext context) {
     super.build(context);
 
-    // if (listaTarefa != null && widget.apenasVisualizar == true) {
-      
-    // }
+    mediaQuery = MediaQuery.of(context);
 
     if (listaTarefa != null && widget.apenasVisualizar == false)
       atualizarListView();
 
     if (listaTarefa == null) listaTarefa = List<Tarefa>();
-
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -65,14 +64,18 @@ class _ListaTarefas extends State<ListaTarefas>
         backgroundColor: Colors.green[400],
         tooltip: "Adicionar Tarefa",
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            txtListaVazia(listaTarefa.length),
-            carregarLista()
-          ],
+      body: 
+      
+              Container(
+          child: Column(
+            children: <Widget>[
+              btnTarefasAntiga(),
+              txtListaVazia(listaTarefa.length),
+              carregarLista()
+            ],
+          ),
         ),
-      ),
+      
     );
   }
 
@@ -81,7 +84,7 @@ class _ListaTarefas extends State<ListaTarefas>
       return Container();
     else {
       return Container(
-        padding: EdgeInsets.only(top: 260.0),
+        padding: EdgeInsets.only(top: mediaQuery.size.height / 3),
         alignment: Alignment.center,
         child: Text(
           "Não há tarefas cadastradas!",
@@ -91,12 +94,45 @@ class _ListaTarefas extends State<ListaTarefas>
     }
   }
 
+  Container btnTarefasAntiga() {
+    if (mostrarBtn) {
+    return Container(
+      color: Colors.blueGrey[200],
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: mediaQuery.size.height / 8),
+            child: Container(
+              child: FlatButton(
+                color: Colors.blueGrey[400],
+                child: Text(
+                  "Mostrar Tarefas Antigas",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {  
+                  setState(() {
+                    mostrarBtn = false;
+                    mostrarAntigas = true;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    }
+    return Container();
+  }
+
   //getTarefaListView
   Expanded carregarLista() {
     return Expanded(
       child: ListView.builder(
         itemCount: listaTarefa.length,
         itemBuilder: (BuildContext context, int index) {
+         
+          if (diasRestantes(listaTarefa[index].getData()) > 0) {
           return Container(
             child: Card(
               child: ListTile(
@@ -106,7 +142,7 @@ class _ListaTarefas extends State<ListaTarefas>
                 trailing: Column(
                   children: <Widget>[
                     Text(
-                      diasRestantes(listaTarefa[index].getData()),
+                      diasRestantes(listaTarefa[index].getData()).toString(),
                       style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -128,13 +164,53 @@ class _ListaTarefas extends State<ListaTarefas>
                   }));
                   if (result == true) atualizarListView();
                 },
+          
               ),
             ),
           );
-        },
-      ),
-    );
-  }
+          
+        // } else if (mostrarAntigas && diasRestantes(listaTarefa[index].getData()) < 0){
+        //   return Container(
+        //     child: Card(
+        //       child: ListTile(
+        //         leading: iconePrioridade(listaTarefa[index].getPrioridade()),
+        //         title: Text(listaTarefa[index].getTipo()),
+        //         subtitle: Text(listaTarefa[index].getDisciplina()),
+        //         trailing: Column(
+        //           children: <Widget>[
+        //             Text(
+        //               diasRestantes(listaTarefa[index].getData()).toString(),
+        //               style: TextStyle(
+        //                   fontSize: 30.0,
+        //                   fontWeight: FontWeight.bold,
+        //                   color: Colors.blueGrey[600]),
+        //             ),
+        //             Text(
+        //               "DIAS",
+        //               style: TextStyle(
+        //                   fontSize: 12.0,
+        //                   fontWeight: FontWeight.bold,
+        //                   color: Colors.blueGrey[600]),
+        //             ),
+        //           ],
+        //         ),
+        //         onTap: () async {
+        //           bool result = await Navigator.push(context,
+        //               MaterialPageRoute(builder: (context) {
+        //             return ViewTarefa(tarefa: listaTarefa[index]);
+        //           }));
+        //           if (result == true) atualizarListView();
+        //         },
+          
+          }}));
+            
+          
+          }
+        
+        
+      
+        
+  
 
   void atualizarListView() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
@@ -165,8 +241,8 @@ class _ListaTarefas extends State<ListaTarefas>
     return dataFormatada;
   }
 
-  String diasRestantes(int data) {
+  int diasRestantes(int data) {
     DateTime dataTarefa = DateTime.fromMillisecondsSinceEpoch(data);
-    return dataTarefa.difference(dataAtual).inDays.toString();
+    return dataTarefa.difference(dataAtual).inDays;
   }
 }
