@@ -22,9 +22,11 @@ class _ListaTarefas extends State<ListaTarefas>
     with AutomaticKeepAliveClientMixin {
   DateTime dataAtual = new DateTime.now();
   bool apenasVisualizar;
-  bool mostrarBtn = true;
+  bool mostrarBtn = false;
   bool mostrarAntigas = false;
   List<Tarefa> listaTarefa;
+  List<Tarefa> listaDiasPositivo = List<Tarefa>();
+  List<Tarefa> listaExibir = List<Tarefa>();
   MediaQueryData mediaQuery;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
@@ -37,6 +39,8 @@ class _ListaTarefas extends State<ListaTarefas>
   @override
   void initState() {
     super.initState();
+    atualizarListView();
+
   }
 
   @override
@@ -45,10 +49,16 @@ class _ListaTarefas extends State<ListaTarefas>
 
     mediaQuery = MediaQuery.of(context);
 
-    if (listaTarefa != null && widget.apenasVisualizar == false)
+    if (listaTarefa != null && widget.apenasVisualizar == false) {
       atualizarListView();
+    }
 
-    if (listaTarefa == null) listaTarefa = List<Tarefa>();
+    iniciarListaDiasPositivo();
+
+    if (listaTarefa == null) {
+      listaTarefa = List<Tarefa>();
+      listaDiasPositivo = listaTarefa;
+    }
 
     return Scaffold(
       appBar: appBar(),
@@ -56,9 +66,9 @@ class _ListaTarefas extends State<ListaTarefas>
       body: Container(
         child: Column(
           children: <Widget>[
-            // btnTarefasAntiga(),
-            txtListaVazia(listaTarefa.length),
-            carregarLista()
+            txtListaVazia(listaExibir.length),
+            btnTarefasAntiga(),
+            carregarLista(),
           ],
         ),
       ),
@@ -68,22 +78,26 @@ class _ListaTarefas extends State<ListaTarefas>
   AppBar appBar() {
     if (!widget.apenasVisualizar)
       return null;
-      else {
-        return AppBar(  
-          backgroundColor: Colors.pink[400],
-          leading: FlatButton(  
-            child: Icon(Icons.arrow_back, size: 30, color: Colors.white,),
-            onPressed: () => Navigator.pop(context),
+    else {
+      return AppBar(
+        backgroundColor: Colors.pink[400],
+        leading: FlatButton(
+          child: Icon(
+            Icons.arrow_back,
+            size: 30,
+            color: Colors.white,
           ),
-        );
-      }
+          onPressed: () => Navigator.pop(context),
+        ),
+      );
+    }
   }
 
   FloatingActionButton floatingBtn() {
-    if (widget.apenasVisualizar) 
+    if (widget.apenasVisualizar)
       return null;
-      else {
-        return FloatingActionButton(
+    else {
+      return FloatingActionButton(
         heroTag: "btn2",
         onPressed: () async {
           bool result = await Navigator.push(context,
@@ -96,7 +110,7 @@ class _ListaTarefas extends State<ListaTarefas>
         backgroundColor: Colors.green[400],
         tooltip: "Adicionar Tarefa",
       );
-      }
+    }
   }
 
   Container txtListaVazia(int tam) {
@@ -115,6 +129,15 @@ class _ListaTarefas extends State<ListaTarefas>
   }
 
   Container btnTarefasAntiga() {
+    String txtBtn = "";
+    if (listaExibir.length > 0) {
+      mostrarBtn = true;
+    }
+
+    if (mostrarAntigas) {
+      txtBtn = "Ocultar Tarefas Antigas";
+    } else if (!mostrarAntigas) txtBtn = "Mostrar Tarefas Antigas";
+
     if (mostrarBtn) {
       return Container(
         color: Colors.blueGrey[200],
@@ -126,13 +149,20 @@ class _ListaTarefas extends State<ListaTarefas>
                 child: FlatButton(
                   color: Colors.blueGrey[400],
                   child: Text(
-                    "Mostrar Tarefas Antigas",
+                    txtBtn,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
                     setState(() {
-                      mostrarBtn = false;
-                      mostrarAntigas = true;
+                      if (mostrarAntigas) {
+                        mostrarAntigas = false;
+                        listaExibir = listaDiasPositivo;
+                      } else if (!mostrarAntigas) {
+                        mostrarAntigas = true;
+                        listaExibir = listaTarefa;
+                      }
+                      //       print("Exibir: $listaExibir");
+                      //       print("Positivo: $listaDiasPositivo");
                     });
                   },
                 ),
@@ -145,50 +175,79 @@ class _ListaTarefas extends State<ListaTarefas>
     return Container();
   }
 
+  void iniciarListaDiasPositivo() {
+    int i = 0;
+    Tarefa tarefa;
+    if (listaDiasPositivo.isNotEmpty) return;
+
+    if (listaTarefa.isEmpty) {
+      listaDiasPositivo = List<Tarefa>();
+      return;
+    }
+    //   print("ListaTarefas: $listaTarefa");
+
+    while (i != listaTarefa.length) {
+      if (diasRestantes(listaTarefa[i].getData()) >= 0) {
+        tarefa = listaTarefa[i];
+        print(tarefa.getDisciplina());
+        listaDiasPositivo.add(tarefa);
+      }
+      i++;
+    }
+
+    setState(() {
+      //   print("set state lista positivo: $listaDiasPositivo");
+      listaExibir = listaDiasPositivo;
+    });
+  }
+
   //getTarefaListView
- Expanded carregarLista() {
+  Expanded carregarLista() {
+    if (listaTarefa.length == 0) {
+      return Expanded(child: Container());
+    }
     return Expanded(
-      child: ListView.builder(
-        itemCount: listaTarefa.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            child: Card(
-              child: ListTile(
-                leading: iconePrioridade(listaTarefa[index].getPrioridade()),
-                title: Text(listaTarefa[index].getTipo()),
-                subtitle: Text(listaTarefa[index].getDisciplina()),
-                trailing: Column(
-                  children: <Widget>[
-                    Text(
-                      diasRestantes(listaTarefa[index].getData()).toString(),
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey[600]),
+        child: ListView.builder(
+            itemCount: listaExibir.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                child: Card(
+                  child: ListTile(
+                    leading:
+                        iconePrioridade(listaExibir[index].getPrioridade()),
+                    title: Text(listaExibir[index].getTipo()),
+                    subtitle: Text(listaExibir[index].getDisciplina()),
+                    trailing: Column(
+                      children: <Widget>[
+                        Text(
+                          diasRestantes(listaExibir[index].getData())
+                              .toString(),
+                          style: TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueGrey[600]),
+                        ),
+                        Text(
+                          "DIAS",
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueGrey[600]),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "DIAS",
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey[600]),
-                    ),
-                  ],
+                    onTap: () async {
+                      bool result = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ViewTarefa(tarefa: listaExibir[index]);
+                      }));
+                      if (result == true) atualizarListView();
+                    },
+                  ),
                 ),
-                onTap: () async {
-                  bool result = await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return ViewTarefa(tarefa: listaTarefa[index]);
-                  }));
-                  if (result == true) atualizarListView();
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
-}
+              );
+            }));
+  }
 
   void atualizarListView() {
     final Future<Database> dbFuture = databaseHelper.iniciarDb();

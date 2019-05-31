@@ -26,8 +26,6 @@ class _FormTarefa extends State<FormTarefa> {
   String dropdownPrioridade = "Prioridade";
   String txtData;
 
-  bool listaDisciplinaVazia;
-
   int _prioridade = 0;
   int count;
   int _data = 0;
@@ -464,10 +462,6 @@ class _FormTarefa extends State<FormTarefa> {
         });
       });
     });
-    if (stringDisciplinas.isEmpty)
-      listaDisciplinaVazia = true;
-    else
-      listaDisciplinaVazia = false;
   }
 
   Future<Null> selecionarData() async {
