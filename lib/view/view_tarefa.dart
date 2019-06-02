@@ -18,6 +18,9 @@ class _ViewTarefa extends State<ViewTarefa> {
   double saldoNotaDisciplina;
   double notaDisciplina;
   bool erro = false;
+  bool editarNota = false;
+  final notaController = TextEditingController();
+  final FocusNode txtFocus = FocusNode();
   Tarefa tarefa;
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -26,49 +29,19 @@ class _ViewTarefa extends State<ViewTarefa> {
   @override
   void initState() {
     _nota = tarefa.getNota();
+  
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (txtFocus.hasFocus) {
+      setState(() {
+        editarNota = true;
+      });
+    }
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.pink[400],
-        title: Text(tarefa.getTipo()),
-        actions: <Widget>[
-          SizedBox(
-            height: 30.0,
-            width: 50.0,
-            child: FlatButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return FormTarefa.editar(
-                        acao: "e", id: tarefa.getId(), tarefa: tarefa);
-                  }));
-                },
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.blue[300],
-                  size: 30.0,
-                )),
-          ),
-          SizedBox(
-            height: 30.0,
-            width: 50.0,
-            child: FlatButton(
-                onPressed: () {
-                  setState(() {
-                    alertApagar(context, tarefa);
-                  });
-                },
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white70,
-                  size: 30.0,
-                )),
-          ),
-        ],
-      ),
+      appBar: appBar(),
       body: Container(
           child: Column(
         children: <Widget>[
@@ -111,48 +84,38 @@ class _ViewTarefa extends State<ViewTarefa> {
                   SizedBox(
                     height: 46.0,
                     width: 48.0,
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(bottom: 2, top: 12.0),
-                          hintText: tarefa.getNota().toString(),
-                          hintStyle: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                          errorStyle:
-                              (erro ? TextStyle(color: Colors.red) : null)),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(5),
-                      ],
-                      onSubmitted: (String valor) async {
-                        _nota = double.parse(valor);
-                        if (_nota > tarefa.getValor()) {
-                          alertError(context, "Nota maior que ${tarefa.getValor()}");
-                        }
-                        if (_nota < 0){
-                          alertError(context, "Nota menor que 0.0!");
-                          return;
-                        }
-                        if (tarefa.getNota() != 0) 
-                          saldoNotaDisciplina = _nota - tarefa.getNota();
-                         else 
-                          saldoNotaDisciplina = _nota;
-                       
-                        notaDisciplina = await databaseHelper.getNotaDisciplina(tarefa.getDisciplina());
-                        
-                        if (notaDisciplina + saldoNotaDisciplina > 100) {
-                          alertError(context, "Nota total da Disciplina passou de 100.0!");
-                          return;
-                        }
-                        tarefa.setNota(_nota);
-                        await databaseHelper.atualizarNota(
-                            tarefa, _nota, tarefa.getId());
-                        await databaseHelper.atualizarNotaDisciplina(
-                            saldoNotaDisciplina, tarefa.getDisciplina());
-                           
-                      },
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20.0),
+                    child: GestureDetector(
+                      child: TextField(
+                        focusNode: txtFocus,
+                        controller: notaController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(bottom: 2, top: 12.0),
+                            hintText: tarefa.getNota().toString(),
+                            hintStyle: TextStyle(
+                              fontSize: 20.0,
+                            ),
+                            errorStyle:
+                                (erro ? TextStyle(color: Colors.red) : null)),
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(5),
+                        ],
+                        onSubmitted: (String valor) {
+                          _nota = double.parse(valor);
+                          validarNota(_nota);
+                        },
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      behavior: HitTestBehavior.translucent,
+                        onTap: (){
+                                                    print(editarNota);
+
+                         setState(() {
+                           editarNota=true;
+                         });
+                       },
                     ),
                   ),
                   Padding(
@@ -201,6 +164,72 @@ class _ViewTarefa extends State<ViewTarefa> {
     );
   }
 
+  AppBar appBar() {
+    if (!editarNota) {
+      return AppBar(
+        backgroundColor: Colors.pink[400],
+        title: Text(tarefa.getTipo()),
+        actions: <Widget>[
+          SizedBox(
+            height: 30.0,
+            width: 50.0,
+            child: FlatButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return FormTarefa.editar(
+                        acao: "e", id: tarefa.getId(), tarefa: tarefa);
+                  }));
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: Colors.blue[300],
+                  size: 30.0,
+                )),
+          ),
+          SizedBox(
+            height: 30.0,
+            width: 50.0,
+            child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    alertApagar(context, tarefa);
+                  });
+                },
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white70,
+                  size: 30.0,
+                )),
+          ),
+         
+        ],
+      );
+    } else if (editarNota) {
+      print(notaController.text);
+      return AppBar(
+        backgroundColor: Colors.pink[400],
+        title: Text(tarefa.getTipo()),
+        actions: <Widget>[
+          SizedBox(
+            height: 30.0,
+            width: 50.0,
+            child: FlatButton(
+                onPressed: () {
+                  _nota = double.parse(notaController.text);
+                  validarNota(_nota);
+                },
+                child: Icon(
+                  Icons.done,
+                   color: Colors.greenAccent[700],
+                  size: 30.0,
+                )),
+          ),
+        ],
+      );
+    }
+    return AppBar();
+  }
+
   Text textPrioridade() {
     if (tarefa.getPrioridade() == 1)
       return Text("Baixa",
@@ -224,6 +253,39 @@ class _ViewTarefa extends State<ViewTarefa> {
     return dataFormatada;
   }
 
+  void validarNota(double nota) async {
+    if (_nota > tarefa.getValor()) {
+      alertError(context, "Nota maior que ${tarefa.getValor()}");
+      notaController.text = "";
+      return;
+    }
+    if (_nota < 0) {
+      alertError(context, "Nota menor que 0.0!");
+       notaController.text = "";
+      return;
+    }
+    if (tarefa.getNota() != 0)
+      saldoNotaDisciplina = _nota - tarefa.getNota();
+    else
+      saldoNotaDisciplina = _nota;
+
+    notaDisciplina =
+        await databaseHelper.getNotaDisciplina(tarefa.getDisciplina());
+
+    if (notaDisciplina + saldoNotaDisciplina > 100) {
+      alertError(context, "Nota total da Disciplina passou de 100.0!");
+      return;
+    }
+    tarefa.setNota(_nota);
+    await databaseHelper.atualizarNota(tarefa, _nota, tarefa.getId());
+    await databaseHelper.atualizarNotaDisciplina(
+        saldoNotaDisciplina, tarefa.getDisciplina());
+    txtFocus.unfocus();
+    setState(() {
+      editarNota = false;
+    });
+  }
+
   void alertApagar(BuildContext context, Tarefa tarefa) async {
     showDialog(
       context: context,
@@ -240,7 +302,8 @@ class _ViewTarefa extends State<ViewTarefa> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                  await databaseHelper.atualizarNotaDisciplina(-tarefa.getNota(), tarefa.getDisciplina());
+                  await databaseHelper.atualizarNotaDisciplina(
+                      -tarefa.getNota(), tarefa.getDisciplina());
                   await databaseHelper.apagarTarefa(tarefa.getId());
                   Navigator.pop(context, true);
                   Navigator.pop(context, true);
@@ -276,9 +339,8 @@ class _ViewTarefa extends State<ViewTarefa> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                 Navigator.pop(context);
+                  Navigator.pop(context);
                 }),
-            
           ],
         );
       },
