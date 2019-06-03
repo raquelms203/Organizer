@@ -172,7 +172,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                 },
                 child: Icon(
                   Icons.edit,
-                  color: Colors.blue[300],
+                  color: Colors.white,
                   size: 30.0,
                 )),
           ),
@@ -187,14 +187,13 @@ class _ViewTarefa extends State<ViewTarefa> {
                 },
                 child: Icon(
                   Icons.delete,
-                  color: Colors.white70,
+                  color: Colors.white,
                   size: 30.0,
                 )),
           ),
         ],
       );
     } else if (editarNota) {
-      print(notaController.text);
       return AppBar(
         backgroundColor: Colors.pink[400],
         title: Text(tarefa.getTipo()),
@@ -209,7 +208,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                 },
                 child: Icon(
                   Icons.done,
-                   color: Colors.greenAccent[700],
+                   color: Colors.white,
                   size: 30.0,
                 )),
           ),

@@ -87,6 +87,12 @@ class DatabaseHelper {
           ''');
   }
 
+  void apagarTudo() async {
+    Database db = await this.getDatabase();
+   await db.rawDelete('DELETE FROM $tableTarefas');
+   await db.rawDelete('DELETE FROM $tableDisciplinas');                                 
+  }
+
   // funções disciplinas
 
   // fecth -> SELECT todas as disciplinas do db [objeto Map]
@@ -100,7 +106,8 @@ class DatabaseHelper {
     Database db = await this.getDatabase();
     List<String> listaNomeDisciplinas = [];
 
-    var result = await db.rawQuery('SELECT disciplina FROM $tableDisciplinas WHERE $colStatus = ?', ['1']);
+    var result = await db.rawQuery(
+        'SELECT disciplina FROM $tableDisciplinas WHERE $colStatus = ?', ['1']);
     var stringMapList = result;
 
     int tam = stringMapList.length;
@@ -249,7 +256,8 @@ class DatabaseHelper {
 
   Future<int> apagarTarefaPorDisciplina(String disciplina) async {
     var db = await this.getDatabase();
-    int result = await db.rawDelete('DELETE FROM $tableTarefas WHERE $colDisciplina = ?', ['$disciplina']);
+    int result = await db.rawDelete(
+        'DELETE FROM $tableTarefas WHERE $colDisciplina = ?', ['$disciplina']);
     return result;
   }
 

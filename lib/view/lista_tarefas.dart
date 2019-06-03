@@ -41,15 +41,11 @@ class _ListaTarefas extends State<ListaTarefas>
   void initState() {
     super.initState();
     atualizarListView();
-    
-
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    mediaQuery = MediaQuery.of(context);
 
     if (listaTarefa != null && widget.apenasVisualizar == false) {
       atualizarListView();
@@ -61,6 +57,8 @@ class _ListaTarefas extends State<ListaTarefas>
       listaTarefa = List<Tarefa>();
       listaDiasPositivo = listaTarefa;
     }
+
+    mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
       appBar: appBar(),
@@ -119,9 +117,9 @@ class _ListaTarefas extends State<ListaTarefas>
     if (tam > 0)
       return Container();
     else {
-     setState(() {
-       mostrarBtn = false;
-     });
+      setState(() {
+        mostrarBtn = false;
+      });
       return Container(
         padding: EdgeInsets.only(top: mediaQuery.size.height / 3),
         alignment: Alignment.center,
@@ -138,10 +136,8 @@ class _ListaTarefas extends State<ListaTarefas>
 
     if (listaDiasPositivo.length == listaCompleta.length)
       mostrarBtn = false;
-
-     else 
+    else
       mostrarBtn = true;
-    
 
     if (mostrarAntigas) {
       txtBtn = "Ocultar Tarefas Antigas";
@@ -157,11 +153,12 @@ class _ListaTarefas extends State<ListaTarefas>
               child: Container(
                 child: FlatButton(
                   shape: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal[300])),
-                           color: Colors.white,
+                      borderSide: BorderSide(color: Colors.teal[300])),
+                  color: Colors.white,
                   child: Text(
                     txtBtn,
-                    style: TextStyle(color: Colors.teal[300], fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.teal[300], fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
                     setState(() {
@@ -172,7 +169,6 @@ class _ListaTarefas extends State<ListaTarefas>
                         mostrarAntigas = true;
                         listaExibir = listaCompleta;
                       }
-                     
                     });
                   },
                 ),
@@ -198,16 +194,15 @@ class _ListaTarefas extends State<ListaTarefas>
     if (atualizar) {
       listaDiasPositivo.removeRange(0, listaDiasPositivo.length);
     }
-    
+
     setState(() {
       while (i != listaTarefa.length) {
-      if (diasRestantes(listaTarefa[i].getData()) >= 0) {
-        tarefa = listaTarefa[i];
-        listaDiasPositivo.add(tarefa);
+        if (diasRestantes(listaTarefa[i].getData()) >= 0) {
+          tarefa = listaTarefa[i];
+          listaDiasPositivo.add(tarefa);
+        }
+        i++;
       }
-      i++;
-    }
-
     });
   }
 
@@ -266,15 +261,14 @@ class _ListaTarefas extends State<ListaTarefas>
       tarefaListFuture.then((listaTarefa) {
         setState(() {
           this.listaTarefa = listaTarefa;
-           listaCompleta = listaTarefa;
-           iniciarListaDiasPositivo(true);
-           if (mostrarAntigas)
-              listaExibir = listaCompleta;
-            else if (!mostrarAntigas)
-              listaExibir = listaDiasPositivo;
+          listaCompleta = listaTarefa;
+          iniciarListaDiasPositivo(true);
+          if (mostrarAntigas)
+            listaExibir = listaCompleta;
+          else if (!mostrarAntigas) listaExibir = listaDiasPositivo;
         });
       });
-    });   
+    });
   }
 
   Icon iconePrioridade(int prioridade) {
