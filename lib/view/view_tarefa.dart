@@ -84,7 +84,6 @@ class _ViewTarefa extends State<ViewTarefa> {
                   SizedBox(
                     height: 46.0,
                     width: 48.0,
-                    child: GestureDetector(
                       child: TextField(
                         focusNode: txtFocus,
                         controller: notaController,
@@ -108,16 +107,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20.0),
                       ),
-                      behavior: HitTestBehavior.translucent,
-                        onTap: (){
-                                                    print(editarNota);
-
-                         setState(() {
-                           editarNota=true;
-                         });
-                       },
                     ),
-                  ),
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
                   ),
@@ -201,7 +191,6 @@ class _ViewTarefa extends State<ViewTarefa> {
                   size: 30.0,
                 )),
           ),
-         
         ],
       );
     } else if (editarNota) {
@@ -229,7 +218,7 @@ class _ViewTarefa extends State<ViewTarefa> {
     }
     return AppBar();
   }
-
+  
   Text textPrioridade() {
     if (tarefa.getPrioridade() == 1)
       return Text("Baixa",
@@ -257,13 +246,18 @@ class _ViewTarefa extends State<ViewTarefa> {
     if (_nota > tarefa.getValor()) {
       alertError(context, "Nota maior que ${tarefa.getValor()}");
       notaController.text = "";
+      editarNota = false;
+      txtFocus.unfocus();
       return;
     }
     if (_nota < 0) {
       alertError(context, "Nota menor que 0.0!");
        notaController.text = "";
+        editarNota = false;
+      txtFocus.unfocus();
       return;
     }
+   
     if (tarefa.getNota() != 0)
       saldoNotaDisciplina = _nota - tarefa.getNota();
     else
@@ -272,18 +266,20 @@ class _ViewTarefa extends State<ViewTarefa> {
     notaDisciplina =
         await databaseHelper.getNotaDisciplina(tarefa.getDisciplina());
 
-    if (notaDisciplina + saldoNotaDisciplina > 100) {
+     if (notaDisciplina + saldoNotaDisciplina > 100) {
       alertError(context, "Nota total da Disciplina passou de 100.0!");
+       notaController.text = "";
+        editarNota = false;
+      txtFocus.unfocus();
       return;
     }
+  
     tarefa.setNota(_nota);
     await databaseHelper.atualizarNota(tarefa, _nota, tarefa.getId());
     await databaseHelper.atualizarNotaDisciplina(
         saldoNotaDisciplina, tarefa.getDisciplina());
     txtFocus.unfocus();
-    setState(() {
       editarNota = false;
-    });
   }
 
   void alertApagar(BuildContext context, Tarefa tarefa) async {
