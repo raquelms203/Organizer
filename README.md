@@ -1,6 +1,6 @@
 # Organizer
 
-Aplicativo Android/iOS em Dart(Flutter) para gerenciamento de tarefas universitárias para estudantes (em desenvolvimento).
+Aplicativo Android/iOS em Flutter para gerenciamento de tarefas universitárias para estudantes.
 
 Programa livre para acesso e cópia com finalidade de aprendizado. 
 
