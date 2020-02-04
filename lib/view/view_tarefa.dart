@@ -23,13 +23,13 @@ class _ViewTarefa extends State<ViewTarefa> {
   final FocusNode txtFocus = FocusNode();
   Tarefa tarefa;
   DatabaseHelper databaseHelper = DatabaseHelper();
-
+  MediaQueryData mediaQuery;
   _ViewTarefa(this.tarefa);
 
   @override
   void initState() {
     _nota = tarefa.getNota();
-  
+
     super.initState();
   }
 
@@ -40,6 +40,9 @@ class _ViewTarefa extends State<ViewTarefa> {
         editarNota = true;
       });
     }
+
+    mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       appBar: appBar(),
       body: Container(
@@ -74,50 +77,61 @@ class _ViewTarefa extends State<ViewTarefa> {
             child: SizedBox(
               height: 54.0,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Padding(padding: EdgeInsets.only(left: 15.0)),
+                  //      Padding(
+                  //      padding: EdgeInsets.only(left: mediaQuery.size.width / 60),
                   Text(
-                    "Nota:",
+                    "    Nota:",
                     style: TextStyle(fontSize: 16.0),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 175.0)),
-                  SizedBox(
-                    height: 46.0,
-                    width: 48.0,
-                      child: TextField(
-                        focusNode: txtFocus,
-                        controller: notaController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.only(bottom: 2, top: 12.0),
-                            hintText: tarefa.getNota().toString(),
-                            hintStyle: TextStyle(
-                              fontSize: 20.0,
-                            ),
-                            errorStyle:
-                                (erro ? TextStyle(color: Colors.red) : null)),
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(5),
-                        ],
-                        onSubmitted: (String valor) {
-                          _nota = double.parse(valor);
-                          validarNota(_nota);
-                        },
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20.0),
+                  //      ),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 46.0,
+                        width: 48.0,
+                        child: TextField(
+                          focusNode: txtFocus,
+                          controller: notaController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.only(bottom: 2, top: 12.0),
+                              hintText: tarefa.getNota().toString(),
+                              hintStyle: TextStyle(
+                                fontSize: 20.0,
+                              ),
+                              errorStyle:
+                                  (erro ? TextStyle(color: Colors.red) : null)),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(5),
+                          ],
+                          onSubmitted: (String valor) {
+                            _nota = double.parse(valor);
+                            validarNota(_nota);
+                          },
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
                       ),
-                    ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.0),
+                      Padding(
+                        padding:
+                            EdgeInsets.only(right: mediaQuery.size.width / 60),
+                        child: Text(
+                          "/${tarefa.getValor()}",
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.blueGrey[600],
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "/${tarefa.getValor()}",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.blueGrey[600],
-                        fontWeight: FontWeight.bold),
-                  ),
+
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 10.0),
+                  // ),
                 ],
               ),
             ),
@@ -125,27 +139,27 @@ class _ViewTarefa extends State<ViewTarefa> {
           Card(
             child: SizedBox(
               height: 110,
-              child: Padding(
-                padding: EdgeInsets.only(top: 10.0, left: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Descrição: ",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 4.0),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(right: 15.0),
-                      child: Text("${tarefa.getDescricao()}",
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.blueGrey[600])),
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                  ),
+                  Text(
+                    "    Descrição: ",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(right: 15.0),
+                    child: Text("${tarefa.getDescricao()}",
+                        style: TextStyle(
+                            fontSize: 16.0, color: Colors.blueGrey[600])),
+                  ),
+                ],
               ),
             ),
           )
@@ -208,7 +222,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                 },
                 child: Icon(
                   Icons.done,
-                   color: Colors.white,
+                  color: Colors.white,
                   size: 30.0,
                 )),
           ),
@@ -217,7 +231,7 @@ class _ViewTarefa extends State<ViewTarefa> {
     }
     return AppBar();
   }
-  
+
   Text textPrioridade() {
     if (tarefa.getPrioridade() == 1)
       return Text("Baixa",
@@ -251,12 +265,12 @@ class _ViewTarefa extends State<ViewTarefa> {
     }
     if (_nota < 0) {
       alertError(context, "Nota menor que 0.0!");
-       notaController.text = "";
-        editarNota = false;
+      notaController.text = "";
+      editarNota = false;
       txtFocus.unfocus();
       return;
     }
-   
+
     if (tarefa.getNota() != 0)
       saldoNotaDisciplina = _nota - tarefa.getNota();
     else
@@ -265,20 +279,20 @@ class _ViewTarefa extends State<ViewTarefa> {
     notaDisciplina =
         await databaseHelper.getNotaDisciplina(tarefa.getDisciplina());
 
-     if (notaDisciplina + saldoNotaDisciplina > 100) {
+    if (notaDisciplina + saldoNotaDisciplina > 100) {
       alertError(context, "Nota total da Disciplina passou de 100.0!");
-       notaController.text = "";
-        editarNota = false;
+      notaController.text = "";
+      editarNota = false;
       txtFocus.unfocus();
       return;
     }
-  
+
     tarefa.setNota(_nota);
     await databaseHelper.atualizarNota(tarefa, _nota, tarefa.getId());
     await databaseHelper.atualizarNotaDisciplina(
         saldoNotaDisciplina, tarefa.getDisciplina());
     txtFocus.unfocus();
-      editarNota = false;
+    editarNota = false;
   }
 
   void alertApagar(BuildContext context, Tarefa tarefa) async {

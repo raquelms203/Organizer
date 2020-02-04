@@ -41,6 +41,8 @@ class _FormTarefa extends State<FormTarefa> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 
+  MediaQueryData mediaQuery;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -53,6 +55,8 @@ class _FormTarefa extends State<FormTarefa> {
 
   @override
   Widget build(BuildContext context) {
+    mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
@@ -83,7 +87,8 @@ class _FormTarefa extends State<FormTarefa> {
                   Row(
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.only(top: 30.0),
+                        padding: EdgeInsets.only(
+                            top: 30.0, left: mediaQuery.size.width / 80),
                         child: FlatButton(
                           onPressed: () {
                             if (stringDisciplinas.isEmpty) {
@@ -95,7 +100,7 @@ class _FormTarefa extends State<FormTarefa> {
                               hint: Text(dropdownDisciplina,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20.0)),
+                                      fontSize: 22.0)),
                               onChanged: (String novoValor) {
                                 setState(() {
                                   dropdownDisciplina = novoValor;
@@ -120,68 +125,54 @@ class _FormTarefa extends State<FormTarefa> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 15.0, top: 10.0),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                                width: 150.0,
-                                child: TextFormField(
-                                  initialValue: valorInicialTipo(),
-                                  validator: (value) {
-                                    if (value.isEmpty) return "Campo vazio!";
-                                    _tipo = value;
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: 'Tipo',
-                                      hintText: 'Ex. Prova',
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0))),
-                                )),
-                          ],
+                      Container(
+                        width: mediaQuery.size.width / 2.3,
+                        child: TextFormField(
+                          initialValue: valorInicialTipo(),
+                          validator: (value) {
+                            if (value.isEmpty) return "Campo vazio!";
+                            _tipo = value;
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'Tipo',
+                              hintText: 'Ex. Prova',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0))),
                         ),
                       ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, top: 10.0, right: 10.0),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                  width: 150.0,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    initialValue: valorInicialValor(),
-                                    validator: (value) {
-                                      if (value.isEmpty) return 'Campo vazio!';
-                                      if (double.parse(value) > 100)
-                                        return 'Valor maior que 100.0!';
-                                      _valor = double.parse(value);
-                                    },
-                                    decoration: InputDecoration(
-                                        labelText: 'Valor',
-                                        hintText: 'Ex. 30 pts',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0))),
-                                  )),
-                            ],
+                      Container(
+                          width: mediaQuery.size.width / 2.3,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            initialValue: valorInicialValor(),
+                            validator: (value) {
+                              if (value.isEmpty) return 'Campo vazio!';
+                              if (double.parse(value) > 100)
+                                return 'Valor maior que 100.0!';
+                              _valor = double.parse(value);
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'Valor',
+                                hintText: 'Ex. 30 pts',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0))),
                           ))
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Padding(
                           padding: EdgeInsets.only(
                             top: 10.0,
-                            left: 15.0,
                           ),
                           child: Column(
                             children: <Widget>[
                               SizedBox(
                                   height: 55.0,
-                                  width: 150.0,
+                                  width: mediaQuery.size.width / 2.3,
                                   child: FlatButton(
                                     child: Row(
                                       children: <Widget>[
@@ -212,22 +203,18 @@ class _FormTarefa extends State<FormTarefa> {
                                   ))
                             ],
                           )),
-                      Padding(
-                        padding: EdgeInsets.only(left: 28.0),
-                      ),
                       Container(
                         margin: EdgeInsets.only(top: 10.0),
                         child: Column(
                           children: <Widget>[
-                            SizedBox(
-                              width: 120.0,
-                              height: 30.0,
+                            Container(
+                              width: mediaQuery.size.width / 2.3,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   hint: Text(dropdownPrioridade,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 20.0)),
+                                          fontSize: 22.0)),
                                   onChanged: (String novoValor) {
                                     setState(() {
                                       dropdownPrioridade = novoValor;
@@ -247,24 +234,25 @@ class _FormTarefa extends State<FormTarefa> {
                                   }).toList(),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       )
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: 10.0, left: 15.0),
+                        padding: EdgeInsets.only(top: 10.0),
                         child: Column(
                           children: <Widget>[
                             SizedBox(
-                              height: 120.0,
-                              width: 325.0,
+                              width: mediaQuery.size.width -
+                                  (mediaQuery.size.width / 15),
                               child: TextFormField(
                                 maxLength: 110,
-                                maxLines: 5,
+                                maxLines: 4,
                                 initialValue: valorInicialDescricao(),
                                 validator: (value) {
                                   _descricao = value;

@@ -28,23 +28,20 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
 
   @override
   void initState() {
-    
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     super.build(context);
 
     mediaQuery = MediaQuery.of(context);
 
-     if (listaDisciplina == null) {
+    if (listaDisciplina == null) {
       listaDisciplina = List<Disciplina>();
-     }
-    else 
+    } else
       atualizarListView();
 
-   
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: "btn1",
@@ -76,14 +73,14 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
   Container txtListaVazia(int tam) {
     if (tam == 0) {
       return Container(
-        padding: EdgeInsets.only(top: mediaQuery.size.height/3),
+        padding: EdgeInsets.only(top: mediaQuery.size.height / 3),
         alignment: Alignment.center,
         child: Text(
           "Não há disciplinas cadastradas!",
           style: TextStyle(color: Colors.grey[600], fontSize: 18.0),
         ),
       );
-    } else if (tam > 0){
+    } else if (tam > 0) {
       return Container();
     }
     return Container();
@@ -91,35 +88,31 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
 
 //getDisciplinaListView
   Expanded carregarLista() {
-    
     return Expanded(
       child: ListView.builder(
           itemCount: listaDisciplina.length,
           itemBuilder: (BuildContext context, int index) {
-           
-              return Container(
-                child: Card(
-                  child: ListTile(
-                    leading: Icon(Icons.assignment, size: 40.0),
-                    title: Text(listaDisciplina[index].getDisciplina()),
-                    subtitle: Text(listaDisciplina[index].getCod()),
-                    trailing: Text("${listaDisciplina[index].getNota()}/100",
-                        style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey[600],
-                            fontSize: 18.0)),
-                    onTap: () async {
-                      bool result = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ViewDisciplina(
-                            disciplina: listaDisciplina[index]);
-                      }));
-                      if (result == true) atualizarListView();
-                    },
-                  ),
+            return Container(
+              child: Card(
+                child: ListTile(
+                  leading: Icon(Icons.assignment, size: 40.0),
+                  title: Text(listaDisciplina[index].getDisciplina()),
+                  subtitle: Text(listaDisciplina[index].getCod()),
+                  trailing: Text("${listaDisciplina[index].getNota()}/100",
+                      style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueGrey[600],
+                          fontSize: 18.0)),
+                  onTap: () async {
+                    bool result = await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ViewDisciplina(disciplina: listaDisciplina[index]);
+                    }));
+                    if (result == true) atualizarListView();
+                  },
                 ),
-              );
-            
+              ),
+            );
           }),
     );
   }

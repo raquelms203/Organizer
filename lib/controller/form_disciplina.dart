@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
-import 'package:organizer/view/lista_disciplinas.dart';
 
 class FormDisciplina extends StatefulWidget {
   List<Disciplina> listaDisciplina;
@@ -27,11 +26,12 @@ class _FormDisciplina extends State<FormDisciplina> {
   String _disciplina = "";
   String acao = "";
   String _cod = "";
-  int _limFaltas = 0;
   String _periodo = "";
+  int _limFaltas = 0;
   int _status = -1;
   double _meta = 0.0;
   double _nota = 0.0;
+  MediaQueryData mediaQuery;
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   @override
@@ -45,6 +45,7 @@ class _FormDisciplina extends State<FormDisciplina> {
 
   @override
   Widget build(BuildContext context) {
+    mediaQuery = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
@@ -70,86 +71,93 @@ class _FormDisciplina extends State<FormDisciplina> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Container(
-                  margin: EdgeInsets.only(top: 30.0),
-                  width: 300.0,
-                  child: TextFormField(
-                    initialValue: valorInicialDisciplina(),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Campo vazio!';
-                      }
+              Padding(padding: EdgeInsets.only(top: 30.0)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: mediaQuery.size.width - (mediaQuery.size.width / 21),
+                    child: TextFormField(
+                      initialValue: valorInicialDisciplina(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Campo vazio!';
+                        }
 
-                      _disciplina = value;
-                    },
-                    decoration: InputDecoration(
-                        labelText: 'Nome',
-                        hintText: 'Ex. Prog Móvel',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                        _disciplina = value;
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Nome',
+                          hintText: 'Ex. Prog Móvel',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
                   ),
-                ),
+                ],
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
-                child: Container(
-                  width: 300.0,
-                  child: TextFormField(
-                    initialValue: valorInicialCod(),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Campo vazio!';
-                      }
-                      _cod = value;
-                    },
-                    decoration: InputDecoration(
-                        labelText: 'Código',
-                        hintText: 'Ex. CSI 401',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0))),
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: mediaQuery.size.width - (mediaQuery.size.width / 21),
+                    child: TextFormField(
+                      initialValue: valorInicialCod(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Campo vazio!';
+                        }
+                        _cod = value;
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Código',
+                          hintText: 'Ex. CSI 401',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
                   ),
-                ),
+                ],
               ),
               Container(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.only(left: 15.0)),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            top: 10.0, bottom: 10.0, right: 2.0),
-                        child: TextFormField(
-                          initialValue: valorInicialMeta(),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value.isEmpty) return 'Campo vazio!';
+                    Container(
+                      width: mediaQuery.size.width / 2.3,
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: TextFormField(
+                        initialValue: valorInicialMeta(),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value.isEmpty) return 'Campo vazio!';
 
-                            if (double.parse("$value") < 60.0)
-                              return 'Meta menor que 60.0!';
+                          if (double.parse("$value") < 60.0)
+                            return 'Meta menor que 60.0!';
 
-                            if (double.parse("$value") > 100.0)
-                              return 'Meta maior que 100.0!';
+                          if (double.parse("$value") > 100.0)
+                            return 'Meta maior que 100.0!';
 
-                            _meta = double.parse(value);
-                          },
-                          decoration: InputDecoration(
-                              labelText: 'Meta',
-                              hintText: 'Ex. 60 pts',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0))),
-                        ),
+                          _meta = double.parse(value);
+                        },
+                        decoration: InputDecoration(
+                            labelText: 'Meta',
+                            hintText: 'Ex. 60 pts',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 30.0, right: 35.0)),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(right: mediaQuery.size.width / 14)),
                     Container(
-                      padding: EdgeInsets.only(right: 20.0),
+                      width: mediaQuery.size.width / 2.8,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           hint: Text(dropdownDefault,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                                  fontWeight: FontWeight.bold, fontSize: 22.0)),
                           onChanged: (String novoValor) {
                             setState(() {
                               dropdownDefault = novoValor;
@@ -172,19 +180,17 @@ class _FormDisciplina extends State<FormDisciplina> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(left: 17.0, right: 15.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.only(left: 1.0)),
                     Container(
-                      width: 128.0,
-                      height: 50.0,
-                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                      padding: EdgeInsets.only(left: 5),
+                      width: mediaQuery.size.width / 2.3,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           hint: Text(dropdownDefault2,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                                  fontWeight: FontWeight.bold, fontSize: 22.0)),
                           onChanged: (String novoValor) {
                             setState(() {
                               dropdownDefault2 = novoValor;
@@ -204,17 +210,16 @@ class _FormDisciplina extends State<FormDisciplina> {
                         ),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 73.0)),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(right: mediaQuery.size.width / 14)),
                     Container(
-                      width: 125.0,
-                      height: 50.0,
-                      padding: EdgeInsets.only(
-                          top: 5.0, bottom: 5.0, right: 5.0, left: 5.0),
+                      width: mediaQuery.size.width / 2.8,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           hint: Text(dropdownDefault3,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                                  fontWeight: FontWeight.bold, fontSize: 22.0)),
                           onChanged: (String novoValor) {
                             setState(() {
                               dropdownDefault3 = novoValor;

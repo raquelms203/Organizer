@@ -89,8 +89,8 @@ class DatabaseHelper {
 
   void apagarTudo() async {
     Database db = await this.getDatabase();
-   await db.rawDelete('DELETE FROM $tableTarefas');
-   await db.rawDelete('DELETE FROM $tableDisciplinas');                                 
+    await db.rawDelete('DELETE FROM $tableTarefas');
+    await db.rawDelete('DELETE FROM $tableDisciplinas');
   }
 
   // funções disciplinas
@@ -214,7 +214,8 @@ class DatabaseHelper {
     List<Tarefa> listaTarefasPorDisciplina = [];
 
     var tarefaMapList = await db.rawQuery(
-        'SELECT * FROM $tableTarefas WHERE disciplina = ?', ['$disciplina']);
+        'SELECT * FROM $tableTarefas WHERE disciplina = ? ORDER BY $colData',
+        ['$disciplina']);
 
     int tam = tarefaMapList.length;
 

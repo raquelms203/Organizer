@@ -4,10 +4,8 @@ import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/model/database_helper.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:organizer/view/lista_tarefas.dart';
-import 'package:organizer/view/graficos.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
-
 
 class ViewDisciplina extends StatefulWidget {
   Disciplina disciplina;
@@ -25,7 +23,7 @@ class ViewDisciplina extends StatefulWidget {
 
 class _ViewDisciplina extends State<ViewDisciplina> {
   List<Tarefa> listaTarefa;
-
+  MediaQueryData mediaQuery;
   int faltas = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -37,6 +35,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
 
   @override
   Widget build(BuildContext context) {
+    mediaQuery = MediaQuery.of(context);
     return WillPopScope(
       onWillPop: () {
         Navigator.pop(context, true);
@@ -59,7 +58,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                 child: Icon(Icons.arrow_back, color: Colors.white, size: 25.0)),
           ),
           title: Container(
-            height: double.infinity,
             padding: EdgeInsets.only(top: 5.0),
             child: Text(
                 widget.disciplina.getDisciplina() +
@@ -84,7 +82,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   },
                   child: Icon(
                     Icons.edit,
-                    color: Colors.blue[300],
+                    color: Colors.white,
                     size: 30.0,
                   )),
             ),
@@ -99,159 +97,160 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   },
                   child: Icon(
                     Icons.delete,
-                    color: Colors.white70,
+                    color: Colors.white,
                     size: 30.0,
                   )),
             ),
           ],
           backgroundColor: Colors.pink[400],
         ),
-        body: Container(
-          child: Column(children: <Widget>[
-            Card(
-                child: ListTile(
-                    title: Text("Período"),
-                    trailing: Text(
-                      widget.disciplina.getPeriodo(),
-                      style: TextStyle(
-                        color: Colors.blueGrey[600],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ))),
-            Card(
-                child: ListTile(
-                    title: Text("Status"),
-                    trailing: textStatus(widget.disciplina.getStatus()))),
-            Card(
-                child: ListTile(
-              title: Text("Meta"),
-              trailing: Text(
-                widget.disciplina.getMeta().toString(),
-                style: TextStyle(
-                  color: Colors.blueGrey[600],
-                  fontWeight: FontWeight.bold,
-                ),
+        body: ListView(children: <Widget>[
+          Card(
+              child: ListTile(
+                  title: Text("Período"),
+                  trailing: Text(
+                    widget.disciplina.getPeriodo(),
+                    style: TextStyle(
+                      color: Colors.blueGrey[600],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))),
+          Card(
+              child: ListTile(
+                  title: Text("Status"),
+                  trailing: textStatus(widget.disciplina.getStatus()))),
+          Card(
+              child: ListTile(
+            title: Text("Meta"),
+            trailing: Text(
+              widget.disciplina.getMeta().toString(),
+              style: TextStyle(
+                color: Colors.blueGrey[600],
+                fontWeight: FontWeight.bold,
               ),
-            )),
-            Container(
-              height: 80.0,
-              width: 360.0,
-              child: Card(
-                child: Row(
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.only(left: 15.0)),
-                    Text(
+            ),
+          )),
+          Container(
+            height: 80.0,
+            width: mediaQuery.size.width,
+            child: Card(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  //   Padding(padding: EdgeInsets.only(left: 15.0)),
+                  Padding(
+                    padding: EdgeInsets.only(left: mediaQuery.size.width / 60),
+                    child: Text(
                       "Faltas",
                       style: TextStyle(fontSize: 16.0, fontFamily: 'Trojan'),
                     ),
-                    Padding(padding: EdgeInsets.only(right: 30.0)),
-                    SizedBox(
-                      width: 65.0,
-                      height: 35.0,
-                      child: FlatButton(
-                        child: Text(
-                          "-",
-                          style: TextStyle(fontSize: 30.0, color: Colors.red),
+                  ),
+                  //   Padding(padding: EdgeInsets.only(right: 30.0)),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 65.0,
+                        height: 35.0,
+                        child: FlatButton(
+                          child: Text(
+                            "-",
+                            style: TextStyle(fontSize: 30.0, color: Colors.red),
+                          ),
+                          shape: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red)),
+                          onPressed: () async {
+                            faltas = widget.disciplina.getFaltas();
+                            setState(() {
+                              if (faltas - 1 >= 0) {
+                                faltas = faltas - 1;
+                              }
+                            });
+                            widget.disciplina.setFaltas(faltas);
+                            await databaseHelper.atualizarFaltas(
+                                widget.disciplina.getFaltas(),
+                                widget.disciplina.getId());
+                          },
                         ),
-                        shape: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red)),
-                        onPressed: () async {
-                          faltas = widget.disciplina.getFaltas();
-                          setState(() {
-                            if (faltas - 1 >= 0) {
-                              faltas = faltas - 1;
-                            }
-                          });
-                          widget.disciplina.setFaltas(faltas);
-                          await databaseHelper.atualizarFaltas(
-                              widget.disciplina.getFaltas(),
-                              widget.disciplina.getId());
-                        },
                       ),
-                    ),
-                    Padding(padding: EdgeInsets.only(left: 15.0)),
-                    Text(
-                      "${widget.disciplina.getFaltas()}",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0),
-                    ),
-                    Padding(padding: EdgeInsets.only(left: 15.0)),
-                    SizedBox(
-                      width: 65.0,
-                      height: 35.0,
-                      child: FlatButton(
-                        child: Text(
-                          "+",
-                          style: TextStyle(fontSize: 30.0, color: Colors.green),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0),
+                      ),
+                      Text(
+                        "${widget.disciplina.getFaltas()}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0),
+                      ),
+                      SizedBox(
+                        width: 65.0,
+                        height: 35.0,
+                        child: FlatButton(
+                          child: Text(
+                            "+",
+                            style:
+                                TextStyle(fontSize: 30.0, color: Colors.green),
+                          ),
+                          shape: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green)),
+                          onPressed: () async {
+                            faltas = widget.disciplina.getFaltas();
+                            setState(() {
+                              if (faltas + 1 <=
+                                  widget.disciplina.getLimFaltas()) {
+                                faltas = faltas + 1;
+                              }
+                            });
+                            widget.disciplina.setFaltas(faltas);
+                            await databaseHelper.atualizarFaltas(
+                                widget.disciplina.getFaltas(),
+                                widget.disciplina.getId());
+                          },
                         ),
-                        shape: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green)),
-                        onPressed: () async {
-                          faltas = widget.disciplina.getFaltas();
-                          setState(() {
-                            if (faltas + 1 <=
-                                widget.disciplina.getLimFaltas()) {
-                              faltas = faltas + 1;
-                            }
-                          });
-                          widget.disciplina.setFaltas(faltas);
-                          await databaseHelper.atualizarFaltas(
-                              widget.disciplina.getFaltas(),
-                              widget.disciplina.getId());
-                        },
                       ),
-                    ),
-                    Padding(padding: EdgeInsets.only(left: 25.0)),
-                    Text(
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: mediaQuery.size.width / 60),
+                    child: Text(
                       "Máx: " + widget.disciplina.getLimFaltas().toString(),
                       style: TextStyle(
                         color: Colors.blueGrey[600],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-            ),
-            Center(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  color: Colors.green[400],
-                  child: FlatButton(
-                    child: Text("Mostrar Tarefas", 
-                    style: TextStyle(color: Colors.white),),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ListaTarefas.visualizar(
-                            listaTarefa: listaTarefa, apenasVisualizar: true);
-                      }));
-                    },
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10),
+          ),
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                color: Colors.green[400],
+                child: FlatButton(
+                  child: Text(
+                    "Mostrar Tarefas",
+                    style: TextStyle(color: Colors.white),
                   ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ListaTarefas.visualizar(
+                          listaTarefa: listaTarefa, apenasVisualizar: true);
+                    }));
+                  },
                 ),
-                  // Container(
-                  //   margin: EdgeInsets.only(left: 10.0),
-                  //   color: Colors.lightBlue[400],
-                  //   child: FlatButton(  
-                  //      child: Text("Mostrar Gráficos", 
-                  //     style: TextStyle(color: Colors.white),),
-                  //     onPressed: () {
-                  //       Navigator.push(context,
-                  //           MaterialPageRoute(builder: (context) {
-                  //         return SimpleSeriesLegend();
-                  //       }));
-                  //     },
-                  //   ),
-                  // )
-              ],
-            )),
-          ]),
-        ),
+              ),
+            ],
+          )),
+        ]),
       ),
     );
   }
@@ -294,7 +293,8 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   style: TextStyle(color: Colors.black, fontSize: 15.0),
                 ),
                 onPressed: () async {
-                  await databaseHelper.apagarTarefaPorDisciplina(disciplina.getDisciplina());
+                  await databaseHelper
+                      .apagarTarefaPorDisciplina(disciplina.getDisciplina());
                   await databaseHelper.apagarDisciplina(disciplina.getId());
                   Navigator.pop(context, true);
                   Navigator.pop(context, true);

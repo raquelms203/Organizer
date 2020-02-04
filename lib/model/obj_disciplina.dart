@@ -11,8 +11,7 @@ class Disciplina {
   double _nota;
 
   Disciplina(this._disciplina, this._cod, this._faltas, this._limFaltas,
-      this._meta, this._periodo,this._nota, this._status);
-
+      this._meta, this._periodo, this._nota, this._status);
 
   String getDisciplina() {
     return this._disciplina;

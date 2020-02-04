@@ -4,7 +4,7 @@ import 'package:organizer/model/obj_disciplina.dart';
 import 'package:organizer/view/lista_tarefas.dart';
 import 'package:organizer/model/obj_tarefa.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:organizer/view/configuracoes.dart';
+import 'package:organizer/controller/configuracoes.dart';
 
 void main() {
   List<Disciplina> listaDisciplinas = List<Disciplina>();
@@ -13,55 +13,54 @@ void main() {
   runApp(
     MaterialApp(
       title: "Organizer",
-
+      debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 2,
-        child: Builder(
-          builder: (context) {
-                  return new Scaffold(
-            appBar: AppBar(
-              actions: <Widget>[  
-                FlatButton(  
-                  child: Icon(Icons.settings, 
-                  size: 25.0,
-                  color: Colors.white,),
-                  onPressed: () {  
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return Configuracoes();
-                    }));
-                  }
-                )
-              ],
-              backgroundColor: Colors.pink[400],
-              bottom: TabBar(
-                indicatorColor: Colors.white,
-                tabs: <Widget>[
-                  Tab(
-                    text: "Tarefas",
+          length: 2,
+          child: Builder(
+            builder: (context) {
+              return new Scaffold(
+                appBar: AppBar(
+                  actions: <Widget>[
+                    FlatButton(
+                        child: Icon(
+                          Icons.settings,
+                          size: 25.0,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return Configuracoes();
+                          }));
+                        })
+                  ],
+                  backgroundColor: Colors.pink[400],
+                  bottom: TabBar(
+                    indicatorColor: Colors.white,
+                    tabs: <Widget>[
+                      Tab(
+                        text: "Tarefas",
+                      ),
+                      Tab(
+                        text: "Disciplinas",
+                      )
+                    ],
                   ),
-                  Tab(
-                    text: "Disciplinas",
-                  )
-                ],
-              ),
-              title: Text("Organizer"),
-             
-            ),
-            body: TabBarView(
-              children: <Widget>[
-                ListaTarefas(
-                  listaTarefa: listaTarefas,
+                  title: Text("Organizer"),
                 ),
-                ListaDisciplinas(
-                  listaDisciplina: listaDisciplinas,
+                body: TabBarView(
+                  children: <Widget>[
+                    ListaTarefas(
+                      listaTarefa: listaTarefas,
+                    ),
+                    ListaDisciplinas(
+                      listaDisciplina: listaDisciplinas,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-
-          );
-          },
-        )
-      ),
+              );
+            },
+          )),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

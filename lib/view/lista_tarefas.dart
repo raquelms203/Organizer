@@ -40,23 +40,28 @@ class _ListaTarefas extends State<ListaTarefas>
   @override
   void initState() {
     super.initState();
-    atualizarListView();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    if (listaTarefa != null && widget.apenasVisualizar == false) {
-      atualizarListView();
+    if (widget.apenasVisualizar) {
+      if (mostrarAntigas)
+        listaExibir = listaCompleta;
+      else if (!mostrarAntigas) listaExibir = listaDiasPositivo;
     }
-    listaCompleta = listaTarefa;
-    iniciarListaDiasPositivo(false);
+
+    if ((widget.apenasVisualizar == false && listaTarefa != null))
+      atualizarListView();
 
     if (listaTarefa == null) {
       listaTarefa = List<Tarefa>();
       listaDiasPositivo = listaTarefa;
     }
+
+    listaCompleta = listaTarefa;
+    iniciarListaDiasPositivo(false);
 
     mediaQuery = MediaQuery.of(context);
 
@@ -66,8 +71,8 @@ class _ListaTarefas extends State<ListaTarefas>
       body: Container(
         child: Column(
           children: <Widget>[
-            txtListaVazia(listaExibir.length),
             btnTarefasAntiga(),
+            txtListaVazia(),
             carregarLista(),
           ],
         ),
@@ -113,8 +118,8 @@ class _ListaTarefas extends State<ListaTarefas>
     }
   }
 
-  Container txtListaVazia(int tam) {
-    if (tam > 0)
+  Container txtListaVazia() {
+    if (listaExibir.isNotEmpty)
       return Container();
     else {
       setState(() {
@@ -147,31 +152,29 @@ class _ListaTarefas extends State<ListaTarefas>
       return Container(
         color: Colors.white30,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: mediaQuery.size.height / 8),
-              child: Container(
-                child: FlatButton(
-                  shape: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.teal[300])),
-                  color: Colors.white,
-                  child: Text(
-                    txtBtn,
-                    style: TextStyle(
-                        color: Colors.teal[300], fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (mostrarAntigas) {
-                        mostrarAntigas = false;
-                        listaExibir = listaDiasPositivo;
-                      } else if (!mostrarAntigas) {
-                        mostrarAntigas = true;
-                        listaExibir = listaCompleta;
-                      }
-                    });
-                  },
+            Container(
+              child: FlatButton(
+                shape: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.teal[300])),
+                color: Colors.white,
+                child: Text(
+                  txtBtn,
+                  style: TextStyle(
+                      color: Colors.teal[300], fontWeight: FontWeight.bold),
                 ),
+                onPressed: () {
+                  setState(() {
+                    if (mostrarAntigas) {
+                      mostrarAntigas = false;
+                      listaExibir = listaDiasPositivo;
+                    } else if (!mostrarAntigas) {
+                      mostrarAntigas = true;
+                      listaExibir = listaCompleta;
+                    }
+                  });
+                },
               ),
             ),
           ],
@@ -255,6 +258,7 @@ class _ListaTarefas extends State<ListaTarefas>
   }
 
   void atualizarListView() {
+    if (widget.apenasVisualizar) return;
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {
       Future<List<Tarefa>> tarefaListFuture = databaseHelper.getTarefaLista();

@@ -1,5 +1,4 @@
 class Tarefa {
-
   String _descricao;
   String _disciplina;
   String _tipo;
@@ -12,8 +11,10 @@ class Tarefa {
   int _id;
   int _prioridade;
 
-  Tarefa(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._data, this._prioridade);
-  Tarefa.comId(this._disciplina, this._descricao, this._tipo, this._valor, this._nota, this._data, this._prioridade, _id);
+  Tarefa(this._disciplina, this._descricao, this._tipo, this._valor, this._nota,
+      this._data, this._prioridade);
+  Tarefa.comId(this._disciplina, this._descricao, this._tipo, this._valor,
+      this._nota, this._data, this._prioridade, _id);
 
   String getDescricao() => this._descricao;
   String getDisciplina() => this._disciplina;
@@ -61,5 +62,4 @@ class Tarefa {
     this._data = map['data'];
     this._prioridade = map['prioridade'];
   }
-
 }
