@@ -459,7 +459,7 @@ class _FormTarefa extends State<FormTarefa> {
         firstDate: DateTime(2019),
         lastDate: DateTime(2022),
         builder: (BuildContext context, Widget child) {
-          return FittedBox(
+          return SingleChildScrollView(
             child: Theme(
               child: child,
               data: ThemeData(
