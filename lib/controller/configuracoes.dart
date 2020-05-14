@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:organizer/model/database_helper.dart';
 
 class Configuracoes extends StatefulWidget {
@@ -10,6 +11,7 @@ class Configuracoes extends StatefulWidget {
 
 class _Configuracoes extends State<Configuracoes> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -18,8 +20,9 @@ class _Configuracoes extends State<Configuracoes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.pink[400],
+        backgroundColor: Color(0xffF5891F),
       ),
       body: Column(
         children: <Widget>[
@@ -40,7 +43,80 @@ class _Configuracoes extends State<Configuracoes> {
                     }),
               ],
             ),
-          )
+          ),
+          InkWell(
+            onTap: () {
+              Clipboard.setData(
+                  new ClipboardData(text: "raquelmartins203@yahoo.com.br"));
+              final snackBar = SnackBar(
+                content: Text('Email copiado com sucesso!'),
+                backgroundColor: Colors.green,
+              );
+
+              _scaffoldKey.currentState.showSnackBar(snackBar);
+            },
+            child: Card(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.email,
+                          size: 30,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "raquelmartins203@yahoo.com.br",
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Clipboard.setData(
+                  new ClipboardData(text: "github.com/raquelms203"));
+              final snackBar = SnackBar(
+                content: Text('GitHub copiado com sucesso!'),
+                backgroundColor: Colors.green,
+              );
+
+              _scaffoldKey.currentState.showSnackBar(snackBar);
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 15,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: AssetImage("assets/git.png"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "github.com/raquelms203",
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

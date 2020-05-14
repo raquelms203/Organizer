@@ -3,15 +3,12 @@ class Disciplina {
   String _cod;
   String _periodo;
 
-  int _status;
   int _id;
-  int _limFaltas;
   int _faltas;
-  double _meta;
   double _nota;
 
-  Disciplina(this._disciplina, this._cod, this._faltas, this._limFaltas,
-      this._meta, this._periodo, this._nota, this._status);
+  Disciplina(this._disciplina, this._cod, this._faltas,
+     this._periodo, this._nota,);
 
   String getDisciplina() {
     return this._disciplina;
@@ -21,24 +18,12 @@ class Disciplina {
     return this._cod;
   }
 
-  int getLimFaltas() {
-    return this._limFaltas;
-  }
-
-  int getStatus() {
-    return this._status;
-  }
-
   int getFaltas() {
     return this._faltas;
   }
 
   String getPeriodo() {
     return this._periodo;
-  }
-
-  double getMeta() {
-    return this._meta;
   }
 
   double getNota() {
@@ -57,24 +42,12 @@ class Disciplina {
     this._cod = cod;
   }
 
-  void setLimFaltas(int limFaltas) {
-    this._limFaltas = limFaltas;
-  }
-
-  void setStatus(int status) {
-    this._status = status;
-  }
-
   void setFaltas(int faltas) {
     this._faltas = faltas;
   }
 
   void setPeriodo(String periodo) {
     this._periodo = periodo;
-  }
-
-  void setMeta(double meta) {
-    this._meta = meta;
   }
 
   void setNota(double nota) {
@@ -93,10 +66,7 @@ class Disciplina {
 
     map['disciplina'] = _disciplina;
     map['cod'] = _cod;
-    map['meta'] = _meta;
     map['periodo'] = _periodo;
-    map['lim_faltas'] = _limFaltas;
-    map['status'] = _status;
     map['faltas'] = 0;
     map['nota'] = _nota;
 
@@ -108,10 +78,7 @@ class Disciplina {
     this._id = map['id'];
     this._disciplina = map['disciplina'];
     this._cod = map['cod'];
-    this._meta = map['meta'];
     this._periodo = map['periodo'];
-    this._limFaltas = map['lim_faltas'];
-    this._status = map['status'];
     this._faltas = map['faltas'];
     this._nota = map['nota'];
   }

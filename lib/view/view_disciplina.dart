@@ -102,7 +102,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   )),
             ),
           ],
-          backgroundColor: Colors.pink[400],
+          backgroundColor: Color(0xffF5891F),
         ),
         body: ListView(children: <Widget>[
           Card(
@@ -115,21 +115,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                       fontWeight: FontWeight.bold,
                     ),
                   ))),
-          Card(
-              child: ListTile(
-                  title: Text("Status"),
-                  trailing: textStatus(widget.disciplina.getStatus()))),
-          Card(
-              child: ListTile(
-            title: Text("Meta"),
-            trailing: Text(
-              widget.disciplina.getMeta().toString(),
-              style: TextStyle(
-                color: Colors.blueGrey[600],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )),
           Container(
             height: 80.0,
             width: mediaQuery.size.width,
@@ -197,10 +182,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                           onPressed: () async {
                             faltas = widget.disciplina.getFaltas();
                             setState(() {
-                              if (faltas + 1 <=
-                                  widget.disciplina.getLimFaltas()) {
-                                faltas = faltas + 1;
-                              }
+                              faltas = faltas + 1;
                             });
                             widget.disciplina.setFaltas(faltas);
                             await databaseHelper.atualizarFaltas(
@@ -210,16 +192,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                         ),
                       ),
                     ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: mediaQuery.size.width / 60),
-                    child: Text(
-                      "Máx: " + widget.disciplina.getLimFaltas().toString(),
-                      style: TextStyle(
-                        color: Colors.blueGrey[600],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                   ),
                 ],
               ),

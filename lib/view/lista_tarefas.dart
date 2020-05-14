@@ -85,7 +85,7 @@ class _ListaTarefas extends State<ListaTarefas>
       return null;
     else {
       return AppBar(
-        backgroundColor: Colors.pink[400],
+        backgroundColor:  Color(0xffF5891F),
         leading: FlatButton(
           child: Icon(
             Icons.arrow_back,

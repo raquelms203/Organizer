@@ -60,7 +60,7 @@ class _FormTarefa extends State<FormTarefa> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
-        backgroundColor: Colors.pink[400],
+        backgroundColor: Color(0xffF5891F),
         actions: <Widget>[
           MaterialButton(
             child: Text(
@@ -460,12 +460,7 @@ class _FormTarefa extends State<FormTarefa> {
         lastDate: DateTime(2022),
         builder: (BuildContext context, Widget child) {
           return SingleChildScrollView(
-            child: Theme(
-              child: child,
-              data: ThemeData(
-                primaryColor: Colors.pink[400],
-              ),
-            ),
+            child: child,
           );
         });
     _data = dataSelecionada.millisecondsSinceEpoch;

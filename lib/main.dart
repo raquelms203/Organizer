@@ -12,6 +12,12 @@ void main() {
 
   runApp(
     MaterialApp(
+      theme: ThemeData(  
+        primaryColor: Color(0xffF5891F),
+        primaryColorBrightness: Brightness.dark,
+        accentColor: Color(0xffF5891F),
+        accentColorBrightness: Brightness.dark
+      ),
       title: "Organizer",
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -34,7 +40,7 @@ void main() {
                           }));
                         })
                   ],
-                  backgroundColor: Colors.pink[400],
+                  backgroundColor: Color(0xffF5891F),
                   bottom: TabBar(
                     indicatorColor: Colors.white,
                     tabs: <Widget>[

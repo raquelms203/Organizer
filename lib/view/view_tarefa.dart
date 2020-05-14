@@ -171,7 +171,7 @@ class _ViewTarefa extends State<ViewTarefa> {
   AppBar appBar() {
     if (!editarNota) {
       return AppBar(
-        backgroundColor: Colors.pink[400],
+        backgroundColor:  Color(0xffF5891F),
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
           SizedBox(
@@ -209,7 +209,7 @@ class _ViewTarefa extends State<ViewTarefa> {
       );
     } else if (editarNota) {
       return AppBar(
-        backgroundColor: Colors.pink[400],
+        backgroundColor:  Color(0xffF5891F),
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
           SizedBox(

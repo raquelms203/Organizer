@@ -18,11 +18,8 @@ class DatabaseHelper {
   String colIdDisciplina = 'id';
   String colDisciplina = 'disciplina';
   String colCod = 'cod';
-  String colLimFaltas = 'lim_faltas';
   String colPeriodo = 'periodo';
   String colFaltas = 'faltas';
-  String colMeta = 'meta';
-  String colStatus = 'status';
   String colNotaDisciplina = 'nota';
 
   //tabela tarefas
@@ -54,7 +51,7 @@ class DatabaseHelper {
 
   Future<Database> iniciarDb() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'database7.db';
+    String path = dir.path + 'database8.db';
     var disciplinaDatabase =
         await openDatabase(path, version: 1, onCreate: _criarDb);
     return disciplinaDatabase;
@@ -67,9 +64,6 @@ class DatabaseHelper {
             $colDisciplina TEXT NOT NULL,
             $colCod TEXT NOT NULL,
             $colFaltas INTEGER (2) NOT NULL,
-            $colLimFaltas INTEGER (2) NOT NULL,
-            $colMeta DOUBLE NOT NULL,
-            $colStatus INTEGER (1) NOT NULL,
             $colPeriodo TEXT NOT NULL,
             $colNotaDisciplina DOUBLE NOT NULL);
           ''');
@@ -107,7 +101,7 @@ class DatabaseHelper {
     List<String> listaNomeDisciplinas = [];
 
     var result = await db.rawQuery(
-        'SELECT disciplina FROM $tableDisciplinas WHERE $colStatus = ?', ['1']);
+        'SELECT disciplina FROM $tableDisciplinas');
     var stringMapList = result;
 
     int tam = stringMapList.length;

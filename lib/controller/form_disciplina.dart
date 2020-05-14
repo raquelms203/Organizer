@@ -21,7 +21,6 @@ class FormDisciplina extends StatefulWidget {
 
 class _FormDisciplina extends State<FormDisciplina> {
   String dropdownDefault = "Período";
-  String dropdownDefault2 = "Máx. Faltas";
   String dropdownDefault3 = "Status";
   String _disciplina = "";
   String acao = "";
@@ -49,7 +48,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitulo()),
-        backgroundColor: Colors.pink[400],
+        backgroundColor: Color(0xffF5891F),
         actions: <Widget>[
           MaterialButton(
               child: Text(
@@ -101,145 +100,59 @@ class _FormDisciplina extends State<FormDisciplina> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Container(
-                    width: mediaQuery.size.width - (mediaQuery.size.width / 21),
-                    child: TextFormField(
-                      initialValue: valorInicialCod(),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Campo vazio!';
-                        }
-                        _cod = value;
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Código',
-                          hintText: 'Ex. CSI 401',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 8),
+                      child: TextFormField(
+                        initialValue: valorInicialCod(),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo vazio!';
+                          }
+                          _cod = value;
+                        },
+                        decoration: InputDecoration(
+                            labelText: 'Código',
+                            hintText: 'Ex. CSI 401',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
+                      ),
                     ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 30, right: 8),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        hint: Text(dropdownDefault,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 22.0)),
+                        onChanged: (String novoValor) {
+                          setState(() {
+                            dropdownDefault = novoValor;
+                            _periodo = novoValor;
+                          });
+                        },
+                        items: periodos()
+                            .map<DropdownMenuItem<String>>((String valor) {
+                          return DropdownMenuItem<String>(
+                              value: valor,
+                              child: Text(
+                                valor,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ));
+                        }).toList(),
+                      ),
+                    ),
+                  )
                 ],
               ),
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Container(
-                      width: mediaQuery.size.width / 2.3,
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: TextFormField(
-                        initialValue: valorInicialMeta(),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value.isEmpty) return 'Campo vazio!';
-
-                          if (double.parse("$value") < 60.0)
-                            return 'Meta menor que 60.0!';
-
-                          if (double.parse("$value") > 100.0)
-                            return 'Meta maior que 100.0!';
-
-                          _meta = double.parse(value);
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Meta',
-                            hintText: 'Ex. 60 pts',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0))),
-                      ),
-                    ),
                     Padding(
                         padding:
                             EdgeInsets.only(right: mediaQuery.size.width / 14)),
-                    Container(
-                      width: mediaQuery.size.width / 2.8,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: Text(dropdownDefault,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22.0)),
-                          onChanged: (String novoValor) {
-                            setState(() {
-                              dropdownDefault = novoValor;
-                              _periodo = novoValor;
-                            });
-                          },
-                          items: periodos()
-                              .map<DropdownMenuItem<String>>((String valor) {
-                            return DropdownMenuItem<String>(
-                                value: valor,
-                                child: Text(
-                                  valor,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ));
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(left: 5),
-                      width: mediaQuery.size.width / 2.3,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: Text(dropdownDefault2,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22.0)),
-                          onChanged: (String novoValor) {
-                            setState(() {
-                              dropdownDefault2 = novoValor;
-                              _limFaltas = int.parse(
-                                  dropdownDefault2[0] + dropdownDefault2[1]);
-                            });
-                          },
-                          items: ['9 Faltas', '18 Faltas']
-                              .map<DropdownMenuItem<String>>((String valor) {
-                            return DropdownMenuItem<String>(
-                                value: valor,
-                                child: Text(
-                                  valor,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ));
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                        padding:
-                            EdgeInsets.only(right: mediaQuery.size.width / 14)),
-                    Container(
-                      width: mediaQuery.size.width / 2.8,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: Text(dropdownDefault3,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22.0)),
-                          onChanged: (String novoValor) {
-                            setState(() {
-                              dropdownDefault3 = novoValor;
-                              if (novoValor == "Cursando")
-                                _status = 1;
-                              else if (novoValor == "Encerrada") _status = 0;
-                            });
-                          },
-                          items: ['Cursando', 'Encerrada']
-                              .map<DropdownMenuItem<String>>((String valor) {
-                            return DropdownMenuItem<String>(
-                                value: valor,
-                                child: Text(
-                                  valor,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ));
-                          }).toList(),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -254,7 +167,7 @@ class _FormDisciplina extends State<FormDisciplina> {
     List<String> periodos = [""];
     int i;
 
-    for (i = 1; i <= 10; i++) periodos.add("$iº P");
+    for (i = 1; i <= 12; i++) periodos.add("$iº P");
 
     periodos.add("Eletiva");
     return periodos;
@@ -279,18 +192,6 @@ class _FormDisciplina extends State<FormDisciplina> {
     else if (widget.acao == "e") {
       dropdownDefault = widget.disciplina.getPeriodo();
       _periodo = widget.disciplina.getPeriodo();
-
-      dropdownDefault2 =
-          (widget.disciplina.getLimFaltas().toString() + " Faltas");
-      _limFaltas = widget.disciplina.getLimFaltas();
-
-      if (widget.disciplina.getStatus() == 0) {
-        dropdownDefault3 = "Encerrada";
-        _status = 0;
-      } else if (widget.disciplina.getStatus() == 1) {
-        dropdownDefault3 = "Cursando";
-        _status = 1;
-      }
     }
   }
 
@@ -306,14 +207,6 @@ class _FormDisciplina extends State<FormDisciplina> {
     if (widget.acao == "a")
       return "";
     else if (widget.acao == "e") return widget.disciplina.getCod();
-
-    return "";
-  }
-
-  String valorInicialMeta() {
-    if (widget.acao == "a")
-      return "";
-    else if (widget.acao == "e") return widget.disciplina.getMeta().toString();
 
     return "";
   }
@@ -357,25 +250,13 @@ class _FormDisciplina extends State<FormDisciplina> {
       return;
     }
 
-    if (_limFaltas == 0) {
-      errorMsg("Selecione o Máx de Faltas!");
-      return;
-    }
-
-    if (_status == -1) {
-      errorMsg("Selecione o Status!");
-      return;
-    }
     _disciplina = (_disciplina[0].toUpperCase() + _disciplina.substring(1));
     _cod = _cod.toUpperCase();
 
     if (widget.acao == "e") {
       widget.disciplina.setDisciplina(_disciplina);
       widget.disciplina.setCod(_cod);
-      widget.disciplina.setLimFaltas(_limFaltas);
-      widget.disciplina.setMeta(_meta);
       widget.disciplina.setPeriodo(_periodo);
-      widget.disciplina.setStatus(_status);
 
       result = await databaseHelper.atualizarDisciplina(widget.disciplina);
     } else if (widget.acao == "a") {
@@ -384,14 +265,15 @@ class _FormDisciplina extends State<FormDisciplina> {
         return;
       }
 
-      Disciplina disciplina = new Disciplina(
-          _disciplina, _cod, 0, _limFaltas, _meta, _periodo, _nota, _status);
+      Disciplina disciplina =
+          new Disciplina(_disciplina, _cod, 0, _periodo, _nota);
 
       result = await databaseHelper.inserirDisciplina(disciplina);
     }
 
     if (result == 0) errorMsg("Erro ao Salvar!");
 
+    if (widget.acao == "e") Navigator.pop(context, true);
     Navigator.pop(context, true);
   }
 }
