@@ -133,16 +133,6 @@ class _Configuracoes extends State<Configuracoes> {
           ),
           actions: <Widget>[
             FlatButton(
-                child: new Text(
-                  "Sim",
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
-                ),
-                onPressed: () {
-                  databaseHelper.apagarTudo();
-                  Navigator.pop(context, true);
-                  Navigator.pop(context, true);
-                }),
-            FlatButton(
               child: new Text(
                 "Não",
                 style: TextStyle(color: Colors.black, fontSize: 15.0),
@@ -151,6 +141,16 @@ class _Configuracoes extends State<Configuracoes> {
                 Navigator.pop(context);
               },
             ),
+            FlatButton(
+                child: new Text(
+                  "Sim",
+                style: TextStyle(color: Color(0xffF5891F), fontSize: 15.0),
+                ),
+                onPressed: () {
+                  databaseHelper.apagarTudo();
+                  Navigator.pop(context, true);
+                  Navigator.pop(context, true);
+                }),
           ],
         );
       },

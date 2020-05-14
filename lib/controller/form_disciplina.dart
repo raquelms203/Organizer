@@ -87,7 +87,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                       },
                       decoration: InputDecoration(
                           labelText: 'Nome',
-                          hintText: 'Ex. Prog Móvel',
+                          hintText: 'Ex. Cálculo',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     ),
@@ -113,7 +113,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                         },
                         decoration: InputDecoration(
                             labelText: 'Código',
-                            hintText: 'Ex. CSI 401',
+                            hintText: 'Ex. CEA 160',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0))),
                       ),
@@ -254,11 +254,17 @@ class _FormDisciplina extends State<FormDisciplina> {
     _cod = _cod.toUpperCase();
 
     if (widget.acao == "e") {
+      String nomeAntigo = widget.disciplina.getDisciplina();
+
       widget.disciplina.setDisciplina(_disciplina);
       widget.disciplina.setCod(_cod);
       widget.disciplina.setPeriodo(_periodo);
 
-      result = await databaseHelper.atualizarDisciplina(widget.disciplina);
+      if (nomeAntigo != _disciplina)
+        result = await databaseHelper.atualizarDisciplina(widget.disciplina,
+            nomeAntigo: nomeAntigo);
+      else
+        result = await databaseHelper.atualizarDisciplina(widget.disciplina);
     } else if (widget.acao == "a") {
       if (disciplinaExiste(_disciplina)) {
         errorMsg("Disciplina já cadastrada!");

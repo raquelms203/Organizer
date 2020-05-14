@@ -120,85 +120,98 @@ class _ViewDisciplina extends State<ViewDisciplina> {
             width: mediaQuery.size.width,
             child: Card(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  //   Padding(padding: EdgeInsets.only(left: 15.0)),
-                  Padding(
-                    padding: EdgeInsets.only(left: mediaQuery.size.width / 60),
-                    child: Text(
-                      "Faltas",
-                      style: TextStyle(fontSize: 16.0, fontFamily: 'Trojan'),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.only(left: mediaQuery.size.width / 60),
+                      child: Text(
+                        "Faltas",
+                        style: TextStyle(fontSize: 16.0, fontFamily: 'Trojan'),
+                      ),
                     ),
                   ),
-                  //   Padding(padding: EdgeInsets.only(right: 30.0)),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 65.0,
-                        height: 35.0,
-                        child: FlatButton(
-                          child: Text(
-                            "-",
-                            style: TextStyle(fontSize: 30.0, color: Colors.red),
+                  Expanded(
+                    flex: 4,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 65.0,
+                          height: 35.0,
+                          child: FlatButton(
+                            child: Text(
+                              "-",
+                              style:
+                                  TextStyle(fontSize: 30.0, color: Colors.red),
+                            ),
+                            shape: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red)),
+                            onPressed: () async {
+                              faltas = widget.disciplina.getFaltas();
+                              setState(() {
+                                if (faltas - 1 >= 0) {
+                                  faltas = faltas - 1;
+                                }
+                              });
+                              widget.disciplina.setFaltas(faltas);
+                              await databaseHelper.atualizarFaltas(
+                                  widget.disciplina.getFaltas(),
+                                  widget.disciplina.getId());
+                            },
                           ),
-                          shape: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red)),
-                          onPressed: () async {
-                            faltas = widget.disciplina.getFaltas();
-                            setState(() {
-                              if (faltas - 1 >= 0) {
-                                faltas = faltas - 1;
-                              }
-                            });
-                            widget.disciplina.setFaltas(faltas);
-                            await databaseHelper.atualizarFaltas(
-                                widget.disciplina.getFaltas(),
-                                widget.disciplina.getId());
-                          },
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                      ),
-                      Text(
-                        "${widget.disciplina.getFaltas()}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                      ),
-                      SizedBox(
-                        width: 65.0,
-                        height: 35.0,
-                        child: FlatButton(
-                          child: Text(
-                            "+",
-                            style:
-                                TextStyle(fontSize: 30.0, color: Colors.green),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                        ),
+                        Text(
+                          "${widget.disciplina.getFaltas()}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20.0),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                        ),
+                        SizedBox(
+                          width: 65.0,
+                          height: 35.0,
+                          child: FlatButton(
+                            child: Text(
+                              "+",
+                              style: TextStyle(
+                                  fontSize: 30.0, color: Colors.green),
+                            ),
+                            shape: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green)),
+                            onPressed: () async {
+                              faltas = widget.disciplina.getFaltas();
+                              setState(() {
+                                faltas = faltas + 1;
+                              });
+                              widget.disciplina.setFaltas(faltas);
+                              await databaseHelper.atualizarFaltas(
+                                  widget.disciplina.getFaltas(),
+                                  widget.disciplina.getId());
+                            },
                           ),
-                          shape: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.green)),
-                          onPressed: () async {
-                            faltas = widget.disciplina.getFaltas();
-                            setState(() {
-                              faltas = faltas + 1;
-                            });
-                            widget.disciplina.setFaltas(faltas);
-                            await databaseHelper.atualizarFaltas(
-                                widget.disciplina.getFaltas(),
-                                widget.disciplina.getId());
-                          },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  )
                 ],
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 30),
           ),
           Center(
               child: Row(
@@ -255,14 +268,14 @@ class _ViewDisciplina extends State<ViewDisciplina> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: new Text(
-            "Deseja apagar essa disciplina?",
+            "Deseja apagar essa disciplina e todas as tarefas relacionadas?",
             style: TextStyle(color: Colors.blue[600]),
           ),
           actions: <Widget>[
             FlatButton(
                 child: new Text(
                   "Sim",
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                  style: TextStyle(color: Color(0xffF5891F), fontSize: 15.0),
                 ),
                 onPressed: () async {
                   await databaseHelper

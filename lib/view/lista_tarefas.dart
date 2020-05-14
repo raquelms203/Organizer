@@ -293,7 +293,9 @@ class _ListaTarefas extends State<ListaTarefas>
   }
 
   int diasRestantes(int data) {
+    dataAtual = DateTime(dataAtual.year, dataAtual.month, dataAtual.day);
     DateTime dataTarefa = DateTime.fromMillisecondsSinceEpoch(data);
+    dataTarefa = DateTime(dataTarefa.year, dataTarefa.month, dataTarefa.day);
     return dataTarefa.difference(dataAtual).inDays;
   }
 }

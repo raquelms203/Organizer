@@ -136,10 +136,15 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> atualizarDisciplina(Disciplina disciplina) async {
+  Future<int> atualizarDisciplina(Disciplina disciplina, {String nomeAntigo}) async {
     var db = await this.getDatabase();
     var result = await db.update(tableDisciplinas, disciplina.disciplinaToMap(),
         where: '$colIdDisciplina = ?', whereArgs: [disciplina.getId()]);
+
+    if(nomeAntigo != null) {  
+         await db.rawUpdate("UPDATE $tableTarefas SET $colDisciplina = '${disciplina.getDisciplina()}' WHERE $colDisciplina = '$nomeAntigo'");
+
+    }
     return result;
   }
 

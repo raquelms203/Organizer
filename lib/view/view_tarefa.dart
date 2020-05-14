@@ -96,8 +96,6 @@ class _ViewTarefa extends State<ViewTarefa> {
                           controller: notaController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(bottom: 2, top: 12.0),
                               hintText: tarefa.getNota().toString(),
                               hintStyle: TextStyle(
                                 fontSize: 20.0,
@@ -171,7 +169,7 @@ class _ViewTarefa extends State<ViewTarefa> {
   AppBar appBar() {
     if (!editarNota) {
       return AppBar(
-        backgroundColor:  Color(0xffF5891F),
+        backgroundColor: Color(0xffF5891F),
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
           SizedBox(
@@ -209,7 +207,7 @@ class _ViewTarefa extends State<ViewTarefa> {
       );
     } else if (editarNota) {
       return AppBar(
-        backgroundColor:  Color(0xffF5891F),
+        backgroundColor: Color(0xffF5891F),
         title: Text(tarefa.getTipo()),
         actions: <Widget>[
           SizedBox(
@@ -302,13 +300,21 @@ class _ViewTarefa extends State<ViewTarefa> {
         return AlertDialog(
           title: new Text(
             "Deseja apagar essa tarefa?",
-            style: TextStyle(color: Colors.blue[600]),
           ),
           actions: <Widget>[
             FlatButton(
+              child: new Text(
+                "Não",
+                style: TextStyle(fontSize: 15.0, color: Colors.black),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
                 child: new Text(
                   "Sim",
-                  style: TextStyle(color: Colors.black, fontSize: 15.0),
+                  style: TextStyle(color: Color(0xffF5891F), fontSize: 15.0),
                 ),
                 onPressed: () async {
                   await databaseHelper.atualizarNotaDisciplina(
@@ -317,15 +323,6 @@ class _ViewTarefa extends State<ViewTarefa> {
                   Navigator.pop(context, true);
                   Navigator.pop(context, true);
                 }),
-            FlatButton(
-              child: new Text(
-                "Não",
-                style: TextStyle(color: Colors.black, fontSize: 15.0),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
           ],
         );
       },
