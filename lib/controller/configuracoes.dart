@@ -129,7 +129,7 @@ class _Configuracoes extends State<Configuracoes> {
         return AlertDialog(
           title: new Text(
             "Deseja apagar todas as disciplinas e tarefas?",
-            style: TextStyle(color: Colors.blue[600]),
+            style: TextStyle(color: Colors.black),
           ),
           actions: <Widget>[
             FlatButton(

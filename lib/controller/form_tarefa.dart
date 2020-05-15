@@ -368,7 +368,7 @@ class _FormTarefa extends State<FormTarefa> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text("OK"),
+              child: new Text("OK", style: TextStyle(color: Colors.black),),
               onPressed: () {
                 Navigator.of(context).pop();
                 if (vezesVoltarTela == 2) Navigator.pop(context);
@@ -391,7 +391,7 @@ class _FormTarefa extends State<FormTarefa> {
           ),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("OK"),
+              child: new Text("OK", style: TextStyle(color: Colors.black),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -408,18 +408,20 @@ class _FormTarefa extends State<FormTarefa> {
     _tipo = (_tipo[0].toUpperCase() + _tipo.substring(1));
 
     if (_disciplina == "") {
-      errorMsg("Campo 'Disciplina' Vazio!", 1);
+      errorMsg("Campo 'Disciplina' vazio!", 1);
       return;
     }
 
     if (_data == 0) {
-      errorMsg("Campo 'Entrega' Vazio!", 1);
+      errorMsg("Campo 'Entrega' vazio!", 1);
+      return;
     }
 
     if (_prioridade == 0) {
-      errorMsg("Campo 'Prioridade' Vazio!", 1);
+      errorMsg("Campo 'Prioridade' vazio!", 1);
       return;
     }
+
 
     if (widget.acao == "e") {
       widget.tarefa.setDisciplina(_disciplina);

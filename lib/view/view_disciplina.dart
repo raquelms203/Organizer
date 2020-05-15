@@ -269,7 +269,7 @@ class _ViewDisciplina extends State<ViewDisciplina> {
         return AlertDialog(
           title: new Text(
             "Deseja apagar essa disciplina e todas as tarefas relacionadas?",
-            style: TextStyle(color: Colors.blue[600]),
+            style: TextStyle(color: Colors.black),
           ),
           actions: <Widget>[
             FlatButton(

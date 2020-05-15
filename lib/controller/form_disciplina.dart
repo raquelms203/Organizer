@@ -75,7 +75,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                    width: mediaQuery.size.width - (mediaQuery.size.width / 21),
+                    width: mediaQuery.size.width - 32,
                     child: TextFormField(
                       initialValue: valorInicialDisciplina(),
                       validator: (value) {
@@ -102,7 +102,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(left: 8),
+                      margin: const EdgeInsets.only(left: 16),
                       child: TextFormField(
                         initialValue: valorInicialCod(),
                         validator: (value) {
@@ -120,7 +120,7 @@ class _FormDisciplina extends State<FormDisciplina> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.only(left: 30, right: 8),
+                    padding: const EdgeInsets.only(left: 30, right: 16),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         hint: Text(dropdownDefault,
@@ -222,7 +222,7 @@ class _FormDisciplina extends State<FormDisciplina> {
           ),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("OK"),
+              child: new Text("OK", style: TextStyle(color: Colors.black),),
               onPressed: () {
                 Navigator.pop(context, true);
               },
