@@ -224,7 +224,7 @@ class _ListaTarefas extends State<ListaTarefas>
                     leading:
                         iconePrioridade(listaExibir[index].getPrioridade()),
                     title: Text(listaExibir[index].getTipo()),
-                    subtitle: Text(listaExibir[index].getDisciplina()),
+                    subtitle: Text(listaExibir[index].getDisciplina(), maxLines: 1,),
                     trailing: Column(
                       children: <Widget>[
                         Text(

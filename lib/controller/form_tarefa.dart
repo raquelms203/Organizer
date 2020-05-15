@@ -436,6 +436,8 @@ class _FormTarefa extends State<FormTarefa> {
       result = await databaseHelper.inserirTarefa(tarefa);
     }
     if (result == 0) errorMsgSalvar();
+    if (widget.acao == "e") Navigator.pop(context, true);
+
     Navigator.pop(context, true);
   }
 

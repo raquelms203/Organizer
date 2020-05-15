@@ -96,7 +96,7 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.assignment, size: 40.0),
-                  title: Text(listaDisciplina[index].getDisciplina()),
+                  title: Text(listaDisciplina[index].getDisciplina(), maxLines: 3,),
                   subtitle: Text(listaDisciplina[index].getCod()),
                   trailing: Text("${listaDisciplina[index].getNota()}/100",
                       style: new TextStyle(

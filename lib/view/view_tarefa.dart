@@ -49,13 +49,20 @@ class _ViewTarefa extends State<ViewTarefa> {
           child: Column(
         children: <Widget>[
           Card(
-              child: ListTile(
-            title: Text("Disciplina:"),
-            trailing: Text(
-              tarefa.getDisciplina(),
-              style: TextStyle(
-                color: Colors.blueGrey[600],
-                fontWeight: FontWeight.bold,
+              child: Container(
+            child: ListTile(
+              title: Text("Disciplina:"),
+              trailing: Container(
+                width: MediaQuery.of(context).size.width - 130,
+                child: Text(
+                  tarefa.getDisciplina(),
+                  textAlign: TextAlign.end,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.blueGrey[600],
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           )),
@@ -114,8 +121,7 @@ class _ViewTarefa extends State<ViewTarefa> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            EdgeInsets.only(right: mediaQuery.size.width / 60),
+                        padding: EdgeInsets.only(right: 16),
                         child: Text(
                           "/${tarefa.getValor()}",
                           style: TextStyle(
@@ -126,10 +132,6 @@ class _ViewTarefa extends State<ViewTarefa> {
                       ),
                     ],
                   ),
-
-                  // Padding(
-                  //   padding: EdgeInsets.only(left: 10.0),
-                  // ),
                 ],
               ),
             ),
@@ -137,6 +139,7 @@ class _ViewTarefa extends State<ViewTarefa> {
           Card(
             child: SizedBox(
               height: 110,
+              width: MediaQuery.of(context).size.width - 16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -144,15 +147,14 @@ class _ViewTarefa extends State<ViewTarefa> {
                     padding: EdgeInsets.only(top: 8.0),
                   ),
                   Text(
-                    "    Descrição: ",
+                    "  Descrição: ",
                     style: TextStyle(fontSize: 16.0),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 4.0),
                   ),
                   Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(right: 15.0),
+                    margin: EdgeInsets.only(left: 15.0),
                     child: Text("${tarefa.getDescricao()}",
                         style: TextStyle(
                             fontSize: 16.0, color: Colors.blueGrey[600])),
