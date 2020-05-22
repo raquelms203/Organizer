@@ -89,36 +89,31 @@ class _FormTarefa extends State<FormTarefa> {
                       Container(
                         padding: EdgeInsets.only(
                             top: 30.0, left: mediaQuery.size.width / 80),
-                        child: FlatButton(
-                          onPressed: () {
-                            if (stringDisciplinas.isEmpty) {
-                              errorMsg("Cadastre as Disciplinas primeiro!", 2);
-                            }
-                          },
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              hint: Text(dropdownDisciplina,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            hint: Container(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: Text(dropdownDisciplina,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 22.0)),
-                              onChanged: (String novoValor) {
-                                setState(() {
-                                  dropdownDisciplina = novoValor;
-                                  _disciplina = novoValor;
-                                });
-                              },
-                              items: stringDisciplinas
-                                  .map<DropdownMenuItem<String>>(
-                                      (String valor) {
-                                return DropdownMenuItem<String>(
-                                    value: valor,
-                                    child: Text(
-                                      valor,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ));
-                              }).toList(),
                             ),
+                            onChanged: (String novoValor) {
+                              setState(() {
+                                dropdownDisciplina = novoValor;
+                                _disciplina = novoValor;
+                              });
+                            },
+                            items: stringDisciplinas
+                                .map<DropdownMenuItem<String>>((String valor) {
+                              return DropdownMenuItem<String>(
+                                  value: valor,
+                                  child: Text(
+                                    valor,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ));
+                            }).toList(),
                           ),
                         ),
                       ),
@@ -353,7 +348,11 @@ class _FormTarefa extends State<FormTarefa> {
 
   String dataFormatada(int _data) {
     DateTime data = DateTime.fromMillisecondsSinceEpoch(_data);
-    String dataFormatada = ("${data.day}/${data.month}/${data.year}");
+    String day = data.day.toString();
+    String month = data.month.toString();
+    if(day.length == 1) day = "0" + day;
+    if(month.length == 1) month = "0" + month; 
+    String dataFormatada = ("$day/$month/${data.year}");
     return dataFormatada;
   }
 
@@ -368,7 +367,10 @@ class _FormTarefa extends State<FormTarefa> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: new Text("OK", style: TextStyle(color: Colors.black),),
+              child: new Text(
+                "OK",
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
                 if (vezesVoltarTela == 2) Navigator.pop(context);
@@ -391,7 +393,10 @@ class _FormTarefa extends State<FormTarefa> {
           ),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("OK", style: TextStyle(color: Colors.black),),
+              child: new Text(
+                "OK",
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -422,7 +427,6 @@ class _FormTarefa extends State<FormTarefa> {
       return;
     }
 
-
     if (widget.acao == "e") {
       widget.tarefa.setDisciplina(_disciplina);
       widget.tarefa.setTipo(_tipo);
@@ -451,6 +455,8 @@ class _FormTarefa extends State<FormTarefa> {
       disciplinasListFuture.then((listaDisciplinas) {
         setState(() {
           stringDisciplinas = listaDisciplinas;
+          if (listaDisciplinas.isEmpty)
+            errorMsg("Cadastre disciplinas primeiro!", 2);
         });
       });
     });
@@ -464,13 +470,23 @@ class _FormTarefa extends State<FormTarefa> {
         lastDate: DateTime(2022),
         builder: (BuildContext context, Widget child) {
           return SingleChildScrollView(
-            child: child,
-          );
+              child: Theme(
+                  child: child,
+                  data: ThemeData.light().copyWith(
+                    primaryColor: Color(0xffF5891F),
+                    colorScheme:
+                        ColorScheme.light(primary: const Color(0xffF5891F)),
+                    buttonTheme:
+                        ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                    accentColor: Color(0xffF5891F),
+                  )));
         });
-    _data = dataSelecionada.millisecondsSinceEpoch;
+    if (dataSelecionada != null) {
+      _data = dataSelecionada.millisecondsSinceEpoch;
 
-    setState(() {
-      txtData = dataFormatada(_data);
-    });
+      setState(() {
+        txtData = dataFormatada(_data);
+      });
+    }
   }
 }

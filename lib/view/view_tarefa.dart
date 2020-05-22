@@ -251,8 +251,11 @@ class _ViewTarefa extends State<ViewTarefa> {
 
   String dataFormatada() {
     DateTime data = DateTime.fromMillisecondsSinceEpoch(tarefa.getData());
-    String dataFormatada = ("${data.day}/${data.month}/${data.year}");
-    return dataFormatada;
+    String day = data.day.toString();
+    String month = data.month.toString();
+    if (day.length == 1) day = "0" + day;
+    if (month.length == 1) month = "0" + month;
+    return "$day/$month/${data.year}";
   }
 
   void validarNota(double nota) async {

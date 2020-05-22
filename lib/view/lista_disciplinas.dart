@@ -36,11 +36,15 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
     super.build(context);
 
     mediaQuery = MediaQuery.of(context);
+    atualizarListView();
 
-    if (listaDisciplina == null) {
-      listaDisciplina = List<Disciplina>();
-    } else
-      atualizarListView();
+    // if (listaDisciplina == null) {
+    //   return Container(
+    //     height: 10,
+    //     width: 10,
+    //     padding: const EdgeInsets.only(top: 40),
+    //     child: CircularProgressIndicator());
+    // }
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -60,13 +64,19 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
         backgroundColor: Colors.green[400],
         tooltip: "Adicionar Disciplina",
       ),
-      body: Container(
-          child: Column(
-        children: <Widget>[
-          txtListaVazia(listaDisciplina.length),
-          carregarLista()
-        ],
-      )),
+      body: listaDisciplina == null
+          ? Container(
+            height: 80,
+            alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 40),
+          child: CircularProgressIndicator())
+          : Container(
+              child: Column(
+              children: <Widget>[
+                txtListaVazia(listaDisciplina.length),
+                carregarLista()
+              ],
+            )),
     );
   }
 
@@ -96,7 +106,10 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.assignment, size: 40.0),
-                  title: Text(listaDisciplina[index].getDisciplina(), maxLines: 3,),
+                  title: Text(
+                    listaDisciplina[index].getDisciplina(),
+                    maxLines: 3,
+                  ),
                   subtitle: Text(listaDisciplina[index].getCod()),
                   trailing: Text("${listaDisciplina[index].getNota()}/100",
                       style: new TextStyle(
@@ -115,10 +128,6 @@ class _ListaDisciplinas extends State<ListaDisciplinas>
             );
           }),
     );
-  }
-
-  Visibility disableTxtVazia(Container cont) {
-    return Visibility(child: cont, visible: false);
   }
 
   void atualizarListView() {

@@ -273,6 +273,15 @@ class _ViewDisciplina extends State<ViewDisciplina> {
           ),
           actions: <Widget>[
             FlatButton(
+              child: new Text(
+                "Não",
+                style: TextStyle(color: Colors.black, fontSize: 15.0),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
                 child: new Text(
                   "Sim",
                   style: TextStyle(color: Color(0xffF5891F), fontSize: 15.0),
@@ -284,15 +293,6 @@ class _ViewDisciplina extends State<ViewDisciplina> {
                   Navigator.pop(context, true);
                   Navigator.pop(context, true);
                 }),
-            FlatButton(
-              child: new Text(
-                "Não",
-                style: TextStyle(color: Colors.black, fontSize: 15.0),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
           ],
         );
       },

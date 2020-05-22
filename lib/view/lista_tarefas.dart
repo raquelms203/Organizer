@@ -26,7 +26,7 @@ class _ListaTarefas extends State<ListaTarefas>
   bool mostrarAntigas = false;
   List<Tarefa> listaTarefa;
   List<Tarefa> listaDiasPositivo = List<Tarefa>();
-  List<Tarefa> listaExibir = List<Tarefa>();
+  List<Tarefa> listaExibir;
   List<Tarefa> listaCompleta = List<Tarefa>();
   MediaQueryData mediaQuery;
 
@@ -55,11 +55,6 @@ class _ListaTarefas extends State<ListaTarefas>
     if ((widget.apenasVisualizar == false && listaTarefa != null))
       atualizarListView();
 
-    if (listaTarefa == null) {
-      listaTarefa = List<Tarefa>();
-      listaDiasPositivo = listaTarefa;
-    }
-
     listaCompleta = listaTarefa;
     iniciarListaDiasPositivo(false);
 
@@ -85,7 +80,7 @@ class _ListaTarefas extends State<ListaTarefas>
       return null;
     else {
       return AppBar(
-        backgroundColor:  Color(0xffF5891F),
+        backgroundColor: Color(0xffF5891F),
         leading: FlatButton(
           child: Icon(
             Icons.arrow_back,
@@ -118,7 +113,13 @@ class _ListaTarefas extends State<ListaTarefas>
     }
   }
 
-  Container txtListaVazia() {
+  Widget txtListaVazia() {
+    if (listaExibir == null) {
+      return Container(
+          padding: const EdgeInsets.only(top: 40),
+          child: CircularProgressIndicator());
+    }
+
     if (listaExibir.isNotEmpty)
       return Container();
     else {
@@ -224,7 +225,10 @@ class _ListaTarefas extends State<ListaTarefas>
                     leading:
                         iconePrioridade(listaExibir[index].getPrioridade()),
                     title: Text(listaExibir[index].getTipo()),
-                    subtitle: Text(listaExibir[index].getDisciplina(), maxLines: 1,),
+                    subtitle: Text(
+                      listaExibir[index].getDisciplina(),
+                      maxLines: 1,
+                    ),
                     trailing: Column(
                       children: <Widget>[
                         Text(
@@ -259,11 +263,13 @@ class _ListaTarefas extends State<ListaTarefas>
 
   void atualizarListView() {
     if (widget.apenasVisualizar) return;
+
     final Future<Database> dbFuture = databaseHelper.iniciarDb();
     dbFuture.then((database) {
       Future<List<Tarefa>> tarefaListFuture = databaseHelper.getTarefaLista();
       tarefaListFuture.then((listaTarefa) {
         setState(() {
+          if (listaTarefa == null) listaTarefa = List<Tarefa>();
           this.listaTarefa = listaTarefa;
           listaCompleta = listaTarefa;
           iniciarListaDiasPositivo(true);

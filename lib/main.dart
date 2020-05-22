@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:organizer/controller/configuracoes.dart';
 
 void main() {
-  List<Disciplina> listaDisciplinas = List<Disciplina>();
+  List<Disciplina> listaDisciplinas;
   List<Tarefa> listaTarefas = List<Tarefa>();
 
   runApp(
@@ -16,6 +16,7 @@ void main() {
         primaryColor: Color(0xffF5891F),
         primaryColorBrightness: Brightness.dark,
         accentColor: Color(0xffF5891F),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(foregroundColor: Colors.white),
         accentColorBrightness: Brightness.dark
       ),
       title: "Organizer",
@@ -73,7 +74,6 @@ void main() {
       ],
       supportedLocales: [
         const Locale('pt', 'BR'),
-        const Locale('en', 'US'),
       ],
     ),
   );
